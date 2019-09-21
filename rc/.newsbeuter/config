@@ -1,0 +1,9 @@
+auto-reload yes
+browser "nohup surf -e $(cat /home/peter/tmp/tabbed-surf.xid) -s -p %u 1>/dev/null 2>/dev/null &"
+color background          black   white
+color listnormal          black   white
+color listnormal_unread   black   white
+color listfocus           yellow  blue   bold
+color info                yellow  blue   bold
+color article             black   white
+max-items 200
