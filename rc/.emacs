@@ -16,12 +16,18 @@
 (require 'package)
 (setq user-emacs-directory "~/.emacs.d/")
 (setq package-user-dir (concat user-emacs-directory "packages"))
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-(add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
+(setq package-archives '(;;("gnu" . "https://elpa.gnu.org/packages/")
+                         ;; for temporary problem with elpa using https
+                         ("gnu-mirror" . "https://mirrors.163.com/elpa/gnu/")
+                         ("melpa" . "https://melpa.org/packages/")
+                         ("org" . "https://orgmode.org/elpa/")))
+
 (when (>= emacs-major-version 25)
-  (setq package-archive-priorities '(("org" . 3)
-								     ("melpa" . 2)
-								     ("gnu" . 1))))
+  (setq package-archive-priorities '(("org" . 4)
+                                     ("melpa" . 3)
+                                     ("gnu-mirror" . 2)
+                                     ;;("gnu" . 1)
+                                     )))
 (setq package-load-list '(all))
 (package-initialize)
 (setq package-enable-at-startup nil)
@@ -50,7 +56,7 @@
 (defvar workp (string-match "ibm" (system-name)))
 
 ;;; Add lisp directory tree to load-path
-;(setq load-path (append (cjp-get-dir-structure-in "lisp") load-path))
+;;(setq load-path (append (cjp-get-dir-structure-in "lisp") load-path))
 
 ;;;;;;
 ;;; legacy settings
@@ -59,8 +65,10 @@
 ;;;;;;
 
 ;;;;;;
-(setq sh-indent-comment t)
+(setq sh-indent-comment t
+      sh-basic-offset 2)
 
+(setq vc-follow-symlinks t)
 ;;;;;;
 ;;; for quick lookup of man page and hyperspec
 (global-set-key  [f6] (lambda () (interactive) (manual-entry (current-word))))
@@ -89,12 +97,6 @@
   :init (require 'ess-site))
 
 ;;;;;;
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:family "DejaVu Sans Mono" :foundry "unknown" :slant normal :weight normal :height 120 :width normal)))))
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -155,13 +157,13 @@
 ;; C family
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 (setq-default c-basic-offset 4
-			  tab-width 4
-			  indent-tabs-mode nil)
+              tab-width 4
+              indent-tabs-mode nil)
 
 (setq c-default-style 
-	  '((java-mode . "java")
-		(awk-mode . "awk")
-		(other . "linux")))
+      '((java-mode . "java")
+        (awk-mode . "awk")
+        (other . "linux")))
 (c-set-offset 'substatement-open 0)
 ;;
 
@@ -177,7 +179,7 @@
 
 ;;;;;;
 ;;
-;(add-hook 'after-init-hook (lambda () (load-theme 'spacemacs-dark)))
+                                        ;(add-hook 'after-init-hook (lambda () (load-theme 'spacemacs-dark)))
 
 ;;;;;;
 ;; babel
@@ -191,7 +193,7 @@
    (python . t)
    (sql . t)
    (shell . t)
-   (sh . t)
+   ;;(sh . t)
    (awk . t)
    (sed . t)
    (css . t)
@@ -247,3 +249,9 @@
   )
 
 ;;;;;;
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
