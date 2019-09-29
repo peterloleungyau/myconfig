@@ -7,3 +7,4 @@ color listfocus           yellow  blue   bold
 color info                yellow  blue   bold
 color article             black   white
 max-items 200
+ssl-verifypeer no
