@@ -16,9 +16,10 @@
 (require 'package)
 (setq user-emacs-directory "~/.emacs.d/")
 (setq package-user-dir (concat user-emacs-directory "packages"))
-(setq package-archives '(;;("gnu" . "https://elpa.gnu.org/packages/")
+(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
                          ;; for temporary problem with elpa using https
-                         ("gnu-mirror" . "https://mirrors.163.com/elpa/gnu/")
+                         ;;("gnu-mirror" . "http://mirrors.163.com/elpa/gnu/")
                          ("melpa" . "https://melpa.org/packages/")
                          ("org" . "https://orgmode.org/elpa/")))
 
@@ -134,7 +135,7 @@
  '(org-odt-preferred-output-format "pdf")
  '(package-selected-packages
    (quote
-    (counsel-projectile projectile counsel ivy org-plus-contrib org-link-minor-mode ox-hugo ob-ipython ob-mongo ob-prolog ob-sagemath ob-sql-mode spacemacs-theme magit slime org-ref markdown-mode ess auctex)))
+    (yasnippet-snippets yasnippet lsp-python ess-R-data-view ess-smart-equals ess-smart-underscore ess-view company-lsp lsp-ui lsp-mode counsel-projectile projectile counsel ivy org-plus-contrib org-link-minor-mode ox-hugo ob-ipython ob-mongo ob-prolog ob-sagemath ob-sql-mode spacemacs-theme magit slime org-ref markdown-mode ess auctex)))
  '(pdf-view-midnight-colors (quote ("#b2b2b2" . "#292b2e")))
  '(safe-local-variable-values (quote ((Base . 10) (Syntax . ANSI-Common-Lisp))))
  '(select-enable-primary t)
@@ -232,15 +233,29 @@
 ;;  )
 
 ;;;;;;
-;;(use-package projectile
-;;  :ensure t
-;;  :bind-keymap ("\C-c p" . projectile-command-map)
-;;  :config
-;;  (projectile-mode t)
-;;  (setq projectile-completion-system 'ivy)
-;;  (use-package counsel-projectile
-;;    :ensure t)
-;;  )
+(use-package projectile
+  :ensure t
+  :bind-keymap ("\C-c p" . projectile-command-map)
+  :config
+  (projectile-mode t)
+  ;;(setq projectile-completion-system 'ivy)
+  (use-package counsel-projectile
+    :ensure t)
+  )
+
+(use-package yasnippet
+  :ensure t
+  :config
+  (use-package yasnippet-snippets
+    :ensure t)
+  )
+
+(use-package lsp-mode
+  :hook (python-mode . lsp)
+  :commands lsp)
+
+(use-package lsp-ui :commands lsp-ui-mode)
+(use-package company-lsp :commands company-lsp)
 
 ;;;;;;
 (use-package auctex
