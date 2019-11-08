@@ -135,7 +135,7 @@
  '(org-odt-preferred-output-format "pdf")
  '(package-selected-packages
    (quote
-    (yasnippet-snippets yasnippet lsp-python ess-R-data-view ess-smart-equals ess-smart-underscore ess-view company-lsp lsp-ui lsp-mode counsel-projectile projectile counsel ivy org-plus-contrib org-link-minor-mode ox-hugo ob-ipython ob-mongo ob-prolog ob-sagemath ob-sql-mode spacemacs-theme magit slime org-ref markdown-mode ess auctex)))
+    (elpy yasnippet-snippets yasnippet lsp-python ess-R-data-view ess-smart-equals ess-smart-underscore ess-view company-lsp lsp-ui lsp-mode counsel-projectile projectile counsel ivy org-plus-contrib org-link-minor-mode ox-hugo ob-ipython ob-mongo ob-prolog ob-sagemath ob-sql-mode spacemacs-theme magit slime org-ref markdown-mode ess auctex)))
  '(pdf-view-midnight-colors (quote ("#b2b2b2" . "#292b2e")))
  '(safe-local-variable-values (quote ((Base . 10) (Syntax . ANSI-Common-Lisp))))
  '(select-enable-primary t)
@@ -245,18 +245,30 @@
 
 (use-package yasnippet
   :ensure t
+  :init
+  (yas-global-mode 1)
   :config
   (use-package yasnippet-snippets
     :ensure t)
+  (add-to-list 'yas-snippet-dirs (locate-user-emacs-file "snippets"))
   )
 
 (use-package lsp-mode
-  :hook (python-mode . lsp)
+  ;; :hook (python-mode . lsp)
   :commands lsp)
 
 (use-package lsp-ui :commands lsp-ui-mode)
 (use-package company-lsp :commands company-lsp)
 
+(use-package elpy
+  :ensure t
+  :commands elpy-enable
+  :init (with-eval-after-load 'python (elpy-enable))
+  :config
+  (flymake-mode -1)
+  :bind (:map python-mode-map
+              ("<C-return>" . python-shell-send-region))
+  )
 ;;;;;;
 (use-package auctex
   :ensure t
