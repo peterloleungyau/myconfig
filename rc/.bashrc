@@ -147,6 +147,12 @@ function mark_watched {
 	mv "$1" "watched_$1"
 }
 
+function link_rc {
+  TARG=~/"$1"
+  mkdir -p ${TARG%/*}
+  ln -sf ~/myconfig/rc/"$1" ~/"$1"
+}
+
 ## image viewer: sxiv
 alias viewimg="sxiv"
 
