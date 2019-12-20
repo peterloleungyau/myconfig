@@ -192,3 +192,5 @@ bar {
 # startup
 exec --no-startup-id xterm -e newsboat
 exec --no-startup-id firefox
+# to disable trackpad while typing, with a 1.5 second delay
+exec_always --no-startup-id syndaemon -i 1.5 -t -K -R -d
