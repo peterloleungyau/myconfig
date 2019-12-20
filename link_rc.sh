@@ -1,6 +1,6 @@
 #!/bin/sh
 
-function link_rc {
+link_rc () {
   TARG=~/"$1"
   mkdir -p ${TARG%/*}
   ln -sf ~/myconfig/rc/"$1" ~/"$1"
