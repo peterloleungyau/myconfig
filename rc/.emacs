@@ -16,7 +16,7 @@
 (require 'package)
 (setq user-emacs-directory "~/.emacs.d/")
 (setq package-user-dir (concat user-emacs-directory "packages"))
-(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+;;(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
                          ;; for temporary problem with elpa using https
                          ;;("gnu-mirror" . "http://mirrors.163.com/elpa/gnu/")
@@ -64,6 +64,7 @@
 (require 'cl)
 
 ;;;;;;
+(setq find-file-visit-truename t)
 
 ;;;;;;
 (setq sh-indent-comment t
@@ -106,10 +107,10 @@
  '(ansi-color-names-vector
    ["#0a0814" "#f2241f" "#67b11d" "#b1951d" "#4f97d7" "#a31db1" "#28def0" "#b2b2b2"])
  '(column-number-mode t)
- '(custom-enabled-themes nil)
+ '(custom-enabled-themes (quote (dracula)))
  '(custom-safe-themes
    (quote
-    ("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
+    ("947190b4f17f78c39b0ab1ea95b1e6097cc9202d55c73a702395fc817f899393" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
  '(electric-indent-mode nil)
  '(hl-todo-keyword-faces
    (quote
@@ -135,7 +136,7 @@
  '(org-odt-preferred-output-format "pdf")
  '(package-selected-packages
    (quote
-    (elpy yasnippet-snippets yasnippet lsp-python ess-R-data-view ess-smart-equals ess-smart-underscore ess-view company-lsp lsp-ui lsp-mode counsel-projectile projectile counsel ivy org-plus-contrib org-link-minor-mode ox-hugo ob-ipython ob-mongo ob-prolog ob-sagemath ob-sql-mode spacemacs-theme magit slime org-ref markdown-mode ess auctex)))
+    (dracula-theme elpy yasnippet-snippets yasnippet lsp-python ess-R-data-view ess-smart-equals ess-smart-underscore ess-view company-lsp lsp-ui lsp-mode counsel-projectile projectile counsel ivy org-plus-contrib org-link-minor-mode ox-hugo ob-ipython ob-mongo ob-prolog ob-sagemath ob-sql-mode spacemacs-theme magit slime org-ref markdown-mode ess auctex)))
  '(pdf-view-midnight-colors (quote ("#b2b2b2" . "#292b2e")))
  '(safe-local-variable-values (quote ((Base . 10) (Syntax . ANSI-Common-Lisp))))
  '(select-enable-primary t)
