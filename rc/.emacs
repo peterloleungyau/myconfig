@@ -260,6 +260,33 @@
 (use-package lsp-ui :commands lsp-ui-mode)
 (use-package company-lsp :commands company-lsp)
 
+;;
+(defun block-line-end ()
+  "To get the end of Python block of current indentation.
+From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-interpreter-c-c-c-r-command-in-ipython-mode
+"
+  (setq indentation (current-indentation))
+  (forward-line)
+  (while (> (current-indentation) indentation)
+    (forward-line))
+  (forward-line -1)
+  (line-end-position))
+
+(defun my-python-shell-send-region (&optional beg end)
+  "To automatically send a code block.
+From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-interpreter-c-c-c-r-command-in-ipython-mode
+"
+  (interactive)
+  (let ((beg (cond (beg beg)
+                   ((region-active-p) (region-beginning))
+                   (t (line-beginning-position))))
+        (end (cond (end end)
+                   ((region-active-p) 
+                    (copy-marker (region-end)))
+                   (t (block-line-end)))))
+    (python-shell-send-region beg end))
+  (forward-line))
+
 (use-package elpy
   :ensure t
   :commands elpy-enable
@@ -267,7 +294,7 @@
   :config
   (flymake-mode -1)
   :bind (:map python-mode-map
-              ("<C-return>" . python-shell-send-region))
+              ("<C-return>" . my-python-shell-send-region))
   )
 ;;;;;;
 (use-package auctex
