@@ -41,6 +41,12 @@ bindsym XF86AudioPrev exec playerctl previous
 bindsym $mod+Shift+f exec firefox
 bindsym Print exec screenshot
 
+# need to install acpilight for xbacklight to work: https://gitlab.com/wavexx/acpilight
+# also need to add user to the video group
+# adjust screen brightness
+bindsym XF86MonBrightnessUp exec --no-startup-id xbacklight -inc 10
+bindsym XF86MonBrightnessDown exec --no-startup-id xbacklight -dec 10
+
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
@@ -191,6 +197,7 @@ bar {
 
 # startup
 exec --no-startup-id xterm -e newsboat
-exec --no-startup-id firefox
+exec --no-startup-id firefox &
+exec --no-startup-id udiskie -A -t &
 # to disable trackpad while typing, with a 1.5 second delay
 exec_always --no-startup-id syndaemon -i 1.5 -t -K -R -d
