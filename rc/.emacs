@@ -135,7 +135,7 @@
  '(org-odt-preferred-output-format "pdf")
  '(package-selected-packages
    (quote
-    (elpy yasnippet-snippets yasnippet lsp-python ess-R-data-view ess-smart-equals ess-smart-underscore ess-view company-lsp lsp-ui lsp-mode counsel-projectile projectile counsel ivy org-plus-contrib org-link-minor-mode ox-hugo ob-ipython ob-mongo ob-prolog ob-sagemath ob-sql-mode spacemacs-theme magit slime org-ref markdown-mode ess auctex)))
+    (pydoc-info elpy yasnippet-snippets yasnippet lsp-python ess-R-data-view ess-smart-equals ess-smart-underscore ess-view company-lsp lsp-ui lsp-mode counsel-projectile projectile counsel ivy org-plus-contrib org-link-minor-mode ox-hugo ob-ipython ob-mongo ob-prolog ob-sagemath ob-sql-mode spacemacs-theme magit slime org-ref markdown-mode ess auctex)))
  '(pdf-view-midnight-colors (quote ("#b2b2b2" . "#292b2e")))
  '(safe-local-variable-values (quote ((Base . 10) (Syntax . ANSI-Common-Lisp))))
  '(select-enable-primary t)
@@ -301,6 +301,156 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
   :ensure t
   :defer t
   )
+
+;;;;;;
+(require 'info-look)
+
+(info-lookup-add-help
+ :mode 'python-mode
+ :regexp "[[:alnum:]_]+"
+ :doc-spec
+ '(("(python)Index" nil "")))
+
+;;;;;
+(defun occur-multi-strs-engine (regexps)
+  ;; returns a hash table of line-beg => (occurrence-count "matched-line" (word-beg . word-end) ...)
+  ;; of the occurrences of the list of regexps
+  (let* ((found-match-lines (make-hash-table))
+         ;; use line beginning position as key
+         word-end
+         (orig-beg-pt (point-min))
+         (orig-line-no (line-number-at-pos orig-beg-pt))
+         cur-line-no
+         prev-pt
+         )
+    (save-excursion
+      (dolist (regexp regexps found-match-lines)
+        (setq prev-pt orig-beg-pt)
+        (goto-char prev-pt)
+        (setq cur-line-no orig-line-no)
+        (while (and (not (eobp))
+                    (setq word-end (re-search-forward regexp nil t)))
+          (let* ((line-beg (line-beginning-position))
+                 (line-end (line-end-position))
+                 (word-pos (cons (match-beginning 0) word-end))
+                 (entry (gethash line-beg found-match-lines nil)))
+            (if entry
+                ;; entry is (occurrence-count line-no "matched-line" (word-beg . word-end) ...)
+                ;; add new occurrence to the matched line
+                (progn
+                  (incf (car entry))
+                  (push word-pos (cdddr entry))
+                  ;; get the line-no, so no need to count
+                  (setq cur-line-no (second entry))
+                  (setq prev-pt line-beg))
+              ;; new entry
+              ;; update line number
+              (incf cur-line-no (count-lines prev-pt line-beg))
+              (setq prev-pt line-beg)
+              (puthash line-beg
+                       (list 1 cur-line-no (buffer-substring line-beg line-end) word-pos)
+                       found-match-lines))
+            (goto-char line-end)
+            ))))
+    ))
+
+(defun occur-multi-sort (match-lines)
+  ;; h is as returned by occur-multi-strs-engine
+  ;; sort by decreasing number of occurrence
+  (let (res)
+    (maphash (lambda (k v) (push (cons k v) res)) match-lines)
+    (sort res (lambda (x y)
+                ;; cadr is now the occurrence-count
+                (< (cadr y) (cadr x))))))
+
+(defun occur-multi-str-output (sorted-match-lines regexps ori-buf out-buf)
+  ;; each entry in sorted-match-lines is (line-beg occurrence-count line-no "matched-line" (word-beg . word-end) ...)
+  (with-current-buffer out-buf
+    ;; make-marker
+    ;; set-marker
+    (occur-mode)
+    (let ((inhibit-read-only t)) ;; to allow modifying the buffer
+      (erase-buffer)
+      (let ((n-matches (length sorted-match-lines)))
+        ;; title
+        (insert (propertize
+                 (format "%d matched line%s for %S in buffer: %s\n"
+                         n-matches (if (<= n-matches 1) "" "s")
+                         regexps (buffer-name ori-buf))
+                 'read-only t))
+        (add-face-text-property (point-min) (point) list-matching-lines-buffer-name-face)
+        ;; list-matching-lines-face
+        ;; each matched line
+        (dolist (m sorted-match-lines)
+          (let* ((match-str (fourth m))
+                 (line-beg (first m))
+                 ;; the list of (word-beg . word-end)
+                 (occs (cddddr m))
+                 ;; jump to the first occurrence in the line
+                 (marker (set-marker (make-marker)
+                                     (reduce 'min occs :key 'car)
+                                     ori-buf)))
+            ;; prefix
+            (insert (propertize
+                     (format "%7d:" (third m))
+                     'font-lock-face list-matching-lines-prefix-face
+                     'occur-prefix t
+                     'mouse-face (list 'highlight)
+                     'front-sticky t
+                     'rear-nonsticky t
+                     'occur-target marker
+                     'follow-link t
+                     'help-echo "mouse-2: go to this occurrence"))
+          ;; matched str
+            (dolist (occ occs)
+              (let ((word-s (- (car occ) line-beg))
+                    (word-e (- (cdr occ) line-beg)))
+                (add-text-properties
+                 word-s word-e
+                 '(occur-match t) match-str)
+                (add-face-text-property
+                 word-s word-e
+                 list-matching-lines-face nil match-str)))
+            (insert (propertize
+                     match-str
+                     'mouse-face (list 'highlight)
+                     'occur-target marker
+                     'follow-link t
+                     'help-echo "mouse-2: go to this occurrence")))
+          (insert "\n")
+          )))
+      (goto-char (point-min))))
+
+(defun occur-multi-strings (regexps)
+  (interactive "MRegexps: ")
+  (let* ((ori-buf-name (buffer-name))
+         (rs (mapcar (lambda (x)
+                       (cond ((stringp x) x)
+                             ((symbolp x) (symbol-name x))
+                             (t (prin1-to-string x))))
+                     ;; use this hack to get a list of things
+                     (car (read-from-string (concat "( " regexps " )")))))
+         (matches (occur-multi-sort (occur-multi-strs-engine rs)))
+         (n-matches (length matches))
+         (out-buf-name "*Occur Multi-Str*")
+         (out-buf (progn
+                    (when (string= out-buf-name ori-buf-name)
+                      ;; same as the searched buffer, rename it
+                      (rename-uniquely))
+                    (get-buffer-create out-buf-name))))
+    ;;
+    (message "Found %s matched line%s"
+             n-matches (if (<= n-matches 1) "" "s"))
+    (occur-multi-str-output matches rs (current-buffer) out-buf)
+    (display-buffer out-buf)
+    ;; add-text-properties: (occur-match)
+    ;; buffer-substring to get the substring with the original text properties
+    ;; prefix for line number
+    ;; propertize for mouse click, marker to the original occurrence line
+    ;; insert into out buffer, using occur-mode
+    ))
+
+(global-set-key (kbd "C-c s") 'occur-multi-strings)
 
 ;;;;;;
 (custom-set-faces
