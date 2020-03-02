@@ -450,7 +450,18 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
     ;; insert into out buffer, using occur-mode
     ))
 
-(global-set-key (kbd "C-c s") 'occur-multi-strings)
+(global-set-key (kbd "M-s s") 'occur-multi-strings)
+
+;;
+(defvar search-howto-path "~/projects/learning_notes/learning.org"
+  "The path to the howto file that should be searched.")
+
+(defun search-howto (regexps)
+  (interactive "MRegexps: ")
+  (with-current-buffer (find-file-noselect search-howto-path)
+    (occur-multi-strings regexps)))
+
+(global-set-key (kbd "M-s h") 'search-howto)
 
 ;;;;;;
 (custom-set-faces
