@@ -78,7 +78,7 @@
 (setq common-lisp-hyperspec-root "file:/usr/share/doc/hyperspec/")
 ;;;;;;
 ;;; compilation
-(global-set-key (kbd "C-c c") 'compile)
+;;(global-set-key (kbd "C-c c") 'compile)
 
 ;;;;;;
 ;; SBCL and slime
@@ -206,6 +206,18 @@
 (setq org-ditaa-jar-path "/usr/share/emacs/25.3/lisp/org/ditaa.jar")
 (setq org-confirm-babel-evaluate nil)
 
+;;;;;;
+
+(setq org-capture-templates
+      '(("t" "Todo [inbox]" entry
+         (file+headline "~/todo.org" "Tasks")
+         "* TODO %i%?")
+        ("h" "Howto" entry
+         (file+headline "~/projects/learning_notes/learning.org" "HowTo")
+         "* %i%?")
+        ))
+
+(global-set-key (kbd "C-c c") 'org-capture)
 ;;;;;;
 (use-package ox-hugo
   :ensure t            ;Auto-install the package from Melpa (optional)
@@ -421,15 +433,24 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
           )))
       (goto-char (point-min))))
 
+(defvar occur-regexp-abbr
+  '()
+  "Association list of regexp abbreviation as (abbr . substitution), where the abbr string would be replaced by the substitution in regexps. E.g. ((\"r\" . \"\\\\bR\\\\\") ...) would match 'R' as a word just by using the abbreviation 'r'.")
+
 (defun occur-multi-strings (regexps)
   (interactive "MRegexps: ")
   (let* ((ori-buf-name (buffer-name))
-         (rs (mapcar (lambda (x)
-                       (cond ((stringp x) x)
-                             ((symbolp x) (symbol-name x))
-                             (t (prin1-to-string x))))
-                     ;; use this hack to get a list of things
-                     (car (read-from-string (concat "( " regexps " )")))))
+         (rs-raw (mapcar (lambda (x)
+                           (cond ((stringp x) x)
+                                 ((symbolp x) (symbol-name x))
+                                 (t (prin1-to-string x))))
+                         ;; use this hack to get a list of things
+                         (car (read-from-string (concat "( " regexps " )")))))
+         ;; regexp substitution of abbreviation
+         (rs (mapcar (lambda (r)
+                             (or (cdr (assoc r occur-regexp-abbr))
+                                 r))
+                           rs-raw))
          (matches (occur-multi-sort (occur-multi-strs-engine rs)))
          (n-matches (length matches))
          (out-buf-name "*Occur Multi-Str*")
@@ -456,10 +477,15 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
 (defvar search-howto-path "~/projects/learning_notes/learning.org"
   "The path to the howto file that should be searched.")
 
+(defvar search-howto-regexp-abbr
+  '(("r" . "\\bR\\b"))
+  "Would be used as `occur-regexp-abbr' in using search-howto, see `occur-regexp-abbr' for the documentation.")
+
 (defun search-howto (regexps)
   (interactive "MRegexps: ")
   (with-current-buffer (find-file-noselect search-howto-path)
-    (occur-multi-strings regexps)))
+    (let ((occur-regexp-abbr search-howto-regexp-abbr))
+      (occur-multi-strings regexps))))
 
 (global-set-key (kbd "M-s h") 'search-howto)
 
