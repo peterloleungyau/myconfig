@@ -156,3 +156,15 @@ function link_rc {
 ## image viewer: sxiv
 alias viewimg="sxiv"
 
+export GUIX_LOCPATH=$HOME/.guix-profile/lib/locale
+export PATH="/home/peter/.guix-profile/bin${PATH:+:}$PATH"
+export PATH="/home/peter/.config/guix/current/bin${PATH:+:}$PATH"
+
+# set the mouse speed for the trackball
+# the device id is found to be 12 using 'xinput list'
+# and the "Device Accel Velocity Scaling" prop is found to be 262 using 'xinput list-props 12'
+xinput --set-prop 12 262 2.0
+# to set the scroll to be less sensitive, again 268 is the property id of 'Evdev Scrolling Distance'
+xinput --set-prop 12 268 2 1 1
+# to decrease acceleration
+xinput --set-prop 12 260 2.0

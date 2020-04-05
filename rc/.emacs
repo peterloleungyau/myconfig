@@ -477,6 +477,9 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
 (defvar search-howto-path "~/projects/learning_notes/learning.org"
   "The path to the howto file that should be searched.")
 
+(defvar search-bookmarks-path "~/projects/learning_notes/bookmarks.org"
+  "The path to the bookmarks file that should be searched.")
+
 (defvar search-howto-regexp-abbr
   '(("r" . "\\bR\\b"))
   "Would be used as `occur-regexp-abbr' in using search-howto, see `occur-regexp-abbr' for the documentation.")
@@ -487,7 +490,14 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
     (let ((occur-regexp-abbr search-howto-regexp-abbr))
       (occur-multi-strings regexps))))
 
+(defun search-bookmarks (regexps)
+  (interactive "MRegexps: ")
+  (with-current-buffer (find-file-noselect search-bookmarks-path)
+    (let ((occur-regexp-abbr search-howto-regexp-abbr))
+      (occur-multi-strings regexps))))
+
 (global-set-key (kbd "M-s h") 'search-howto)
+(global-set-key (kbd "M-s m") 'search-bookmarks)
 
 ;;;;;;
 (custom-set-faces
