@@ -135,7 +135,7 @@
  '(org-odt-preferred-output-format "pdf")
  '(package-selected-packages
    (quote
-    (pydoc-info elpy yasnippet-snippets yasnippet lsp-python ess-R-data-view ess-smart-equals ess-smart-underscore ess-view company-lsp lsp-ui lsp-mode counsel-projectile projectile counsel ivy org-plus-contrib org-link-minor-mode ox-hugo ob-ipython ob-mongo ob-prolog ob-sagemath ob-sql-mode spacemacs-theme magit slime org-ref markdown-mode ess auctex)))
+    (evil-surround evil evil-mode pydoc-info elpy yasnippet-snippets yasnippet lsp-python ess-R-data-view ess-smart-equals ess-smart-underscore ess-view company-lsp lsp-ui lsp-mode counsel-projectile projectile counsel ivy org-plus-contrib org-link-minor-mode ox-hugo ob-ipython ob-mongo ob-prolog ob-sagemath ob-sql-mode spacemacs-theme magit slime org-ref markdown-mode ess auctex)))
  '(pdf-view-midnight-colors (quote ("#b2b2b2" . "#292b2e")))
  '(safe-local-variable-values (quote ((Base . 10) (Syntax . ANSI-Common-Lisp))))
  '(select-enable-primary t)
@@ -249,11 +249,12 @@
   :ensure t
   :bind-keymap ("\C-c p" . projectile-command-map)
   :config
-  (projectile-mode t)
+  (projectile-mode +1)
   ;;(setq projectile-completion-system 'ivy)
-  (use-package counsel-projectile
-    :ensure t)
+  ;;(use-package counsel-projectile
+  ;;  :ensure t)
   )
+(setq projectile-project-search-path '("~/projects/" "~/old_home/research/"))
 
 (use-package yasnippet
   :ensure t
@@ -481,7 +482,8 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
   "The path to the bookmarks file that should be searched.")
 
 (defvar search-howto-regexp-abbr
-  '(("r" . "\\bR\\b"))
+  '(("r" . "\\bR\\b")
+    ("os" . "\\bOS\\b"))
   "Would be used as `occur-regexp-abbr' in using search-howto, see `occur-regexp-abbr' for the documentation.")
 
 (defun search-howto (regexps)
@@ -498,6 +500,31 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
 
 (global-set-key (kbd "M-s h") 'search-howto)
 (global-set-key (kbd "M-s m") 'search-bookmarks)
+
+;;;; ido-mode
+(setq ido-enable-flex-matching t)
+(setq ido-create-new-buffer 'always)
+(setq ido-everywhere t)
+(ido-mode 1)
+(ido-everywhere 1)
+
+;;;; evil
+(use-package evil
+  :ensure t
+  :config
+  (evil-mode 1)
+  (define-key evil-insert-state-map (kbd "M-j") 'evil-normal-state)
+  (define-key evil-insert-state-map (kbd "C-e") nil)
+  (define-key evil-insert-state-map (kbd "C-y") nil)
+  (define-key evil-motion-state-map (kbd "C-e") nil)
+  (define-key evil-motion-state-map (kbd "C-y") nil)
+  (define-key evil-motion-state-map (kbd "TAB") nil)
+  (use-package evil-surround
+    :ensure t
+    :config
+    (global-evil-surround-mode 1))
+  )
+
 
 ;;;;;;
 (custom-set-faces

@@ -105,8 +105,8 @@ alias editor=$EDITOR
 alias fplay="mplayer -af scaletempo -fs -zoom -framedrop -osdlevel 3"
 alias afplay="mplayer -af scaletempo -aspect 4:3 -fs -zoom -framedrop -osdlevel 3"
 alias fmplay="mplayer -af scaletempo"
-alias ydown="youtube-dl --no-playlist -f 22/18"
-alias ylist="youtube-dl -o 'v%(playlist_index)s_%(title)s.%(ext)s'"
+alias ydown="youtube-dl --no-check-certificate --no-playlist -f 22/18"
+alias ylist="youtube-dl --no-check-certificate -o 'v%(playlist_index)s_%(title)s.%(ext)s'"
 
 export SBCL_HOME=/usr/lib64/sbcl
 export LESS=-R
@@ -161,10 +161,10 @@ export PATH="/home/peter/.guix-profile/bin${PATH:+:}$PATH"
 export PATH="/home/peter/.config/guix/current/bin${PATH:+:}$PATH"
 
 # set the mouse speed for the trackball
-# the device id is found to be 12 using 'xinput list'
-# and the "Device Accel Velocity Scaling" prop is found to be 262 using 'xinput list-props 12'
-xinput --set-prop 12 262 2.0
+# the device id is found to be 10 using 'xinput list'
+# and the "Device Accel Velocity Scaling" prop is found to be 262 using 'xinput list-props 10'
+#xinput --set-prop 10 262 2.0
 # to set the scroll to be less sensitive, again 268 is the property id of 'Evdev Scrolling Distance'
-xinput --set-prop 12 268 2 1 1
+#xinput --set-prop 10 268 2 1 1
 # to decrease acceleration
-xinput --set-prop 12 260 2.0
+#xinput --set-prop 10 260 2.0
