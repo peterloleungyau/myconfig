@@ -1,4 +1,0 @@
-# Write your default config options here!
-volume=17
-vo=x11
-ao=sdl
