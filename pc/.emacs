@@ -298,6 +298,7 @@
   (use-package yasnippet-snippets
     :ensure t)
   (add-to-list 'yas-snippet-dirs (locate-user-emacs-file "snippets"))
+  (add-to-list 'yas-snippet-dirs "/home/peter/myconfig/snippets/")
   )
 
 (use-package lsp-mode
