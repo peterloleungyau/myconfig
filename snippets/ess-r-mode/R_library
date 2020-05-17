@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: R library
+# key: lib
+# --
+library($0)
