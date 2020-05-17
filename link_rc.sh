@@ -1,9 +1,13 @@
 #!/bin/sh
 
+PRO=${1:-pc}
+
+echo Use the profile ${PRO}
+
 link_rc () {
   TARG=~/"$1"
   mkdir -p ${TARG%/*}
-  ln -sf ~/myconfig/rc/"$1" ~/"$1"
+  ln -sf ~/myconfig/${PRO}/"$1" ~/"$1"
 }
 
 link_rc .bashrc

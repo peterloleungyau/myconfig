@@ -16,7 +16,7 @@
 (require 'package)
 (setq user-emacs-directory "~/.emacs.d/")
 (setq package-user-dir (concat user-emacs-directory "packages"))
-;;(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
                          ;; for temporary problem with elpa using https
                          ;;("gnu-mirror" . "http://mirrors.163.com/elpa/gnu/")
@@ -64,7 +64,6 @@
 (require 'cl)
 
 ;;;;;;
-(setq find-file-visit-truename t)
 
 ;;;;;;
 (setq sh-indent-comment t
@@ -96,8 +95,26 @@
 ;;
 (use-package ess
   :ensure t
-  :init (require 'ess-site))
+  :init (require 'ess-site)
+  (setq ess-fancy-comments nil))
 
+;; copied and modified from
+;;  https://emacs.stackexchange.com/questions/8041/how-to-implement-the-piping-operator-in-ess-mode
+(defun then-R-operator ()
+  "R - %>% operator or 'then' pipe operator"
+  (interactive)
+  (just-one-space 1)
+  (insert "%>% "))
+(define-key ess-mode-map (kbd "M-M") 'then-R-operator)
+(define-key inferior-ess-mode-map (kbd "M-M") 'then-R-operator)
+
+(defun my-R-assign ()
+  "R - <- operator"
+  (interactive)
+  (just-one-space 1)
+  (insert "<- "))
+(define-key ess-r-mode-map (kbd "M--") #'my-R-assign)
+(define-key inferior-ess-r-mode-map (kbd "M--") #'my-R-assign)
 ;;;;;;
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -107,11 +124,27 @@
  '(ansi-color-names-vector
    ["#0a0814" "#f2241f" "#67b11d" "#b1951d" "#4f97d7" "#a31db1" "#28def0" "#b2b2b2"])
  '(column-number-mode t)
- '(custom-enabled-themes (quote (dracula)))
+ '(custom-enabled-themes nil)
  '(custom-safe-themes
    (quote
-    ("947190b4f17f78c39b0ab1ea95b1e6097cc9202d55c73a702395fc817f899393" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
+    ("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
  '(electric-indent-mode nil)
+ '(ess-indent-with-fancy-comments nil)
+ '(ess-own-style-list
+   (quote
+    ((ess-indent-offset . 2)
+     (ess-offset-arguments . open-delim)
+     (ess-offset-arguments-newline . prev-call)
+     (ess-offset-block . prev-line)
+     (ess-offset-continued . straight)
+     (ess-align-nested-calls "ifelse")
+     (ess-align-arguments-in-calls "function[ 	]*(")
+     (ess-align-continuations-in-calls . t)
+     (ess-align-blocks control-flow)
+     (ess-indent-from-lhs arguments fun-decl-opening)
+     (ess-indent-from-chain-start . t)
+     (ess-indent-with-fancy-comments . t))))
+ '(ess-style (quote RStudio))
  '(hl-todo-keyword-faces
    (quote
     (("TODO" . "#dc752f")
@@ -136,7 +169,7 @@
  '(org-odt-preferred-output-format "pdf")
  '(package-selected-packages
    (quote
-    (dracula-theme elpy yasnippet-snippets yasnippet lsp-python ess-R-data-view ess-smart-equals ess-smart-underscore ess-view company-lsp lsp-ui lsp-mode counsel-projectile projectile counsel ivy org-plus-contrib org-link-minor-mode ox-hugo ob-ipython ob-mongo ob-prolog ob-sagemath ob-sql-mode spacemacs-theme magit slime org-ref markdown-mode ess auctex)))
+    (dired-subtree dired evil-surround evil evil-mode pydoc-info elpy yasnippet-snippets yasnippet lsp-python ess-R-data-view ess-smart-equals ess-smart-underscore ess-view company-lsp lsp-ui lsp-mode counsel-projectile projectile counsel ivy org-plus-contrib org-link-minor-mode ox-hugo ob-ipython ob-mongo ob-prolog ob-sagemath ob-sql-mode spacemacs-theme magit slime org-ref markdown-mode ess auctex)))
  '(pdf-view-midnight-colors (quote ("#b2b2b2" . "#292b2e")))
  '(safe-local-variable-values (quote ((Base . 10) (Syntax . ANSI-Common-Lisp))))
  '(select-enable-primary t)
@@ -505,9 +538,9 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
 ;;;; ido-mode
 (setq ido-enable-flex-matching t)
 (setq ido-create-new-buffer 'always)
-(setq ido-everywhere t)
+(setq ido-everywhere nil)
 (ido-mode 1)
-(ido-everywhere 1)
+(ido-everywhere 0)
 
 ;;;; evil
 (use-package evil
@@ -516,6 +549,8 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
   (evil-mode 1)
   (define-key evil-insert-state-map (kbd "M-j") 'evil-normal-state)
   (define-key evil-insert-state-map (kbd "C-e") nil)
+  (define-key evil-insert-state-map (kbd "C-a") nil)
+  (define-key evil-insert-state-map (kbd "C-k") nil)
   (define-key evil-insert-state-map (kbd "C-y") nil)
   (define-key evil-motion-state-map (kbd "C-e") nil)
   (define-key evil-motion-state-map (kbd "C-y") nil)
