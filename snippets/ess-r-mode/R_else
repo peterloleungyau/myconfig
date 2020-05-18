@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: R else 
+# key: el
+# --
+else {
+  $0
+}
