@@ -22,3 +22,13 @@ First copy the `.emacs` to the home directory, then run emacs to install the pac
 cp .emacs ~/
 emacs
 ```
+
+## Prevent snapd from auto-updating
+Following https://askubuntu.com/questions/1045542/how-to-stop-snapd-from-auto-updating
+After the installation above, since we would not be updating the emacs often, we can turn off snapd to prevent auto-updating, to prevent unexpected breaking.
+``` bash
+sudo systemctl stop snapd.service
+# to prevent snapd from starting when the machine restarts
+systemctl mask snapd.service
+sudo kill -9 $(pgrep snapd)
+```
