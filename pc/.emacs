@@ -548,19 +548,31 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
   :ensure t
   :config
   (evil-mode 1)
-  (define-key evil-insert-state-map (kbd "M-j") 'evil-normal-state)
   (define-key evil-insert-state-map (kbd "C-e") nil)
+  (define-key evil-insert-state-map (kbd "C-y") nil)
+  (define-key evil-insert-state-map (kbd "TAB") nil)
   (define-key evil-insert-state-map (kbd "C-a") nil)
   (define-key evil-insert-state-map (kbd "C-k") nil)
-  (define-key evil-insert-state-map (kbd "C-y") nil)
   (define-key evil-motion-state-map (kbd "C-e") nil)
   (define-key evil-motion-state-map (kbd "C-y") nil)
   (define-key evil-motion-state-map (kbd "TAB") nil)
+  
   (use-package evil-surround
     :ensure t
     :config
     (global-evil-surround-mode 1))
   )
+
+(use-package linum-relative
+  :ensure t
+  :config
+  (linum-relative-global-mode 1)
+  ;; Use `display-line-number-mode` as linum-mode's backend for smooth performance
+  (setq linum-relative-backend 'display-line-numbers-mode))
+
+;;
+(require 'dired)
+(define-key dired-mode-map (kbd "C-c t") 'dired-hide-details-mode)
 
 ;;;; dired related, adapted from https://gitlab.com/protesilaos/dotemacs/-/blob/master/emacs-init.org
 (use-package dired
@@ -586,10 +598,12 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
               ("<tab>" . dired-subtree-toggle)
               ("<C-tab>" . dired-subtree-cycle)
               ("<S-iso-lefttab>" . dired-subtree-remove)))
+
+;;
+(use-package autopair
+  :ensure t
+  :config
+  (autopair-global-mode)
+  )
 ;;;;;;
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+
