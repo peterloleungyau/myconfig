@@ -1,0 +1,77 @@
+#+STARTUP: indent
+#+STARTUP: overview
+#+STARTUP: logdone
+#+SEQ_TODO: TODO(t) NEXT(n) WAITING(w) | DONE(d) CANCELLED(c) DEFERRED(f)
+
+* Software specification for model development
+** OS
+- cent os 7
+** R
+- R: 3.6.3
+- BiocManager
+  - Icens through BiocManager, needed for FHtest
+- CRAN
+  - Boruta
+  - DT
+  - FHtest: rPackages.FHtest
+  - RISmed
+  - ROCR
+  - RPostgreSQL
+  - RSelenium
+  - Rcpp
+  - SHAPforxgboost
+  - bayesplot
+  - blob
+  - caret
+  - data.table
+  - devtools
+  - doMC
+  - e1071
+  - fastshap
+  - flexsurv
+  - formatR
+  - foreach
+  - ggplot2
+  - ggthemes
+  - glmnet
+  - glue
+  - gmodels
+  - grid
+  - gridExtra
+  - httr
+  - iml
+  - jsonlite
+  - languageserver
+  - lubridate
+  - mgcv
+  - numDeriv
+  - profmem
+  - purrr
+  - randomForest
+  - randomForestSRC
+  - ranger
+  - rbenchmark
+  - rvest
+  - shiny
+  - sparklyr
+  - styler
+  - survminer
+  - tidyr
+  - tidyverse
+  - xgboost
+  - xml2
+  - yaml
+- GitHub
+  - massmutual/SHAP
+  - massmutual/TreeSHAP
+  - massmutual/adstools
+  - massmutual/climbeR
+  - massmutual/dsar
+  - massmutual/makehambeard
+  - massmutual/mmviz
+  - massmutual/pmw
+  - massmutual/hkdata
+  - shapFlex
+** Python
+** Emacs
+** Vim
