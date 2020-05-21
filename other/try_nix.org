@@ -8,59 +8,61 @@
 - cent os 7
 ** R
 - R: 3.6.3
+- on Nix, within rPackage, with the same name
 - BiocManager
-  - Icens through BiocManager, needed for FHtest
-- CRAN
-  - Boruta
-  - DT
-  - FHtest: rPackages.FHtest
-  - RISmed
-  - ROCR
-  - RPostgreSQL
-  - RSelenium
-  - Rcpp
-  - SHAPforxgboost
-  - bayesplot
-  - blob
-  - caret
-  - data.table
-  - devtools
-  - doMC
-  - e1071
-  - fastshap
-  - flexsurv
-  - formatR
-  - foreach
-  - ggplot2
-  - ggthemes
-  - glmnet
-  - glue
-  - gmodels
-  - grid
-  - gridExtra
-  - httr
-  - iml
-  - jsonlite
-  - languageserver
-  - lubridate
-  - mgcv
-  - numDeriv
-  - profmem
-  - purrr
-  - randomForest
-  - randomForestSRC
-  - ranger
-  - rbenchmark
-  - rvest
-  - shiny
-  - sparklyr
-  - styler
-  - survminer
-  - tidyr
-  - tidyverse
-  - xgboost
-  - xml2
-  - yaml
+  - [X] Icens through BiocManager, needed for FHtest: rPackage.Icens
+- [50/51] CRAN
+  - [X] Boruta
+  - [X] DT
+  - [X] FHtest
+  - [X] RISmed
+  - [X] ROCR
+  - [X] RPostgres
+  - [X] RPostgreSQL
+  - [X] RSelenium
+  - [X] Rcpp
+  - [X] SHAPforxgboost
+  - [X] bayesplot
+  - [X] blob
+  - [X] caret
+  - [X] data.table: rPackage.data_table
+  - [X] devtools
+  - [X] doMC
+  - [X] e1071
+  - [X] fastshap
+  - [X] flexsurv
+  - [X] formatR
+  - [X] foreach
+  - [X] ggplot2
+  - [X] ggthemes
+  - [X] glmnet
+  - [X] glue
+  - [X] gmodels
+  - [ ] grid: seems separated into many packages? grid has been removed from CRAN
+  - [X] gridExtra
+  - [X] httr
+  - [X] iml
+  - [X] jsonlite
+  - [X] languageserver
+  - [X] lubridate
+  - [X] mgcv
+  - [X] numDeriv
+  - [X] profmem
+  - [X] purrr
+  - [X] randomForest
+  - [X] randomForestSRC
+  - [X] ranger
+  - [X] rbenchmark
+  - [X] rvest
+  - [X] shiny
+  - [X] sparklyr
+  - [X] styler
+  - [X] survminer
+  - [X] tidyr
+  - [X] tidyverse
+  - [X] xgboost
+  - [X] xml2
+  - [X] yaml
 - GitHub
   - massmutual/SHAP
   - massmutual/TreeSHAP
