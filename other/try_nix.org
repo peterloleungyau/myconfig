@@ -4,10 +4,12 @@
 #+SEQ_TODO: TODO(t) NEXT(n) WAITING(w) | DONE(d) CANCELLED(c) DEFERRED(f)
 
 * Software specification for model development
+** Nix packages
+- https://nixos.org/nixos/packages.html?channel=nixos-20.03
 ** OS
 - cent os 7
 ** R
-- R: 3.6.3
+- [X] R: 3.6.3, but seems Nix has 3.6.2 in 20.03 channel, and has 4.0.0 on unstable channel
 - on Nix, within rPackage, with the same name
 - BiocManager
   - [X] Icens through BiocManager, needed for FHtest: rPackage.Icens
@@ -76,4 +78,24 @@
   - shapFlex
 ** Python
 ** Emacs
+- [X] emacs (26.3)
+- [ ] org
+- [ ] org-contrib
+- [ ] org-tempo
+- [ ] slime
+- [ ] magit
+- [ ] ess
+- [ ] ess-site
+- [ ] auctex
+- [ ] ess-R-data-view
+- [ ] ess-view
+- [ ] yasnippet
+- [ ] ox-hugo
+- [ ] projectile
+- [ ] elpy
+- [ ] evil
+- [ ] evil-surround
+- [ ] linum-relative
+- [ ] dired-subtree
+- [ ] autopair
 ** Vim
