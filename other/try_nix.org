@@ -78,6 +78,7 @@
   - shapFlex
 ** Python
 ** Emacs
+- seems these emacs packages are not separately packaged, so can still use emacs to install the packages
 - [X] emacs (26.3)
 - [ ] org
 - [ ] org-contrib
@@ -99,3 +100,4 @@
 - [ ] dired-subtree
 - [ ] autopair
 ** Vim
+- [X] vim 8.2
