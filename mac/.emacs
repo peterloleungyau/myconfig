@@ -61,7 +61,7 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
  '(org-odt-preferred-output-format "pdf")
  '(package-selected-packages
    (quote
-    (linum-relative autopair evil-surround evil dired-subtree image+ vdiff yasnippet-snippets flycheck lsp-ui lsp-mode company-lsp dash dockerfile-mode markdown-mode use-package ess-R-data-view elpygen ox-hugo spacemacs-theme ess yaml-mode magit anaconda-mode elpy)))
+    (org-evil linum-relative autopair evil-surround evil dired-subtree image+ vdiff yasnippet-snippets flycheck lsp-ui lsp-mode company-lsp dash dockerfile-mode markdown-mode use-package ess-R-data-view elpygen ox-hugo spacemacs-theme ess yaml-mode magit anaconda-mode elpy)))
  '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -412,6 +412,8 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
     :ensure t
     :config
     (global-evil-surround-mode 1))
+  (use-package org-evil
+    :ensure t)
   )
 
 (use-package linum-relative
