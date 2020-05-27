@@ -186,6 +186,7 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
     :ensure t)
   (yas-global-mode 1)
   (add-to-list 'yas-snippet-dirs "~/Documents/personal/myconfig/snippets/")
+  (yas-reload-all)
   )
 
 ;;(setq python-shell-interpreter "/anaconda/envs/myenv/bin/python")
