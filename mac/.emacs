@@ -422,7 +422,8 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
   :config
   (linum-relative-global-mode 1)
   ;; Use `display-line-number-mode` as linum-mode's backend for smooth performance
-  (setq linum-relative-backend 'display-line-numbers-mode))
+  (setq linum-relative-backend 'display-line-numbers-mode)
+  (setq linum-relative-current-symbol "->"))
 
 (use-package key-chord
   :ensure t
