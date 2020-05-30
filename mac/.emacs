@@ -424,6 +424,12 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
   ;; Use `display-line-number-mode` as linum-mode's backend for smooth performance
   (setq linum-relative-backend 'display-line-numbers-mode))
 
+(use-package key-chord
+  :ensure t
+  :config
+  (setq key-chord-two-keys-delay 0.5)
+  (key-chord-define evil-insert-state-map "kj" 'evil-normal-state)
+  (key-chord-mode 1))
 ;;
 (require 'dired)
 (define-key dired-mode-map (kbd "C-c t") 'dired-hide-details-mode)
