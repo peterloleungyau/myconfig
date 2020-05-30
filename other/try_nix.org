@@ -10,7 +10,7 @@
 - cent os 7
 ** R
 - [X] R: 3.6.3, but seems Nix has 3.6.2 in 20.03 channel, and has 4.0.0 on unstable channel
-- on Nix, within rPackage, with the same name
+- on Nix, within rPackages, with the same name
 - BiocManager
   - [X] Icens through BiocManager, needed for FHtest: rPackage.Icens
 - [50/51] CRAN
