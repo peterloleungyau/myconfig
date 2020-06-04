@@ -181,7 +181,8 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
   (ivy-mode 1)
   (use-package counsel
     :ensure t)
-  (setq ivy-use-virtual-buffers t)
+  (setq ivy-use-virtual-buffers t
+        ivy-count-format "%d/%d ")
   (counsel-mode 1)
   )
 
