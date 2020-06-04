@@ -184,6 +184,7 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
   (setq ivy-use-virtual-buffers t
         ivy-count-format "%d/%d ")
   (counsel-mode 1)
+  (define-key ivy-minibuffer-map (kbd "TAB") 'ivy-partial)
   )
 
 ;;
