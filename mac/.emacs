@@ -61,7 +61,7 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
  '(org-odt-preferred-output-format "pdf")
  '(package-selected-packages
    (quote
-    (org-evil linum-relative autopair evil-surround evil dired-subtree image+ vdiff yasnippet-snippets flycheck lsp-ui lsp-mode company-lsp dash dockerfile-mode markdown-mode use-package ess-R-data-view elpygen ox-hugo spacemacs-theme ess yaml-mode magit anaconda-mode elpy)))
+    (counsel-projectile key-chord org-evil linum-relative autopair evil-surround evil dired-subtree image+ vdiff yasnippet-snippets flycheck lsp-ui lsp-mode company-lsp dash dockerfile-mode markdown-mode use-package ess-R-data-view elpygen ox-hugo spacemacs-theme ess yaml-mode magit anaconda-mode elpy)))
  '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -131,6 +131,10 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
   (setq ess-indent-level 2)
   (setq ess-indent-offset 2)
   (setq ess-arg-function-offset t))
+
+(use-package ess-R-data-view
+  :ensure t)
+
 (my-ess-settings)
 (define-key ess-r-mode-map (kbd "C-c v") #'ess-R-dv-ctable)
 (define-key inferior-ess-r-mode-map (kbd "C-c v") #'ess-R-dv-ctable)
@@ -171,11 +175,27 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
   :init (setq markdown-command "multimarkdown"))
 
 ;;
+(use-package ivy
+  :ensure t
+  :config
+  (ivy-mode 1)
+  (use-package counsel
+    :ensure t)
+  (setq ivy-use-virtual-buffers t)
+  (counsel-mode 1)
+  )
+
+;;
 (use-package projectile
   :ensure t
   :config
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-  (projectile-mode +1))
+  (projectile-mode +1)
+  (use-package counsel-projectile
+    :ensure t
+    :config
+    (counsel-projectile-mode 1))
+  )
 (setq projectile-project-search-path '("~/Documents/projects/" "~/Documents/personal/"))
 
 ;;
@@ -466,3 +486,4 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
   :config
   (autopair-global-mode)
   )
+
