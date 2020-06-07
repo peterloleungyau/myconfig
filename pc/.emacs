@@ -187,6 +187,7 @@
 (setq org-latex-pdf-process (list "makepdf.sh %f"))
 
 (add-hook 'org-mode-hook #'visual-line-mode)
+(setq org-blank-before-new-entry '((heading . never) (plain-list-item . never)))
 
 ;;;;;;
 ;; C family
