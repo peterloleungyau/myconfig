@@ -5,6 +5,10 @@
 # python
 sudo yum -y install libXcomposite libXcursor libXi libXtst libXrandr alsa-lib mesa-libEGL libXdamage mesa-libGL libXScrnSaver
 
+# TODO: conda
+wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+sh Miniconda3-latest-Linux-x86_64.sh
+
 wget https://repo.anaconda.com/archive/Anaconda3-2020.02-Linux-x86_64.sh
 
 bash Anaconda3-2020.02-Linux-x86_64.sh -b
@@ -45,11 +49,16 @@ mkdir -p ~/.R
 echo "CXX14 = g++ -std=c++1y -Wno-unused-variable -Wno-unused-function -fPIC" >> ~/.R/Makevars
 #
 Rscript r_pkgs.R
-# MM packages
+# MM packages: TODO
 
-# vim
+# Rstudio
+wget https://download1.rstudio.org/desktop/centos7/x86_64/rstudio-1.3.959-x86_64.rpm
+sudo yum -y install rstudio-*x86_64.rpm
+
+# vim: TODO
 sudo yum -y install gcc make ncurses ncurses-devel git libcurl-devel openssl-devel libxml2-devel curl
-sudo R -e "chooseCRANmirror(graphics=FALSE, ind=14);install.packages(c('languageserver', 'styler', 'formatR'))"
+# already installed above
+# R -e "chooseCRANmirror(graphics=FALSE, ind=14);install.packages(c('languageserver', 'styler', 'formatR'))"
 
 conda install pip
 conda install -c conda-forge python-language-server nodejs
@@ -98,6 +107,20 @@ curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
 vim + 'PlugInstall --sync' +qa
 
 # emacs
-yum -y install emacs
+# compile emacs ourselves, since the version in yum is old
 
+sudo yum -y install gtk* ncurses* libXpm* giflib* libjpeg* libtiff* libpng*
+sudo yum-builddep -y emacs
+
+wget http://mirrors.ustc.edu.cn/gnu/emacs/emacs-26.3.tar.xz
+tar xf emacs-26*.xz
+cd emacs-26.3
+./autogen.sh 
+./configure
+make
+sudo make install
+cd ..
+
+cp .emacs ~/.emacs
+emacs --batch -l ~/.emacs
 
