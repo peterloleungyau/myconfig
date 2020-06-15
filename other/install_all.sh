@@ -1,25 +1,27 @@
 #!/bin/sh
 
+# for centos 7
+
 # python
-sudo yum install libXcomposite libXcursor libXi libXtst libXrandr alsa-lib mesa-libEGL libXdamage mesa-libGL libXScrnSaver
+sudo yum -y install libXcomposite libXcursor libXi libXtst libXrandr alsa-lib mesa-libEGL libXdamage mesa-libGL libXScrnSaver
 
 wget https://repo.anaconda.com/archive/Anaconda3-2020.02-Linux-x86_64.sh
 
-bash Anaconda3-2020.02-Linux-x86_64.sh
+bash Anaconda3-2020.02-Linux-x86_64.sh -b
 
 # R
-sudo yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm 
+sudo yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm 
 
 # To enable the optional content repo, users with certificate subscriptions run:
 sudo subscription-manager repos --enable "rhel-*-optional-rpms"
 
 # Or you can run
-sudo yum install yum-utils
+sudo yum -y install yum-utils
 sudo yum-config-manager --enable "rhel-*-optional-rpms"
 
 export R_VERSION=3.6.3
 curl -O https://cdn.rstudio.com/r/centos-7/pkgs/R-${R_VERSION}-1-1.x86_64.rpm
-sudo yum install R-${R_VERSION}-1-1.x86_64.rpm
+sudo yum -y install R-${R_VERSION}-1-1.x86_64.rpm
 
 /opt/R/${R_VERSION}/bin/R --version
 
@@ -27,13 +29,22 @@ sudo ln -s /opt/R/${R_VERSION}/bin/R /usr/local/bin/R
 sudo ln -s /opt/R/${R_VERSION}/bin/Rscript /usr/local/bin/Rscript
 
 # R packages
-sudo yum install libxml2-devel curl-devel openssl-devel git nano wget java-1.8.0-openjdk-devel
+sudo yum -y install libxml2-devel curl-devel openssl-devel git nano wget java-1.8.0-openjdk-devel postgresql-devel
 
 sudo /opt/R/${R_VERSION}/bin/R CMD javareconf
 
-install.packages(c("devtools", "tidyverse", "yaml"))
-install.packages("rJava")
-install.packages(c("xgboost", "ranger", "Boruta", "caret"))
+# need newer gcc for some R packages
+# https://linuxize.com/post/how-to-install-gcc-compiler-on-centos-7/
+sudo yum -y install centos-release-scl
+sudo yum -y install devtoolset-7
+# switch to new gcc in the same shell
+source scl_source enable devtoolset-7
+
+# for CXX14, needed for tidymodels
+mkdir -p ~/.R
+echo "CXX14 = g++ -std=c++1y -Wno-unused-variable -Wno-unused-function -fPIC" >> ~/.R/Makevars
+#
+Rscript r_pkgs.R
 # MM packages
 
 # vim
@@ -48,7 +59,7 @@ echo  'alias r="radian"' >> ~/.bashrc
 
 # Install tmux
 sudo yum -y install  https://centos7.iuscommunity.org/ius-release.rpm
-sudo yum install -y tmux2u
+sudo yum -y install tmux2u
 
 # Uninstall old versions
 sudo yum -y remove vim-enhanced vim-common vim-filesystem
