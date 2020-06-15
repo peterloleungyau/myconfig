@@ -5,13 +5,12 @@
 # python
 sudo yum -y install libXcomposite libXcursor libXi libXtst libXrandr alsa-lib mesa-libEGL libXdamage mesa-libGL libXScrnSaver
 
-# TODO: conda
-wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
-sh Miniconda3-latest-Linux-x86_64.sh
-
+# conda
+# https://linuxize.com/post/how-to-install-anaconda-on-centos-7/
 wget https://repo.anaconda.com/archive/Anaconda3-2020.02-Linux-x86_64.sh
-
 bash Anaconda3-2020.02-Linux-x86_64.sh -b
+~/anaconda3/bin/conda init
+source ~/.bashrc
 
 # R
 sudo yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm 
@@ -50,6 +49,7 @@ echo "CXX14 = g++ -std=c++1y -Wno-unused-variable -Wno-unused-function -fPIC" >>
 #
 Rscript r_pkgs.R
 # MM packages: TODO
+# TODO: packages from github
 
 # Rstudio
 wget https://download1.rstudio.org/desktop/centos7/x86_64/rstudio-1.3.959-x86_64.rpm
@@ -60,22 +60,22 @@ sudo yum -y install gcc make ncurses ncurses-devel git libcurl-devel openssl-dev
 # already installed above
 # R -e "chooseCRANmirror(graphics=FALSE, ind=14);install.packages(c('languageserver', 'styler', 'formatR'))"
 
-conda install pip
-conda install -c conda-forge python-language-server nodejs
+conda install -y pip
+conda install -y -c conda-forge python-language-server nodejs
 pip install radian autopep8
 sudo pip3 install jedi
 echo  'alias r="radian"' >> ~/.bashrc 
 
 # Install tmux
-sudo yum -y install  https://centos7.iuscommunity.org/ius-release.rpm
+#sudo yum -y install  https://centos7.iuscommunity.org/ius-release.rpm
+sudo yum -y install https://repo.ius.io/ius-release-el7.rpm
 sudo yum -y install tmux2u
 
 # Uninstall old versions
 sudo yum -y remove vim-enhanced vim-common vim-filesystem
 
 # Download the latest version from Github
-cd Downloads
-git clone https://github.com/vim/vim.git
+git clone --depth=1 https://github.com/vim/vim.git
 
 # Configure language, especially for python3
 # Check config-dir folder of python3 in Anaconda 
@@ -88,13 +88,15 @@ cd vim/src
 sudo ./configure --with-features=huge \
             --enable-multibyte \
             --enable-rubyinterp \
+            --with-python3-command=python3.7 \
             --enable-python3interp=yes \
-            --with-python3-config-dir=/home/parallels/anaconda3/bin/python3.7m-config \
+            --with-python3-config-dir=/home/peter/anaconda3/bin/python3.7m-config \
             --prefix=/usr/local/vim8
 
 sudo make && sudo make install
 
 echo "export PATH=$PATH:/usr/local/vim8/bin/" >> ~/.bashrc
+export PATH=$PATH:/usr/local/vim8/bin/ 
 
 # Verify Installed Vim Version, which should be 8.2.xxx
 # Also verify it supports python3
@@ -105,6 +107,8 @@ curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 vim + 'PlugInstall --sync' +qa
+
+cd ../..
 
 # emacs
 # compile emacs ourselves, since the version in yum is old
