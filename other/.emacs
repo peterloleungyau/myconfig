@@ -46,7 +46,7 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
     ("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
  '(delete-by-moving-to-trash t)
  '(dired-dwim-target t)
- '(dired-isearch-filenames (quote dwim))
+ '(dired-isearch-filenames (quote dwim) t)
  '(dired-listing-switches "-aAFhlv")
  '(dired-recursive-copies (quote always))
  '(dired-subtree-use-backgrounds nil t)
@@ -57,7 +57,7 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
  '(org-odt-preferred-output-format "pdf")
  '(package-selected-packages
    (quote
-    (linum-relative autopair evil-surround evil dired-subtree image+ vdiff flycheck dash dockerfile-mode markdown-mode use-package ess-R-data-view elpygen ess yaml-mode magit anaconda-mode elpy)))
+    (key-chord linum-relative autopair evil-surround evil dired-subtree image+ vdiff flycheck dash dockerfile-mode markdown-mode use-package ess-R-data-view elpygen ess yaml-mode magit anaconda-mode elpy)))
  '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -93,7 +93,10 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
 ;;(add-hook 'python-mode-hook 'anaconda-eldoc-mode)
 
 ;;
-(global-set-key (kbd "C-x g") 'magit-status)
+(use-package magit
+  :ensure t
+  :config
+  (global-set-key (kbd "C-x g") 'magit-status))
 
 ;;
 (set-background-color "gray")
@@ -372,6 +375,12 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
   ;; Use `display-line-number-mode` as linum-mode's backend for smooth performance
   (setq linum-relative-backend 'display-line-numbers-mode))
 
+(use-package key-chord
+  :ensure t
+  :config
+  (setq key-chord-two-keys-delay 0.5)
+  (key-chord-define evil-insert-state-map "kj" 'evil-normal-state)
+  (key-chord-mode 1))
 ;;
 (require 'dired)
 (define-key dired-mode-map (kbd "C-c t") 'dired-hide-details-mode)
