@@ -19,7 +19,9 @@ install.packages(c("devtools", "tidyverse", "yaml",
 			"mgcv", "numDeriv", "profmem", "purrr", "randomForest",
 			"randomForestSRC", "ranger", "rbenchmark", "rvest",
 			"shiny", "sparklyr", "styler", "survminer", 
-			"xml2", "rJava"),
+			"xml2", "rJava",
+# igraph needed for some packages to be compiled using new gcc, but itself would error if use the new gcc.
+			"igraph"),
 		repos="https://cloud.r-project.org")
 
 devtools::install_github("XiangdongGu/hkdata")
