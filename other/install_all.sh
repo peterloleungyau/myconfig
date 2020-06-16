@@ -1,7 +1,6 @@
 #!/bin/sh
 
 set -x
-set -e
 
 # for centos 7
 
@@ -11,6 +10,9 @@ sudo yum -y remove git*
 sudo yum -y install https://packages.endpoint.com/rhel/7/os/x86_64/endpoint-repo-1.7-1.x86_64.rpm
 sudo yum -y install git
 
+# git might not have been installed, so allow yum to error out with "Nothing to do"
+# from now on, stop at errors
+set -e
 # python
 sudo yum -y install libXcomposite libXcursor libXi libXtst libXrandr alsa-lib mesa-libEGL libXdamage mesa-libGL libXScrnSaver
 
@@ -45,6 +47,10 @@ sudo yum -y install libxml2-devel curl-devel openssl-devel nano wget java-1.8.0-
 
 sudo /opt/R/${R_VERSION}/bin/R CMD javareconf
 
+# for CXX14, needed for tidymodels and some packages
+mkdir -p ~/.R
+echo "CXX14 = g++ -std=c++1y -Wno-unused-variable -Wno-unused-function -fPIC" >> ~/.R/Makevars
+
 # for these, use the system old gcc
 Rscript r_pkgs.R
 
@@ -54,10 +60,6 @@ sudo yum -y install centos-release-scl
 sudo yum -y install devtoolset-7
 # switch to new gcc in the same shell
 source scl_source enable devtoolset-7
-
-# for CXX14, needed for tidymodels
-mkdir -p ~/.R
-echo "CXX14 = g++ -std=c++1y -Wno-unused-variable -Wno-unused-function -fPIC" >> ~/.R/Makevars
 
 Rscript -e 'install.packages("tidymodels", repos="https://cloud.r-project.org")'
 Rscript -e 'devtools::install_github("tidymodels/parsnip")'

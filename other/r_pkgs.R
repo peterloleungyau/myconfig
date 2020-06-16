@@ -1,4 +1,8 @@
 
+# to use user library
+dir.create(Sys.getenv("R_LIBS_USER"), recursive=T)
+.libPaths(Sys.getenv("R_LIBS_USER"))
+
 install.packages("BiocManager", repos="https://cran.rstudio.com/")
 # for FHtest
 BiocManager::install("Icens", update = FALSE, ask = FALSE)
