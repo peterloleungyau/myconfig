@@ -11,7 +11,7 @@ BiocManager::install("Icens", update = FALSE, ask = FALSE)
 
 install.packages(c("devtools", "tidyverse", "yaml",
 			"Boruta", "DT", "FHtest", "RISmed", "ROCR","RPostgreSQL",
-			"RSelenium", "Rcpp", "SHAPforxgboost", "bayesplot",
+			"RSelenium", "Rcpp", "bayesplot",
 			"blob", "caret", "data.table", "doMC", "e1071", "fastshap",
 			"flexsurv", "formatR", "foreach", "ggplot2", "ggthemes",
 			"glmnet", "glue", "gmodels", "gridExtra", 
@@ -19,10 +19,9 @@ install.packages(c("devtools", "tidyverse", "yaml",
 			"mgcv", "numDeriv", "profmem", "purrr", "randomForest",
 			"randomForestSRC", "ranger", "rbenchmark", "rvest",
 			"shiny", "sparklyr", "styler", "survminer", 
-			"xgboost", "xml2", "rJava"),
+			"xml2", "rJava"),
 		repos="https://cloud.r-project.org")
 
-devtools::install_github("nredell/shapFlex")
 devtools::install_github("XiangdongGu/hkdata")
 #devtools::install_github("tidymodels/parsnip")
 #devtools::install_github("tidymodels/dials")
