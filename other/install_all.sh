@@ -2,6 +2,12 @@
 
 # for centos 7
 
+# newer version of git
+# https://computingforgeeks.com/how-to-install-latest-version-of-git-git-2-x-on-centos-7/
+sudo yum -y remove git*
+sudo yum -y install https://packages.endpoint.com/rhel/7/os/x86_64/endpoint-repo-1.7-1.x86_64.rpm
+sudo yum -y install git
+
 # python
 sudo yum -y install libXcomposite libXcursor libXi libXtst libXrandr alsa-lib mesa-libEGL libXdamage mesa-libGL libXScrnSaver
 
@@ -32,7 +38,7 @@ sudo ln -s /opt/R/${R_VERSION}/bin/R /usr/local/bin/R
 sudo ln -s /opt/R/${R_VERSION}/bin/Rscript /usr/local/bin/Rscript
 
 # R packages
-sudo yum -y install libxml2-devel curl-devel openssl-devel git nano wget java-1.8.0-openjdk-devel postgresql-devel
+sudo yum -y install libxml2-devel curl-devel openssl-devel nano wget java-1.8.0-openjdk-devel postgresql-devel
 
 sudo /opt/R/${R_VERSION}/bin/R CMD javareconf
 
@@ -55,7 +61,7 @@ Rscript r_pkgs.R
 wget https://download1.rstudio.org/desktop/centos7/x86_64/rstudio-1.3.959-x86_64.rpm
 sudo yum -y install rstudio-*x86_64.rpm
 
-# vim: TODO
+# vim:
 sudo yum -y install gcc make ncurses ncurses-devel git libcurl-devel openssl-devel libxml2-devel curl
 # already installed above
 # R -e "chooseCRANmirror(graphics=FALSE, ind=14);install.packages(c('languageserver', 'styler', 'formatR'))"
