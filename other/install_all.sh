@@ -74,8 +74,11 @@ sudo yum -y install tmux2u
 # Uninstall old versions
 sudo yum -y remove vim-enhanced vim-common vim-filesystem
 
+sudo yum -y install ruby ruby-devel
+
 # Download the latest version from Github
-git clone --depth=1 https://github.com/vim/vim.git
+#git clone --depth=1 https://github.com/vim/vim.git
+git clone https://github.com/vim/vim.git
 
 # Configure language, especially for python3
 # Check config-dir folder of python3 in Anaconda 
@@ -85,30 +88,34 @@ git clone --depth=1 https://github.com/vim/vim.git
 # !!!NEED to revise with-python3-config-dir!!!
 
 cd vim/src
-sudo ./configure --with-features=huge \
+# get to a particular commit on May 17, 2020, for consistency
+git reset --hard deb17451edd65e2af1d155bce0886e856a716591
+
+LDFLAGS="-fno-lto" ./configure --with-features=huge \
             --enable-multibyte \
             --enable-rubyinterp \
-            --with-python3-command=python3.7 \
             --enable-python3interp=yes \
-            --with-python3-config-dir=/home/peter/anaconda3/bin/python3.7m-config \
+	    --enable-fail-if-missing \
+	    --with-python3-config-dir=$($HOME/anaconda3/bin/python3.7m-config --configdir) \
             --prefix=/usr/local/vim8
 
-sudo make && sudo make install
+make && sudo make install
 
-echo "export PATH=$PATH:/usr/local/vim8/bin/" >> ~/.bashrc
+echo "export PATH=\$PATH:/usr/local/vim8/bin/" >> ~/.bashrc
 export PATH=$PATH:/usr/local/vim8/bin/ 
 
 # Verify Installed Vim Version, which should be 8.2.xxx
 # Also verify it supports python3
 vim --version|grep python
 
+cd ../..
+
 # Install vim plug manager
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
-vim + 'PlugInstall --sync' +qa
-
-cd ../..
+cp vimrc_pyr_centos ~/.vimrc
+vim -c ':PlugInstall --sync' -c ':qa'
 
 # emacs
 # compile emacs ourselves, since the version in yum is old
