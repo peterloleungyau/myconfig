@@ -1,5 +1,5 @@
 
-install.packages("BiocManager", repos="https://cloud.r-project.org")
+install.packages("BiocManager", repos="https://cran.rstudio.com/")
 # for FHtest
 BiocManager::install("Icens", update = FALSE, ask = FALSE)
 
@@ -10,11 +10,16 @@ install.packages(c("devtools", "tidyverse", "yaml",
 			"RSelenium", "Rcpp", "SHAPforxgboost", "bayesplot",
 			"blob", "caret", "data.table", "doMC", "e1071", "fastshap",
 			"flexsurv", "formatR", "foreach", "ggplot2", "ggthemes",
-			"glmnet", "glue", "gmodels", "gridExtra",
+			"glmnet", "glue", "gmodels", "gridExtra", 
 			"httr", "iml", "jsonlite", "languageserver", "lubridate",
 			"mgcv", "numDeriv", "profmem", "purrr", "randomForest",
 			"randomForestSRC", "ranger", "rbenchmark", "rvest",
-			"shiny", "sparklyr", "styler", "survminer", "tidymodels",
+			"shiny", "sparklyr", "styler", "survminer", 
 			"xgboost", "xml2", "rJava"),
 		repos="https://cloud.r-project.org")
+
+devtools::install_github("nredell/shapFlex")
+devtools::install_github("XiangdongGu/hkdata")
+#devtools::install_github("tidymodels/parsnip")
+#devtools::install_github("tidymodels/dials")
 

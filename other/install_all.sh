@@ -1,5 +1,8 @@
 #!/bin/sh
 
+set -x
+set -e
+
 # for centos 7
 
 # newer version of git
@@ -42,6 +45,9 @@ sudo yum -y install libxml2-devel curl-devel openssl-devel nano wget java-1.8.0-
 
 sudo /opt/R/${R_VERSION}/bin/R CMD javareconf
 
+# for these, use the system old gcc
+sudo Rscript r_pkgs.R
+
 # need newer gcc for some R packages
 # https://linuxize.com/post/how-to-install-gcc-compiler-on-centos-7/
 sudo yum -y install centos-release-scl
@@ -52,17 +58,19 @@ source scl_source enable devtoolset-7
 # for CXX14, needed for tidymodels
 mkdir -p ~/.R
 echo "CXX14 = g++ -std=c++1y -Wno-unused-variable -Wno-unused-function -fPIC" >> ~/.R/Makevars
+
+Rscript -e 'install.packages("tidymodels", repos="https://cloud.r-project.org")'
+Rscript -e 'devtools::install_github("tidymodels/parsnip")'
+Rscript -e 'devtools::install_github("tidymodels/dials")'
 #
-Rscript r_pkgs.R
 # MM packages: TODO
-# TODO: packages from github
 
 # Rstudio
 wget https://download1.rstudio.org/desktop/centos7/x86_64/rstudio-1.3.959-x86_64.rpm
 sudo yum -y install rstudio-*x86_64.rpm
 
 # vim:
-sudo yum -y install gcc make ncurses ncurses-devel git libcurl-devel openssl-devel libxml2-devel curl
+sudo yum -y install make ncurses ncurses-devel libcurl-devel openssl-devel libxml2-devel curl
 # already installed above
 # R -e "chooseCRANmirror(graphics=FALSE, ind=14);install.packages(c('languageserver', 'styler', 'formatR'))"
 
