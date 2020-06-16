@@ -7,6 +7,9 @@ Plug 'scrooloose/nerdtree'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
+" Git
+Plug 'jreybert/vimagit'
+
 " Syntax highlighting for various languages
 Plug 'sheerun/vim-polyglot'
 
