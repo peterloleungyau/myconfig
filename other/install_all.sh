@@ -25,7 +25,7 @@ source ~/.bashrc
 sudo yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm 
 
 # To enable the optional content repo, users with certificate subscriptions run:
-sudo subscription-manager repos --enable "rhel-*-optional-rpms"
+#sudo subscription-manager repos --enable "rhel-*-optional-rpms"
 
 # Or you can run
 sudo yum -y install yum-utils
@@ -46,7 +46,7 @@ sudo yum -y install libxml2-devel curl-devel openssl-devel nano wget java-1.8.0-
 sudo /opt/R/${R_VERSION}/bin/R CMD javareconf
 
 # for these, use the system old gcc
-sudo Rscript r_pkgs.R
+Rscript r_pkgs.R
 
 # need newer gcc for some R packages
 # https://linuxize.com/post/how-to-install-gcc-compiler-on-centos-7/
