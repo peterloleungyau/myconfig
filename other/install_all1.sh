@@ -62,6 +62,20 @@ sudo yum -y install rstudio-*x86_64.rpm
 # https://linuxize.com/post/how-to-install-gcc-compiler-on-centos-7/
 sudo yum -y install centos-release-scl
 sudo yum -y install devtoolset-7
+
+# seems igraph could be installed after this step
+Rscript -e 'install.packages("igraph", repos="https://cloud.r-project.org")'
+
+# MM packages
+if [ -f "mm_pkgs/mm_pkgs.R" ]; then
+	Rscript mm_pkgs/mm_pkgs.R
+fi
+
+# install terminus for vim user
+# https://linoxide.com/linux-how-to/terminus-super-designed-terminal-app-linux/
+wget https://github.com/Eugeny/terminus/releases/download/v1.0.0-alpha.18/terminus-1.0.0-alpha.18.rpm
+sudo yum -y install screen && sudo rpm -ivh terminus-1.0.0-alpha.18.rpm
+
 # switch to new gcc and continue the remaining parts using the new gcc
 scl enable devtoolset-7 bash ./install_all2.sh
 
