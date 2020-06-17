@@ -160,6 +160,9 @@ export GUIX_LOCPATH=$HOME/.guix-profile/lib/locale
 export PATH="/home/peter/.guix-profile/bin${PATH:+:}$PATH"
 export PATH="/home/peter/.config/guix/current/bin${PATH:+:}$PATH"
 
+GUIX_PROFILE="/home/peter/.guix-profile"
+. "$GUIX_PROFILE/etc/profile"
+
 # set the mouse speed for the trackball
 # the device id is found to be 10 using 'xinput list'
 # and the "Device Accel Velocity Scaling" prop is found to be 262 using 'xinput list-props 10'

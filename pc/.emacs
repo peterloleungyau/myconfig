@@ -93,6 +93,7 @@
   :bind (("C-x g" . magit-status)))
 
 ;;
+(setq exec-path (cons "/home/peter/.guix-profile/bin" exec-path))
 (use-package ess
   :ensure t
   :init (require 'ess-site)
