@@ -20,7 +20,6 @@ sudo yum -y install make ncurses ncurses-devel libcurl-devel openssl-devel libxm
 conda install -y pip
 conda install -y -c conda-forge python-language-server nodejs
 pip install radian autopep8
-sudo pip3 install jedi
 echo  'alias r="radian"' >> ~/.bashrc 
 
 # Install tmux
