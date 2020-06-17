@@ -63,5 +63,5 @@ sudo yum -y install rstudio-*x86_64.rpm
 sudo yum -y install centos-release-scl
 sudo yum -y install devtoolset-7
 # switch to new gcc and continue the remaining parts using the new gcc
-scl enable devtoolset-7 ./install_all2.sh
+scl enable devtoolset-7 bash ./install_all2.sh
 

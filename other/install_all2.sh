@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -x
 set -e
@@ -6,7 +6,7 @@ set -e
 # continue after scl_source
 
 Rscript -e 'install.packages(c("tidymodels", "xgboost", "SHAPforxgboost"), repos="https://cloud.r-project.org")'
-Rscript -e 'devtools::install_github("nredell/shapFlex")'
+#Rscript -e 'devtools::install_github("nredell/shapFlex")'
 Rscript -e 'devtools::install_github("tidymodels/parsnip")'
 Rscript -e 'devtools::install_github("tidymodels/dials")'
 #
