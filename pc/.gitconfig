@@ -3,5 +3,10 @@
 # Please adapt and uncomment the following lines:
 	name = Peter Lo
 	email = peterloleungyau@gmail.com
+[sendemail]
+	smtpEncryption = tls
+	smtpServer = smtp.gmail.com
+	smtpUser = peterloleungyau@gmail.com
+	smtpServerPort = 587
 [log]
 	decorate = short
