@@ -1,8 +1,6 @@
 XTerm*background: black
 XTerm*foreground: white
 XTerm*metaSendsEscape: true
-XTerm*faceName: DejaVu Sans Mono
-XTerm*faceSize: 14
 
 Xft.dpi: 96
 Xft.antialias: 1

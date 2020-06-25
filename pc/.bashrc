@@ -105,8 +105,8 @@ alias editor=$EDITOR
 alias fplay="mplayer -af scaletempo -fs -zoom -framedrop -osdlevel 3"
 alias afplay="mplayer -af scaletempo -aspect 4:3 -fs -zoom -framedrop -osdlevel 3"
 alias fmplay="mplayer -af scaletempo"
-alias ydown="youtube-dl --no-playlist -f 22/18"
-alias ylist="youtube-dl -o 'v%(playlist_index)s_%(title)s.%(ext)s'"
+alias ydown="youtube-dl --no-check-certificate --no-playlist -f 22/18"
+alias ylist="youtube-dl --no-check-certificate -o 'v%(playlist_index)s_%(title)s.%(ext)s'"
 
 export SBCL_HOME=/usr/lib64/sbcl
 export LESS=-R
@@ -156,19 +156,18 @@ function link_rc {
 ## image viewer: sxiv
 alias viewimg="sxiv"
 
+export GUIX_LOCPATH=$HOME/.guix-profile/lib/locale
+export PATH="/home/peter/.guix-profile/bin${PATH:+:}$PATH"
+export PATH="/home/peter/.config/guix/current/bin${PATH:+:}$PATH"
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/peter/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/home/peter/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "/home/peter/anaconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/home/peter/anaconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
+GUIX_PROFILE="/home/peter/.guix-profile"
+. "$GUIX_PROFILE/etc/profile"
 
+# set the mouse speed for the trackball
+# the device id is found to be 10 using 'xinput list'
+# and the "Device Accel Velocity Scaling" prop is found to be 262 using 'xinput list-props 10'
+#xinput --set-prop 10 262 2.0
+# to set the scroll to be less sensitive, again 268 is the property id of 'Evdev Scrolling Distance'
+#xinput --set-prop 10 268 2 1 1
+# to decrease acceleration
+#xinput --set-prop 10 260 2.0

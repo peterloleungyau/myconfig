@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: R define function 
+# key: defun
+# --
+$1 <- function($2) {
+  $0
+}

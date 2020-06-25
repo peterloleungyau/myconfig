@@ -1,0 +1,69 @@
+# These packages could be installed globally with "nix-env -if mmds_hk.nix" in the command-line
+with import <nixpkgs> {};
+let 
+  wanted-pkgs = with rPackages; [
+        Boruta
+        DT
+        FHtest
+        RISmed
+        ROCR
+        #RPostgres
+        RPostgreSQL
+        RSelenium
+        Rcpp
+        SHAPforxgboost
+        bayesplot
+        blob
+        caret
+        data_table
+        devtools
+        doMC
+        e1071
+        fastshap
+        flexsurv
+        formatR
+        foreach
+        ggplot2
+        ggthemes
+        glmnet
+        glue
+        gmodels
+        gridExtra
+        httr
+        iml
+        jsonlite
+        languageserver
+        lubridate
+        mgcv
+        numDeriv
+        profmem
+        purrr
+        randomForest
+        randomForestSRC
+        ranger
+        rbenchmark
+        rvest
+        shiny
+        sparklyr
+        styler
+        survminer
+        tidyr
+        tidyverse
+        xgboost
+        xml2
+        yaml
+      ];
+  R-with-needed-pkgs = rWrapper.override {
+      packages = wanted-pkgs;
+  };
+  Rstudio-with-needed-pkgs = rstudioWrapper.override {
+      packages = wanted-pkgs;
+  };
+in
+[
+  gitAndTools.gitFull
+  emacs
+  vim
+  R-with-needed-pkgs
+  Rstudio-with-needed-pkgs
+]

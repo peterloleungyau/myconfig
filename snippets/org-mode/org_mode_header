@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: org mode header
+# key: orgh
+# --
+#+STARTUP: indent
+#+STARTUP: overview
+#+STARTUP: logdone
+#+SEQ_TODO: TODO(t) NEXT(n) WAITING(w) | DONE(d) CANCELLED(c) DEFERRED(f)
+$0

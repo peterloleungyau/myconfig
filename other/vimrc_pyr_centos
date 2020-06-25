@@ -1,0 +1,119 @@
+call plug#begin('~/.vim/plugged')
+
+" General
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'scrooloose/nerdtree'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+
+" Git
+Plug 'jreybert/vimagit'
+
+" Syntax highlighting for various languages
+Plug 'sheerun/vim-polyglot'
+
+" Python and Julia
+" Send lines to interpreter
+" ALso need to install tmux using 'brew`
+Plug 'benmills/vimux'
+Plug 'jalvesaq/vimcmdline', {'for': ['python', 'julia']}
+
+" R
+Plug 'jalvesaq/Nvim-R' " swissknife for vim and R communication
+Plug 'chrisbra/csv.vim' "for viewing data directly in vim R (Nvim-R)
+Plug 'junegunn/goyo.vim' "for nice zoom effet when editing, see screenshot below
+Plug 'dense-analysis/ale' "for autoformat
+
+" Latex
+" Optional: better Rnoweb support (LaTeX completion)
+Plug 'lervag/vimtex'
+" snippets framework end
+
+call plug#end()
+
+" General
+
+filetype plugin indent on
+
+set number
+set colorcolumn=80
+set textwidth=80
+
+" Tab sanity
+set expandtab
+set tabstop=4
+set shiftwidth=4
+
+" Different tab/space stops
+autocmd Filetype r setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
+autocmd Filetype rmd setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
+
+let g:airline_powerline_fonts = 0
+let g:NERDTreeDirArrows=0
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+
+ " vimcmdline mappings
+ let cmdline_map_start          = ',s'
+ let cmdline_map_send           = ',<Space>'
+ let cmdline_map_send_and_stay  = '<Space>,'
+ let cmdline_map_source_fun     = ',f'
+ let cmdline_map_send_paragraph = ',p'
+ let cmdline_map_send_block     = ',b'
+ let cmdline_map_quit           = ',q'
+
+
+" ALE Configuration
+let g:ale_fixers = {'r': ['styler'], 'python': ['autopep8']}
+
+" Use raian instead of R
+let R_app = "radian"
+let R_cmd = "R"
+let R_hl_term = 0
+let R_args = []  " if you had set any
+let R_bracketed_paste = 1
+
+
+" set rmarkdown file type for safety
+au BufNewFile,BufRead *.Rmd set filetype=rmd
+
+" set r file type for safety
+au BufNewFile,BufRead *.R set filetype=r
+
+
+" Set R shortcuts
+autocmd FileType r inoremap <buffer> %% <Esc>:normal! a %>%<CR>a
+autocmd FileType rnoweb inoremap <buffer> %% <Esc>:normal! a %>%<CR>a
+autocmd FileType rmd inoremap <buffer> %% <Esc>:normal! a %>%<CR>a
+
+
+autocmd FileType r inoremap <buffer> << <Esc>:normal! a <-<CR>a
+autocmd FileType rnoweb inoremap <buffer> << <Esc>:normal! a <-<CR>a
+autocmd FileType rmd inoremap <buffer> << <Esc>:normal! a <-<CR>a
+
+" hlsearch
+hi Search ctermbg=red
+hi Search ctermfg=white
+
+
+" Some notes for Python and Julia through tmux
+
+" check tmux windows
+" tmux ls
+
+" create new window called my1
+" tmux new -s my1
+
+" Exit current window
+" ctrl+b，d
+
+" Nest pane
+" ctrl+b, "->"
+
+" Goto windows "my1"
+" tmux attach -t my1
+
+" Delete "my1"
+" tmux kill-session -t my1
+

@@ -41,12 +41,6 @@ bindsym XF86AudioPrev exec playerctl previous
 bindsym $mod+Shift+f exec firefox
 bindsym Print exec screenshot
 
-# need to install acpilight for xbacklight to work: https://gitlab.com/wavexx/acpilight
-# also need to add user to the video group
-# adjust screen brightness
-bindsym XF86MonBrightnessUp exec --no-startup-id xbacklight -inc 10
-bindsym XF86MonBrightnessDown exec --no-startup-id xbacklight -dec 10
-
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
@@ -57,7 +51,7 @@ bindsym $mod+Return exec xterm
 bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
-bindsym $mod+d exec LANG=C dmenu_run
+bindsym $mod+r exec LANG=C dmenu_run
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
@@ -158,7 +152,7 @@ bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
-bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -185,7 +179,7 @@ mode "resize" {
         bindsym $mod+r mode "default"
 }
 
-bindsym $mod+r mode "resize"
+bindsym $mod+z mode "resize"
 
 assign [class="Firefox"] $ws9
 
@@ -196,10 +190,5 @@ bar {
 }
 
 # startup
-exec --no-startup-id xterm -e newsboat
-exec --no-startup-id firefox &
-exec --no-startup-id udiskie -A -t &
-# to disable trackpad while typing, with a 1.5 second delay
-exec_always --no-startup-id syndaemon -i 1.5 -t -K -R -d
-# disable tap to click
-exec_always --no-startup-id synclient TapButton1=0
+exec --no-startup-id newsboat
+exec --no-startup-id firefox

@@ -1,0 +1,103 @@
+#+STARTUP: indent
+#+STARTUP: overview
+#+STARTUP: logdone
+#+SEQ_TODO: TODO(t) NEXT(n) WAITING(w) | DONE(d) CANCELLED(c) DEFERRED(f)
+
+* Software specification for model development
+** Nix packages
+- https://nixos.org/nixos/packages.html?channel=nixos-20.03
+** OS
+- cent os 7
+** R
+- [X] R: 3.6.3, but seems Nix has 3.6.2 in 20.03 channel, and has 4.0.0 on unstable channel
+- on Nix, within rPackages, with the same name
+- BiocManager
+  - [X] Icens through BiocManager, needed for FHtest: rPackage.Icens
+- [50/51] CRAN
+  - [X] Boruta
+  - [X] DT
+  - [X] FHtest
+  - [X] RISmed
+  - [X] ROCR
+  - [X] RPostgres
+  - [X] RPostgreSQL
+  - [X] RSelenium
+  - [X] Rcpp
+  - [X] SHAPforxgboost
+  - [X] bayesplot
+  - [X] blob
+  - [X] caret
+  - [X] data.table: rPackage.data_table
+  - [X] devtools
+  - [X] doMC
+  - [X] e1071
+  - [X] fastshap
+  - [X] flexsurv
+  - [X] formatR
+  - [X] foreach
+  - [X] ggplot2
+  - [X] ggthemes
+  - [X] glmnet
+  - [X] glue
+  - [X] gmodels
+  - [ ] grid: seems separated into many packages? grid has been removed from CRAN
+  - [X] gridExtra
+  - [X] httr
+  - [X] iml
+  - [X] jsonlite
+  - [X] languageserver
+  - [X] lubridate
+  - [X] mgcv
+  - [X] numDeriv
+  - [X] profmem
+  - [X] purrr
+  - [X] randomForest
+  - [X] randomForestSRC
+  - [X] ranger
+  - [X] rbenchmark
+  - [X] rvest
+  - [X] shiny
+  - [X] sparklyr
+  - [X] styler
+  - [X] survminer
+  - [X] tidyr
+  - [X] tidyverse
+  - [X] xgboost
+  - [X] xml2
+  - [X] yaml
+- GitHub
+  - massmutual/SHAP
+  - massmutual/TreeSHAP
+  - massmutual/adstools
+  - massmutual/climbeR
+  - massmutual/dsar
+  - massmutual/makehambeard
+  - massmutual/mmviz
+  - massmutual/pmw
+  - massmutual/hkdata
+  - shapFlex
+** Python
+** Emacs
+- seems these emacs packages are not separately packaged, so can still use emacs to install the packages
+- [X] emacs (26.3)
+- [ ] org
+- [ ] org-contrib
+- [ ] org-tempo
+- [ ] slime
+- [ ] magit
+- [ ] ess
+- [ ] ess-site
+- [ ] auctex
+- [ ] ess-R-data-view
+- [ ] ess-view
+- [ ] yasnippet
+- [ ] ox-hugo
+- [ ] projectile
+- [ ] elpy
+- [ ] evil
+- [ ] evil-surround
+- [ ] linum-relative
+- [ ] dired-subtree
+- [ ] autopair
+** Vim
+- [X] vim 8.2
