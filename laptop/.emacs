@@ -16,7 +16,7 @@
 (require 'package)
 (setq user-emacs-directory "~/.emacs.d/")
 (setq package-user-dir (concat user-emacs-directory "packages"))
-;;(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
                          ;; for temporary problem with elpa using https
                          ;;("gnu-mirror" . "http://mirrors.163.com/elpa/gnu/")
@@ -64,7 +64,6 @@
 (require 'cl)
 
 ;;;;;;
-(setq find-file-visit-truename t)
 
 ;;;;;;
 (setq sh-indent-comment t
@@ -94,10 +93,29 @@
   :bind (("C-x g" . magit-status)))
 
 ;;
+(setq exec-path (cons "/home/peter/.guix-profile/bin" exec-path))
 (use-package ess
   :ensure t
-  :init (require 'ess-site))
+  :init (require 'ess-site)
+  (setq ess-fancy-comments nil))
 
+;; copied and modified from
+;;  https://emacs.stackexchange.com/questions/8041/how-to-implement-the-piping-operator-in-ess-mode
+(defun then-R-operator ()
+  "R - %>% operator or 'then' pipe operator"
+  (interactive)
+  (just-one-space 1)
+  (insert "%>% "))
+(define-key ess-mode-map (kbd "M-M") 'then-R-operator)
+(define-key inferior-ess-mode-map (kbd "M-M") 'then-R-operator)
+
+(defun my-R-assign ()
+  "R - <- operator"
+  (interactive)
+  (just-one-space 1)
+  (insert "<- "))
+(define-key ess-r-mode-map (kbd "M--") #'my-R-assign)
+(define-key inferior-ess-r-mode-map (kbd "M--") #'my-R-assign)
 ;;;;;;
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -107,11 +125,28 @@
  '(ansi-color-names-vector
    ["#0a0814" "#f2241f" "#67b11d" "#b1951d" "#4f97d7" "#a31db1" "#28def0" "#b2b2b2"])
  '(column-number-mode t)
- '(custom-enabled-themes (quote (dracula)))
+ '(custom-enabled-themes (quote (spacemacs-dark)))
  '(custom-safe-themes
    (quote
-    ("947190b4f17f78c39b0ab1ea95b1e6097cc9202d55c73a702395fc817f899393" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
+    ("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
+ '(display-line-numbers-type (quote relative))
  '(electric-indent-mode nil)
+ '(ess-indent-with-fancy-comments nil)
+ '(ess-own-style-list
+   (quote
+    ((ess-indent-offset . 2)
+     (ess-offset-arguments . open-delim)
+     (ess-offset-arguments-newline . prev-call)
+     (ess-offset-block . prev-line)
+     (ess-offset-continued . straight)
+     (ess-align-nested-calls "ifelse")
+     (ess-align-arguments-in-calls "function[ 	]*(")
+     (ess-align-continuations-in-calls . t)
+     (ess-align-blocks control-flow)
+     (ess-indent-from-lhs arguments fun-decl-opening)
+     (ess-indent-from-chain-start . t)
+     (ess-indent-with-fancy-comments . t))))
+ '(ess-style (quote RStudio))
  '(hl-todo-keyword-faces
    (quote
     (("TODO" . "#dc752f")
@@ -136,7 +171,7 @@
  '(org-odt-preferred-output-format "pdf")
  '(package-selected-packages
    (quote
-    (dracula-theme elpy yasnippet-snippets yasnippet lsp-python ess-R-data-view ess-smart-equals ess-smart-underscore ess-view company-lsp lsp-ui lsp-mode counsel-projectile projectile counsel ivy org-plus-contrib org-link-minor-mode ox-hugo ob-ipython ob-mongo ob-prolog ob-sagemath ob-sql-mode spacemacs-theme magit slime org-ref markdown-mode ess auctex)))
+    (debbugs yaml-mode yaml-model ewal-spacemacs-themes nix-mode key-chord org-evil autopair linum-relative dired-subtree dired evil-surround evil evil-mode pydoc-info elpy yasnippet-snippets yasnippet lsp-python ess-R-data-view ess-smart-equals ess-smart-underscore ess-view company-lsp lsp-ui lsp-mode counsel-projectile projectile counsel ivy org-plus-contrib org-link-minor-mode ox-hugo ob-ipython ob-mongo ob-prolog ob-sagemath ob-sql-mode spacemacs-theme magit slime org-ref markdown-mode ess auctex)))
  '(pdf-view-midnight-colors (quote ("#b2b2b2" . "#292b2e")))
  '(safe-local-variable-values (quote ((Base . 10) (Syntax . ANSI-Common-Lisp))))
  '(select-enable-primary t)
@@ -154,6 +189,7 @@
 (setq org-latex-pdf-process (list "makepdf.sh %f"))
 
 (add-hook 'org-mode-hook #'visual-line-mode)
+(setq org-blank-before-new-entry '((heading . never) (plain-list-item . never)))
 
 ;;;;;;
 ;; C family
@@ -265,6 +301,8 @@
   (use-package yasnippet-snippets
     :ensure t)
   (add-to-list 'yas-snippet-dirs (locate-user-emacs-file "snippets"))
+  (add-to-list 'yas-snippet-dirs "/home/peter/myconfig/snippets/")
+  (yas-reload-all)
   )
 
 (use-package lsp-mode
@@ -505,26 +543,49 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
 ;;;; ido-mode
 (setq ido-enable-flex-matching t)
 (setq ido-create-new-buffer 'always)
-(setq ido-everywhere t)
+(setq ido-everywhere nil)
 (ido-mode 1)
-(ido-everywhere 1)
+(ido-everywhere 0)
+(setq ido-auto-merge-work-directories-length -1)
 
 ;;;; evil
 (use-package evil
   :ensure t
   :config
   (evil-mode 1)
-  (define-key evil-insert-state-map (kbd "M-j") 'evil-normal-state)
   (define-key evil-insert-state-map (kbd "C-e") nil)
   (define-key evil-insert-state-map (kbd "C-y") nil)
+  (define-key evil-insert-state-map (kbd "TAB") nil)
+  (define-key evil-insert-state-map (kbd "C-a") nil)
+  (define-key evil-insert-state-map (kbd "C-k") nil)
   (define-key evil-motion-state-map (kbd "C-e") nil)
   (define-key evil-motion-state-map (kbd "C-y") nil)
   (define-key evil-motion-state-map (kbd "TAB") nil)
+  
   (use-package evil-surround
     :ensure t
     :config
     (global-evil-surround-mode 1))
+  (use-package org-evil
+    :ensure t)
   )
+
+(use-package linum-relative
+  :ensure t
+  :config
+  (linum-relative-global-mode 1)
+  ;; Use `display-line-number-mode` as linum-mode's backend for smooth performance
+  (setq linum-relative-backend 'display-line-numbers-mode))
+
+(use-package key-chord
+  :ensure t
+  :config
+  (setq key-chord-two-keys-delay 0.5)
+  (key-chord-define evil-insert-state-map "kj" 'evil-normal-state)
+  (key-chord-mode 1))
+;;
+(require 'dired)
+(define-key dired-mode-map (kbd "C-c t") 'dired-hide-details-mode)
 
 ;;;; dired related, adapted from https://gitlab.com/protesilaos/dotemacs/-/blob/master/emacs-init.org
 (use-package dired
@@ -550,10 +611,28 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
               ("<tab>" . dired-subtree-toggle)
               ("<C-tab>" . dired-subtree-cycle)
               ("<S-iso-lefttab>" . dired-subtree-remove)))
+
+;;
+(use-package autopair
+  :ensure t
+  :config
+  (autopair-global-mode)
+  )
+
+;;
+(use-package nix-mode
+  :mode "\\.nix\\'")
+
+(use-package yaml-mode
+  :ensure t)
+
+(use-package debbugs
+  :ensure t)
 ;;;;;;
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(default ((t (:family "DejaVu Sans Mono" :foundry "unknown" :slant normal :weight normal :height 158 :width normal)))))

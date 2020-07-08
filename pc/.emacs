@@ -171,7 +171,7 @@
  '(org-odt-preferred-output-format "pdf")
  '(package-selected-packages
    (quote
-    (ewal-spacemacs-themes nix-mode key-chord org-evil autopair linum-relative dired-subtree dired evil-surround evil evil-mode pydoc-info elpy yasnippet-snippets yasnippet lsp-python ess-R-data-view ess-smart-equals ess-smart-underscore ess-view company-lsp lsp-ui lsp-mode counsel-projectile projectile counsel ivy org-plus-contrib org-link-minor-mode ox-hugo ob-ipython ob-mongo ob-prolog ob-sagemath ob-sql-mode spacemacs-theme magit slime org-ref markdown-mode ess auctex)))
+    (debbugs yaml-mode yaml-model ewal-spacemacs-themes nix-mode key-chord org-evil autopair linum-relative dired-subtree dired evil-surround evil evil-mode pydoc-info elpy yasnippet-snippets yasnippet lsp-python ess-R-data-view ess-smart-equals ess-smart-underscore ess-view company-lsp lsp-ui lsp-mode counsel-projectile projectile counsel ivy org-plus-contrib org-link-minor-mode ox-hugo ob-ipython ob-mongo ob-prolog ob-sagemath ob-sql-mode spacemacs-theme magit slime org-ref markdown-mode ess auctex)))
  '(pdf-view-midnight-colors (quote ("#b2b2b2" . "#292b2e")))
  '(safe-local-variable-values (quote ((Base . 10) (Syntax . ANSI-Common-Lisp))))
  '(select-enable-primary t)
@@ -561,6 +561,7 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
   (define-key evil-motion-state-map (kbd "C-e") nil)
   (define-key evil-motion-state-map (kbd "C-y") nil)
   (define-key evil-motion-state-map (kbd "TAB") nil)
+  (evil-set-initial-state 'debbugs-gnu-mode 'emacs)
   
   (use-package evil-surround
     :ensure t
@@ -622,6 +623,12 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
 ;;
 (use-package nix-mode
   :mode "\\.nix\\'")
+
+(use-package yaml-mode
+  :ensure t)
+
+(use-package debbugs
+  :ensure t)
 ;;;;;;
 
 (custom-set-faces
