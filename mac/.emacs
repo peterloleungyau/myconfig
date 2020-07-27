@@ -172,7 +172,10 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
-  :init (setq markdown-command "multimarkdown"))
+  :init
+  ;;(setq markdown-command "multimarkdown")
+  (setq markdown-command "pandoc")
+  )
 
 ;;
 (use-package ivy
@@ -492,3 +495,6 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
 ;;
 (use-package nix-mode
   :mode "\\.nix\\'")
+
+(use-package yaml-mode
+  :ensure t)
