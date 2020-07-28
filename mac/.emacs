@@ -50,7 +50,7 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
  '(dired-isearch-filenames (quote dwim))
  '(dired-listing-switches "-aAFhlv")
  '(dired-recursive-copies (quote always))
- '(dired-subtree-use-backgrounds nil)
+ '(dired-subtree-use-backgrounds nil t)
  '(elpy-modules
    (quote
     (elpy-module-company elpy-module-eldoc elpy-module-pyvenv elpy-module-highlight-indentation elpy-module-yasnippet elpy-module-django elpy-module-sane-defaults)))
@@ -61,7 +61,7 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
  '(org-odt-preferred-output-format "pdf")
  '(package-selected-packages
    (quote
-    (nix-mode ox-hugo counsel-projectile key-chord org-evil linum-relative autopair evil-surround evil dired-subtree image+ vdiff yasnippet-snippets flycheck lsp-ui lsp-mode company-lsp dash dockerfile-mode markdown-mode use-package ess-R-data-view elpygen spacemacs-theme ess yaml-mode magit anaconda-mode elpy)))
+    (highlight-indent-guides nix-mode ox-hugo counsel-projectile key-chord org-evil linum-relative autopair evil-surround evil dired-subtree image+ vdiff yasnippet-snippets flycheck lsp-ui lsp-mode company-lsp dash dockerfile-mode markdown-mode use-package ess-R-data-view elpygen spacemacs-theme ess yaml-mode magit anaconda-mode elpy)))
  '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -498,5 +498,29 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
 (use-package nix-mode
   :mode "\\.nix\\'")
 
+;;; from https://stackoverflow.com/a/4459159
+(defun aj-toggle-fold ()
+  "Toggle fold all lines larger than indentation on current line"
+  (interactive)
+  (let ((col 1))
+    (save-excursion
+      (back-to-indentation)
+      (setq col (+ 1 (current-column)))
+      (set-selective-display
+       (if selective-display nil (or col 1))))))
+
 (use-package yaml-mode
-  :ensure t)
+  :ensure t
+  :bind (:map yaml-mode-map
+              ("<C-tab>" . aj-toggle-fold))
+  )
+
+;;
+
+(use-package highlight-indent-guides
+  :ensure t
+  :init
+  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
+  (add-hook 'yaml-mode-hook 'highlight-indent-guides-mode)
+  (setq highlight-indent-guides-method 'column)
+  )
