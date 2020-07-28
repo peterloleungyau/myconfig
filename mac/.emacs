@@ -431,9 +431,11 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
   (define-key evil-insert-state-map (kbd "TAB") nil)
   (define-key evil-insert-state-map (kbd "C-a") nil)
   (define-key evil-insert-state-map (kbd "C-k") nil)
+  (define-key evil-insert-state-map (kbd "C-w") nil)
   (define-key evil-motion-state-map (kbd "C-e") nil)
   (define-key evil-motion-state-map (kbd "C-y") nil)
   (define-key evil-motion-state-map (kbd "TAB") nil)
+  (define-key evil-motion-state-map (kbd "C-w") nil)
   (use-package evil-surround
     :ensure t
     :config
