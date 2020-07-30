@@ -733,8 +733,9 @@ If N is negative, would move down N items instead."
   "Indent the whole subtree of the current item, i.e. move it to the right by N steps.
 Each step consists of `simple-indent-list-offset' spaces. N defaults to 1. If N is negative, would move to the left instead."
   (interactive "p")
-  (let ((indent-adjust (* simple-indent-list-offset (or n 1))))
-    (when (>= (+ (current-indentation) indent-adjust) 0)
+  (let ((indent-adjust (max (* simple-indent-list-offset (or n 1))
+                            (- (current-indentation)))))
+    (unless (zerop indent-adjust)
       ;; do not let the line go past the left edge, which may destroy the structure
       (save-excursion
         (beginning-of-line)
@@ -756,8 +757,9 @@ Each step consists of `simple-indent-list-offset' spaces. N defaults to 1. If N 
   "Indent the current line, i.e. move it to the right by N steps.
 Each step consists of `simple-indent-list-offset' spaces. N defaults to 1. If N is negative, would move to the left instead."
   (interactive "p")
-  (let ((indent-adjust (* simple-indent-list-offset (or n 1))))
-    (when (>= (+ (current-indentation) indent-adjust) 0)
+  (let ((indent-adjust (max (* simple-indent-list-offset (or n 1))
+                            (- (current-indentation)))))
+    (unless (zerop indent-adjust)
       (save-excursion
         (indent-rigidly (line-beginning-position) (line-end-position) indent-adjust)))))
 
