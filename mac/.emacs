@@ -61,7 +61,7 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
  '(org-odt-preferred-output-format "pdf")
  '(package-selected-packages
    (quote
-    (highlight-indent-guides nix-mode ox-hugo counsel-projectile key-chord org-evil linum-relative autopair evil-surround evil dired-subtree image+ vdiff yasnippet-snippets flycheck lsp-ui lsp-mode company-lsp dash dockerfile-mode markdown-mode use-package ess-R-data-view elpygen spacemacs-theme ess yaml-mode magit anaconda-mode elpy)))
+    (auctex highlight-indent-guides nix-mode ox-hugo counsel-projectile key-chord org-evil linum-relative autopair evil-surround evil dired-subtree image+ vdiff yasnippet-snippets flycheck lsp-ui lsp-mode company-lsp dash dockerfile-mode markdown-mode use-package ess-R-data-view elpygen spacemacs-theme ess yaml-mode magit anaconda-mode elpy)))
  '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -498,6 +498,149 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
 (use-package nix-mode
   :mode "\\.nix\\'")
 
+;; simple list item manipulation based on indentation, e.g. in yaml
+(defvar simple-indent-list-offset 2
+  "The number of spaces for each indentation.")
+
+(defun simple-indent-list-goto (wanted-indent n skip)
+  "Move by N items while skipping some lines.
+If N is positive, move forward, otherwise move backward. Blank lines and those lines where `(skip line-indent wanted-indent)' is true are skipped an not counted toward N. Go to at most N lines which are not blank and where `(skip line-indent wanted-indent)' is false. Stop and return nil if beginning of buffer or end of buffer is reached before N good lines are found. Otherwise returns t.
+Adapted from https://emacs.stackexchange.com/a/27169"
+  (let ((direction (if (> n 0) 1 -1))
+        (n (abs n)))
+    (while (and (> n 0)
+                ;; forward-line returns 0 on success
+                (zerop (forward-line direction))
+                (or (eolp)
+                    ;; skip over blank lines
+                    (funcall skip (current-indentation) wanted-indent)
+                    (decf n))))
+    (= n 0)))
+
+(defun simple-indent-list-next-item (&optional n)
+  "Jump to the next N items with the same or less indentation.
+N defaults to 1. If N is negative, would go backward, i.e. to previous N item.
+Will go to the end of buffer if no such item exists."
+  (interactive "p")
+  (let ((cur-col (current-column)))
+    (and (simple-indent-list-goto (current-indentation) (or n 1) '>)
+         (move-to-column cur-col))))
+
+(defun simple-indent-list-prev-item (&optional n)
+  "Jump to the previous item with the same or less indentation.
+N defaults to 1. If N is negative, would go forward, i.e. to next N item.
+Will go to the beginning of buffer if no such item exists."
+  (interactive "p")
+  (simple-indent-list-next-item (if (null n) -1 (- n))))
+
+(defun simple-indent-list-parent-item (&optional n)
+  "Jump to the N previous item with strictly less indentation.
+Will go to the beginning of buffer if no such item exists."
+  (interactive "p")
+  (let ((cur-col (current-column)))
+    (setq n (or n 1))
+    (and (simple-indent-list-goto (current-indentation) (- n) '>=)
+         (move-to-column cur-col))))
+
+(defun simple-indent-list-select-item (&optional n)
+  "Select the region of the whole subtree(s) of N items.
+N defaults to 1. If N is negative, select N previous items instead."
+  (interactive "p")
+  (beginning-of-line)
+  (set-mark-command nil)
+  (simple-indent-list-goto (current-indentation) (or n 1) '>))
+
+(defun simple-indent-list-act-item (action n)
+  "Call (action beg end) on the region of the whole subtree(s) of N items.
+If N is negative, kill N previous items instead."
+  (beginning-of-line)
+  (let ((beg (point)))
+    (simple-indent-list-goto (current-indentation) (or n 1) '>)
+    (funcall action beg (point))))
+
+(defun simple-indent-list-kill-item (&optional n)
+  "Kill the region of the whole subtree(s) of N items.
+N defaults to 1. If N is negative, kill N previous items instead."
+  (interactive "p")
+  (simple-indent-list-act-item 'kill-region (or n 1)))
+
+(defun simple-indent-list-copy-item (&optional n)
+  "Copy the region of the whole subtree(s) of N items, as in kill-ring-save.
+N defaults to 1. If N is negative, kill N previous items instead."
+  (interactive "p")
+  (save-excursion
+    (simple-indent-list-act-item 'kill-ring-save n)))
+
+(defun simple-indent-list-yank-item ()
+  "Paste the region of the whole subtree(s) previously killed.
+Will make sure there is a newline at the end of the pasted region and the current line."
+  (interactive)
+  (beginning-of-line)
+  (yank)
+  (unless (equalp (point) (line-beginning-position))
+    (insert "\n")))
+
+(defun simple-indent-list-move-item-down (&optional n)
+  "Move the whole subtree of the current item down N items.
+N defaults to 1. If N is negative, would move up N items instead."
+  (interactive "p")
+  (let ((cur-indent (current-indentation))
+        (cur-col (current-column))
+        (cur-item (simple-indent-list-act-item 'delete-and-extract-region 1)))
+    (simple-indent-list-goto cur-indent (or n 1) '>)
+    (save-excursion
+      (beginning-of-line)
+      (insert cur-item)
+      (unless (equalp (point) (line-beginning-position))
+        (insert "\n")))
+    (move-to-column cur-col)))
+
+(defun simple-indent-list-move-item-up (&optional n)
+  "Move the whole subtree of the current item up N items.
+If N is negative, would move down N items instead."
+  (interactive "p")
+  (simple-indent-list-move-item-down (if (null n) -1 (- n))))
+
+(defun simple-indent-list-move-item-indent (&optional n)
+  "Indent the whole subtree of the current item, i.e. move it to the right by N steps.
+Each step consists of `simple-indent-list-offset' spaces. N defaults to 1. If N is negative, would move to the left instead."
+  (interactive "p")
+  (let ((indent-adjust (max (* simple-indent-list-offset (or n 1))
+                            (- (current-indentation)))))
+    (unless (zerop indent-adjust)
+      ;; do not let the line go past the left edge, which may destroy the structure
+      (save-excursion
+        (beginning-of-line)
+        (let ((beg (point)))
+          (simple-indent-list-goto (current-indentation) 1 '>)
+          (unless (eobp)
+            ;; unless at end of buffer, it overshoots one line
+            (backward-char 1))
+          (indent-rigidly beg (point) indent-adjust)
+          )))))
+
+(defun simple-indent-list-move-item-outdent (&optional n)
+  "Outdent the whole subtree of the current item, i.e. move it to the left by N steps.
+Each step consists of `simple-indent-list-offset' spaces. N defaults to 1. If N is negative, would move to the right instead."
+  (interactive "p")
+  (simple-indent-list-move-item-indent (if (null n) -1 (- n))))
+
+(defun simple-indent-list-line-indent (&optional n)
+  "Indent the current line, i.e. move it to the right by N steps.
+Each step consists of `simple-indent-list-offset' spaces. N defaults to 1. If N is negative, would move to the left instead."
+  (interactive "p")
+  (let ((indent-adjust (max (* simple-indent-list-offset (or n 1))
+                            (- (current-indentation)))))
+    (unless (zerop indent-adjust)
+      (save-excursion
+        (indent-rigidly (line-beginning-position) (line-end-position) indent-adjust)))))
+
+(defun simple-indent-list-line-outdent (&optional n)
+  "Indent the current line, i.e. move it to the left by N steps.
+Each step consists of `simple-indent-list-offset' spaces. N defaults to 1. If N is negative, would move to the right instead."
+  (interactive "p")
+  (simple-indent-list-line-indent (if (null n) -1 (- n))))
+
 ;;; from https://stackoverflow.com/a/4459159
 (defun aj-toggle-fold ()
   "Toggle fold all lines larger than indentation on current line"
@@ -512,7 +655,20 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
 (use-package yaml-mode
   :ensure t
   :bind (:map yaml-mode-map
-              ("<C-tab>" . aj-toggle-fold))
+              ("<C-tab>" . aj-toggle-fold)
+              ("<C-M-up>" . simple-indent-list-prev-item)
+              ("<C-M-down>" . simple-indent-list-next-item)
+              ("C-M-u" . simple-indent-list-parent-item)
+              ("C-c r" . simple-indent-list-select-item)
+              ("C-c k" . simple-indent-list-kill-item)
+              ("C-c w" . simple-indent-list-copy-item)
+              ("C-c y" . simple-indent-list-yank-item)
+              ("<M-left>" . simple-indent-list-line-outdent)
+              ("<M-right>" . simple-indent-list-line-indent)
+              ("<M-S-left>" . simple-indent-list-move-item-outdent)
+              ("<M-S-right>" . simple-indent-list-move-item-indent)
+              ("<M-up>" . simple-indent-list-move-item-up)
+              ("<M-down>" . simple-indent-list-move-item-down))
   )
 
 ;;
@@ -523,4 +679,9 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
   (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
   (add-hook 'yaml-mode-hook 'highlight-indent-guides-mode)
   (setq highlight-indent-guides-method 'column)
+  )
+
+(use-package tex
+  :ensure auctex
+  :mode ("\\.tex\\'" . latex-mode)
   )
