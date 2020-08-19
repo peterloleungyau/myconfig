@@ -426,6 +426,7 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
   :ensure t
   :config
   (evil-mode 1)
+  (global-undo-tree-mode -1)
   (define-key evil-insert-state-map (kbd "C-e") nil)
   (define-key evil-insert-state-map (kbd "C-y") nil)
   (define-key evil-insert-state-map (kbd "TAB") nil)
