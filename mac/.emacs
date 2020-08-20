@@ -689,5 +689,7 @@ Each step consists of `simple-indent-list-offset' spaces. N defaults to 1. If N 
   (use-package auctex-latexmk
     :ensure t
     :config
-    (auctex-latexmk-setup))
+    (auctex-latexmk-setup)
+    (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+    (setq reftex-plug-into-AUCTeX t))
   )
