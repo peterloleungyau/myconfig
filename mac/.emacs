@@ -692,5 +692,6 @@ Each step consists of `simple-indent-list-offset' spaces. N defaults to 1. If N 
     (auctex-latexmk-setup)
     (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
     (setq reftex-plug-into-AUCTeX t)
-    (setq auctex-latexmk-inherit-TeX-PDF-mode t))
+    (setq auctex-latexmk-inherit-TeX-PDF-mode t)
+    (setq reftex-external-file-finders t))
   )
