@@ -559,10 +559,13 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
   (define-key evil-insert-state-map (kbd "C-a") nil)
   (define-key evil-insert-state-map (kbd "C-k") nil)
   (define-key evil-insert-state-map (kbd "C-w") nil)
+  (define-key evil-insert-state-map (kbd "C-r") nil)
   (define-key evil-motion-state-map (kbd "C-e") nil)
   (define-key evil-motion-state-map (kbd "C-y") nil)
   (define-key evil-motion-state-map (kbd "TAB") nil)
   (define-key evil-motion-state-map (kbd "C-w") nil)
+  (define-key evil-motion-state-map (kbd "C-r") nil)
+  (define-key undo-tree-map (kbd "C-r") nil)
   (evil-set-initial-state 'debbugs-gnu-mode 'emacs)
   
   (use-package evil-surround
