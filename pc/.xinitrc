@@ -38,6 +38,9 @@ xinput --set-prop 12 268 2 1 1
 # to decrease acceleration
 xinput --set-prop 12 260 2.0
 
+xinput --set-button-map "ELECOM TrackBall Mouse HUGE TrackBall" 1 2 3 4 5 6 7 2 1 10 11 12 13
+xinput --set-button-map "USB OPTICAL MOUSE" 1 2 3 4 5 6 7 2 9 10 11 12 13
+
 exec /usr/bin/dwmstart
 
 ########################################################################
