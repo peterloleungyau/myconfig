@@ -422,21 +422,35 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
 ;;
 
 ;;;; evil
+(add-hook 'undo-tree-mode-hook
+          (lambda ()
+            (define-key undo-tree-map (kbd "C-r") nil)
+            (define-key undo-tree-map (kbd "C-z") 'undo-tree-undo)
+            (define-key undo-tree-map (kbd "C-S-z") 'undo-tree-redo)
+            (global-set-key (kbd "C-r") 'isearch-backward)
+            ))
+
 (use-package evil
   :ensure t
   :config
   (evil-mode 1)
-  (global-undo-tree-mode -1)
   (define-key evil-insert-state-map (kbd "C-e") nil)
   (define-key evil-insert-state-map (kbd "C-y") nil)
   (define-key evil-insert-state-map (kbd "TAB") nil)
   (define-key evil-insert-state-map (kbd "C-a") nil)
   (define-key evil-insert-state-map (kbd "C-k") nil)
   (define-key evil-insert-state-map (kbd "C-w") nil)
+  (define-key evil-insert-state-map (kbd "C-r") nil)
   (define-key evil-motion-state-map (kbd "C-e") nil)
   (define-key evil-motion-state-map (kbd "C-y") nil)
   (define-key evil-motion-state-map (kbd "TAB") nil)
   (define-key evil-motion-state-map (kbd "C-w") nil)
+  (define-key evil-motion-state-map (kbd "C-r") nil)
+  (define-key evil-normal-state-map (kbd "C-r") nil)
+  (undo-tree-mode 1)
+  (define-key undo-tree-map (kbd "C-r") nil)
+  (evil-set-initial-state 'debbugs-gnu-mode 'emacs)
+  
   (use-package evil-surround
     :ensure t
     :config
@@ -444,6 +458,8 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
   (use-package org-evil
     :ensure t)
   )
+
+(global-set-key (kbd "C-r") 'isearch-backward)
 
 (use-package linum-relative
   :ensure t
