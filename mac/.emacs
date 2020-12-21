@@ -200,6 +200,9 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
     :ensure t
     :config
     (counsel-projectile-mode 1))
+  ;; somehow counsel-projectile-grep does not work when using grep alone, possibly due to different version on mac.
+  ;; but projectile-use-git-grep seems to work fine
+  (setq projectile-use-git-grep t)
   )
 (setq projectile-project-search-path '("~/Documents/projects/" "~/Documents/personal/"))
 
