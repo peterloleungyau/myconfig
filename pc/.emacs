@@ -94,6 +94,8 @@
 
 ;;
 (setq exec-path (cons "/home/peter/.guix-profile/bin" exec-path))
+(setenv "PATH" (concat "/home/peter/.guix-profile/bin:" (getenv "PATH")))
+
 (use-package ess
   :ensure t
   :init (require 'ess-site)
@@ -171,7 +173,7 @@
  '(org-odt-preferred-output-format "pdf")
  '(package-selected-packages
    (quote
-    (window-numbering pdf-tools highlight-indent-guides debbugs yaml-mode yaml-model ewal-spacemacs-themes nix-mode key-chord org-evil autopair linum-relative dired-subtree dired evil-surround evil evil-mode pydoc-info elpy yasnippet-snippets yasnippet lsp-python ess-R-data-view ess-smart-equals ess-smart-underscore ess-view company-lsp lsp-ui lsp-mode counsel-projectile projectile counsel ivy org-plus-contrib org-link-minor-mode ox-hugo ob-ipython ob-mongo ob-prolog ob-sagemath ob-sql-mode spacemacs-theme magit slime org-ref markdown-mode ess auctex)))
+    (ripgrep ag window-numbering pdf-tools highlight-indent-guides debbugs yaml-mode yaml-model ewal-spacemacs-themes nix-mode key-chord org-evil autopair linum-relative dired-subtree dired evil-surround evil evil-mode pydoc-info elpy yasnippet-snippets yasnippet lsp-python ess-R-data-view ess-smart-equals ess-smart-underscore ess-view company-lsp lsp-ui lsp-mode counsel-projectile projectile counsel ivy org-plus-contrib org-link-minor-mode ox-hugo ob-ipython ob-mongo ob-prolog ob-sagemath ob-sql-mode spacemacs-theme magit slime org-ref markdown-mode ess auctex)))
  '(pdf-view-midnight-colors (quote ("#b2b2b2" . "#292b2e")))
  '(safe-local-variable-values (quote ((Base . 10) (Syntax . ANSI-Common-Lisp))))
  '(select-enable-primary t)
@@ -290,6 +292,10 @@
   ;;(setq projectile-completion-system 'ivy)
   ;;(use-package counsel-projectile
   ;;  :ensure t)
+  (use-package ag
+    :ensure t)
+  (use-package ripgrep
+    :ensure t)
   )
 (setq projectile-project-search-path '("~/projects/" "~/old_home/research/"))
 
