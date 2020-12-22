@@ -47,7 +47,7 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
     ("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
  '(delete-by-moving-to-trash t)
  '(dired-dwim-target t)
- '(dired-isearch-filenames (quote dwim))
+ '(dired-isearch-filenames (quote dwim) t)
  '(dired-listing-switches "-aAFhlv")
  '(dired-recursive-copies (quote always))
  '(dired-subtree-use-backgrounds nil t)
@@ -61,7 +61,7 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
  '(org-odt-preferred-output-format "pdf")
  '(package-selected-packages
    (quote
-    (window-numbering auctex-latexmk auctex highlight-indent-guides nix-mode ox-hugo counsel-projectile key-chord org-evil linum-relative autopair evil-surround evil dired-subtree image+ vdiff yasnippet-snippets flycheck lsp-ui lsp-mode company-lsp dash dockerfile-mode markdown-mode use-package ess-R-data-view elpygen spacemacs-theme ess yaml-mode magit anaconda-mode elpy)))
+    (ripgrep ag window-numbering auctex-latexmk auctex highlight-indent-guides nix-mode ox-hugo counsel-projectile key-chord org-evil linum-relative autopair evil-surround evil dired-subtree image+ vdiff yasnippet-snippets flycheck lsp-ui lsp-mode company-lsp dash dockerfile-mode markdown-mode use-package ess-R-data-view elpygen spacemacs-theme ess yaml-mode magit anaconda-mode elpy)))
  '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -203,6 +203,10 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
   ;; somehow counsel-projectile-grep does not work when using grep alone, possibly due to different version on mac.
   ;; but projectile-use-git-grep seems to work fine
   (setq projectile-use-git-grep t)
+  (use-package ag
+    :ensure t)
+  (use-package ripgrep
+    :ensure t)
   )
 (setq projectile-project-search-path '("~/Documents/projects/" "~/Documents/personal/"))
 
