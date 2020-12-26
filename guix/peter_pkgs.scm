@@ -23,6 +23,7 @@
     "xinput"
     "gimp"
     "krita"
+    "icecat"
     ;;
     "vim"
     "tmux"
@@ -38,6 +39,7 @@
     "stapler"
     ;; emacs
     "emacs"
+    "emacs-use-package"
     "emacs-org"
     "emacs-slime"
     "emacs-magit"
@@ -65,6 +67,8 @@
     "emacs-debbugs"
     "emacs-highlight-indent-guides"
     "emacs-pdf-tools"
+    "emacs-undo-tree"
+    "emacs-spacemacs-theme"
     ;; R
     "r"
     "r-yaml"
@@ -74,7 +78,7 @@
     "r-tidyverse"
     "r-survminer"
     "r-styler"
-    "r-sparklyr"
+    ;;"r-sparklyr"
     "r-shiny"
     "r-rvest"
     "r-rbenchmark"
@@ -85,7 +89,7 @@
     ;;"r-numderiv"
     ;;"r-mgcv"
     "r-lubridate"
-    "r-languageserver"
+    ;;"r-languageserver"
     "r-jsonlite"
     ;;"r-iml"
     ;;"r-httr"
