@@ -11,8 +11,8 @@ link_rc () {
 }
 
 link_rc .bashrc
-link_rc .newsbeuter/config
-link_rc .newsbeuter/urls
+#link_rc .newsbeuter/config
+#link_rc .newsbeuter/urls
 link_rc .emacs
 link_rc .gitconfig
 link_rc .Xresources
@@ -22,3 +22,4 @@ link_rc .config/i3/config
 link_rc .i3status.conf
 link_rc calibrate_time.sh
 link_rc home.html
+link_rc .config/nyxt
