@@ -846,6 +846,9 @@ Each step consists of `simple-indent-list-offset' spaces. N defaults to 1. If N 
     (window-numbering-mode))
 
 ;;;;;;
+(add-hook 'pdf-view-mode-hook (lambda () (linum-relative-mode -1)))
+ 
+;;;;;;
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
