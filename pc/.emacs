@@ -12,6 +12,9 @@
 ;;; Define org and melpa as package sources, and install `use-package' if it's not
 ;;; already there. Always ensure packages being loaded are there (or else it'll
 ;;; automatically download from melpa)
+(add-to-list 'load-path "~/.guix-profile/share/emacs/site-lisp")
+(setq load-path (remove "/home/peter/.guix-profile/share/emacs/site-lisp/obsolete" load-path))
+(guix-emacs-autoload-packages)
 
 (require 'package)
 (setq user-emacs-directory "~/.emacs.d/")
@@ -31,7 +34,7 @@
                                      )))
 (setq package-load-list '(all))
 (package-initialize)
-(setq package-enable-at-startup nil)
+(setq package-enable-at-startup t)
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -40,7 +43,7 @@
 (eval-when-compile
   (require 'use-package))
 
-(setq use-package-always-ensure t)
+(setq use-package-always-ensure nil)
 (add-hook 'package-menu-mode-hook 'hl-line-mode)
 
 ;;; Load org mode early to ensure that the orgmode ELPA version gets picked up, not the
@@ -83,9 +86,8 @@
 ;;;;;;
 ;; SBCL and slime
 (use-package slime
-  :ensure t
   :config
-  (setq inferior-lisp-program "/usr/bin/sbcl --dynamic-space-size 2048")
+  ;;(setq inferior-lisp-program "/usr/bin/sbcl --dynamic-space-size 2048")
   (slime-setup '(slime-fancy)))
 
 ;; magit
@@ -97,7 +99,6 @@
 (setenv "PATH" (concat "/home/peter/.guix-profile/bin:" (getenv "PATH")))
 
 (use-package ess
-  :ensure t
   :init (require 'ess-site)
   (setq ess-fancy-comments nil))
 
@@ -127,16 +128,14 @@
  '(ansi-color-names-vector
    ["#0a0814" "#f2241f" "#67b11d" "#b1951d" "#4f97d7" "#a31db1" "#28def0" "#b2b2b2"])
  '(column-number-mode t)
- '(custom-enabled-themes (quote (spacemacs-dark)))
+ '(custom-enabled-themes '(spacemacs-dark))
  '(custom-safe-themes
-   (quote
-    ("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
- '(display-line-numbers-type (quote relative))
+   '("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default))
+ '(display-line-numbers-type 'relative)
  '(electric-indent-mode nil)
  '(ess-indent-with-fancy-comments nil)
  '(ess-own-style-list
-   (quote
-    ((ess-indent-offset . 2)
+   '((ess-indent-offset . 2)
      (ess-offset-arguments . open-delim)
      (ess-offset-arguments-newline . prev-call)
      (ess-offset-block . prev-line)
@@ -147,11 +146,10 @@
      (ess-align-blocks control-flow)
      (ess-indent-from-lhs arguments fun-decl-opening)
      (ess-indent-from-chain-start . t)
-     (ess-indent-with-fancy-comments . t))))
- '(ess-style (quote RStudio))
+     (ess-indent-with-fancy-comments . t)))
+ '(ess-style 'RStudio)
  '(hl-todo-keyword-faces
-   (quote
-    (("TODO" . "#dc752f")
+   '(("TODO" . "#dc752f")
      ("NEXT" . "#dc752f")
      ("THEM" . "#2d9574")
      ("PROG" . "#4f97d7")
@@ -166,19 +164,18 @@
      ("FIXME" . "#dc752f")
      ("XXX" . "#dc752f")
      ("XXXX" . "#dc752f")
-     ("???" . "#dc752f"))))
+     ("???" . "#dc752f")))
  '(indent-tabs-mode nil)
- '(org-agenda-files (quote ("~/todo.org")))
- '(org-export-backends (quote (ascii beamer html icalendar latex)))
+ '(org-agenda-files '("~/todo.org"))
+ '(org-export-backends '(ascii beamer html icalendar latex))
  '(org-odt-preferred-output-format "pdf")
  '(package-selected-packages
-   (quote
-    (ripgrep ag window-numbering pdf-tools highlight-indent-guides debbugs yaml-mode yaml-model ewal-spacemacs-themes nix-mode key-chord org-evil autopair linum-relative dired-subtree dired evil-surround evil evil-mode pydoc-info elpy yasnippet-snippets yasnippet lsp-python ess-R-data-view ess-smart-equals ess-smart-underscore ess-view company-lsp lsp-ui lsp-mode counsel-projectile projectile counsel ivy org-plus-contrib org-link-minor-mode ox-hugo ob-ipython ob-mongo ob-prolog ob-sagemath ob-sql-mode spacemacs-theme magit slime org-ref markdown-mode ess auctex)))
- '(pdf-view-midnight-colors (quote ("#b2b2b2" . "#292b2e")))
- '(safe-local-variable-values (quote ((Base . 10) (Syntax . ANSI-Common-Lisp))))
+   '(ripgrep ag window-numbering pdf-tools highlight-indent-guides debbugs yaml-mode yaml-model ewal-spacemacs-themes nix-mode key-chord org-evil autopair linum-relative dired-subtree dired evil-surround evil evil-mode pydoc-info elpy yasnippet-snippets yasnippet lsp-python ess-R-data-view ess-smart-equals ess-smart-underscore ess-view company-lsp lsp-ui lsp-mode counsel-projectile projectile counsel ivy org-plus-contrib org-link-minor-mode ox-hugo ob-ipython ob-mongo ob-prolog ob-sagemath ob-sql-mode spacemacs-theme magit slime org-ref markdown-mode ess auctex))
+ '(pdf-view-midnight-colors '("#b2b2b2" . "#292b2e"))
+ '(safe-local-variable-values '((Base . 10) (Syntax . ANSI-Common-Lisp)))
  '(select-enable-primary t)
  '(show-paren-mode t)
- '(warning-suppress-types (quote ((:warning \(undo\ discard-info\))))))
+ '(warning-suppress-types '((:warning \(undo\ discard-info\)))))
 
 ;;;;;;
 ;;; for sql-mode
@@ -259,7 +256,6 @@
 (global-set-key (kbd "C-c c") 'org-capture)
 ;;;;;;
 (use-package ox-hugo
-  :ensure t            ;Auto-install the package from Melpa (optional)
   :after ox)
 
 ;;;;;;
@@ -285,7 +281,6 @@
 
 ;;;;;;
 (use-package projectile
-  :ensure t
   :bind-keymap ("\C-c p" . projectile-command-map)
   :config
   (projectile-mode +1)
@@ -293,19 +288,19 @@
   ;;(use-package counsel-projectile
   ;;  :ensure t)
   (use-package ag
-    :ensure t)
+    )
   (use-package ripgrep
-    :ensure t)
+    )
   )
 (setq projectile-project-search-path '("~/projects/" "~/old_home/research/"))
 
 (use-package yasnippet
-  :ensure t
   :init
   (yas-global-mode 1)
   :config
   (use-package yasnippet-snippets
-    :ensure t)
+    :ensure t
+    )
   (add-to-list 'yas-snippet-dirs (locate-user-emacs-file "snippets"))
   (add-to-list 'yas-snippet-dirs "/home/peter/myconfig/snippets/")
   (yas-reload-all)
@@ -346,7 +341,6 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
   (forward-line))
 
 (use-package elpy
-  :ensure t
   :commands elpy-enable
   :init (with-eval-after-load 'python (elpy-enable))
   :config
@@ -356,7 +350,6 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
   )
 ;;;;;;
 (use-package auctex
-  :ensure t
   :defer t
   )
 
@@ -564,7 +557,6 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
             ))
 
 (use-package evil
-  :ensure t
   :config
   (evil-mode 1)
   (define-key evil-insert-state-map (kbd "C-e") nil)
@@ -585,24 +577,22 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
   (evil-set-initial-state 'debbugs-gnu-mode 'emacs)
   
   (use-package evil-surround
-    :ensure t
     :config
     (global-evil-surround-mode 1))
   (use-package org-evil
-    :ensure t)
+    :ensure t
+    )
   )
 
 (global-set-key (kbd "C-r") 'isearch-backward)
 
 (use-package linum-relative
-  :ensure t
   :config
   (linum-relative-global-mode 1)
   ;; Use `display-line-number-mode` as linum-mode's backend for smooth performance
   (setq linum-relative-backend 'display-line-numbers-mode))
 
 (use-package key-chord
-  :ensure t
   :config
   (setq key-chord-two-keys-delay 0.5)
   (key-chord-define evil-insert-state-map "kj" 'evil-normal-state)
@@ -627,7 +617,6 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
   )
 
 (use-package dired-subtree
-  :ensure t
   :after dired
   :custom
   (dired-subtree-use-backgrounds nil)
@@ -802,7 +791,6 @@ Each step consists of `simple-indent-list-offset' spaces. N defaults to 1. If N 
        (if selective-display nil (or col 1))))))
 
 (use-package yaml-mode
-  :ensure t
   :bind (:map yaml-mode-map
               ("<C-tab>" . aj-toggle-fold)
               ("<C-M-up>" . simple-indent-list-prev-item)
@@ -821,12 +809,11 @@ Each step consists of `simple-indent-list-offset' spaces. N defaults to 1. If N 
   )
 
 (use-package debbugs
-  :ensure t)
+  )
 
 ;;
 
 (use-package highlight-indent-guides
-  :ensure t
   :init
   (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
   (add-hook 'yaml-mode-hook 'highlight-indent-guides-mode)
@@ -835,7 +822,6 @@ Each step consists of `simple-indent-list-offset' spaces. N defaults to 1. If N 
 
 ;;
 (use-package pdf-tools
-  :ensure t
   :config
   (pdf-tools-install))
 
