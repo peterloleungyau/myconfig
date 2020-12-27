@@ -24,6 +24,10 @@
     "gimp"
     "krita"
     "icecat"
+    "rsync"
+    "curl"
+    "wget"
+    "xrdb"
     ;;
     "vim"
     "tmux"
