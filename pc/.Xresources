@@ -1,6 +1,8 @@
 XTerm*background: black
 XTerm*foreground: white
 XTerm*metaSendsEscape: true
+xterm*faceName: Monospace
+xterm*faceSize: 20
 
 Xft.dpi: 96
 Xft.antialias: 1
