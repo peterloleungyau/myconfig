@@ -61,6 +61,18 @@
                      'ext4))
              (type "ext4"))
            (file-system
+             (mount-point "/home/peter/old_root")
+             (device
+               (uuid "aabf15af-1b80-4985-9586-a753293a872a"
+                     'ext4))
+             (type "ext4"))
+           (file-system
+             (mount-point "/home/peter/old_drive")
+             (device
+               (uuid "c446ae6f-12fb-4bf2-b378-74a482505fa2"
+                     'ext4))
+             (type "ext4"))
+           (file-system
              (mount-point "/boot/efi")
              (device (uuid "1CF7-0888" 'fat32))
              (type "vfat"))

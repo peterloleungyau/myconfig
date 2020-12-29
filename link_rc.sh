@@ -25,3 +25,11 @@ link_rc .i3status.conf
 link_rc calibrate_time.sh
 link_rc home.html
 link_rc .config/nyxt
+
+# for mounting
+# for sdb1
+mkdir -p ~/old_root
+# for sdb3
+mkdir -p ~/old_drive/peter
+# and there is still sdb4 which is not currently mounted
+ln -sf ~/old_drive/peter ~/old_home
