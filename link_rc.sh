@@ -25,6 +25,8 @@ link_rc .i3status.conf
 link_rc calibrate_time.sh
 link_rc home.html
 link_rc .config/nyxt
+# for disabling anti-aliasing for large font sizes
+link_rc .config/fontconfig
 
 # for mounting
 # for sdb1
