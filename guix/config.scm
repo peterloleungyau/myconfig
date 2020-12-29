@@ -23,19 +23,14 @@
             (specification->package "i3-wm")
             (specification->package "i3status")
             (specification->package "dmenu")
-            ;; for the chinese input method
+            (specification->package "st")
+	    ;; for chinese input method
             (specification->package "glibc-locales")
             (specification->package "dconf")
             (specification->package "ibus")
             (specification->package "ibus-libpinyin")
             (specification->package "ibus-rime")
-            ;;(specification->package "fcitx5")
-            ;;(specification->package "fcitx5-configtool")
-            ;;(specification->package "fcitx5-chinese-addons")
-            ;;(specification->package "fcitx5-qt")
-            ;;(specification->package "fcitx5-gtk")
             ;;
-            (specification->package "st")
             (specification->package "nss-certs"))
       %base-packages))
   (services
@@ -47,16 +42,26 @@
       %desktop-services))
   (bootloader
     (bootloader-configuration
-      (bootloader grub-bootloader)
-      (target "/dev/sda")
+      (bootloader grub-efi-bootloader)
+      (target "/boot/efi")
       (keyboard-layout keyboard-layout)))
   (swap-devices
-    (list (uuid "af8d4e0c-0d47-49e2-b822-e32a6d8d9726")))
+    (list (uuid "ce68ef2d-0b67-4adc-90ff-5727388a9322")))
   (file-systems
     (cons* (file-system
-             (mount-point "/")
+             (mount-point "/home")
              (device
-               (uuid "21c472b6-da69-49b1-b030-e4683787409c"
+               (uuid "880c9b8b-b505-4895-8aa8-ca2ea063f42f"
                      'ext4))
              (type "ext4"))
+           (file-system
+             (mount-point "/")
+             (device
+               (uuid "06f7b7d2-5466-4509-b336-002ec27cf280"
+                     'ext4))
+             (type "ext4"))
+           (file-system
+             (mount-point "/boot/efi")
+             (device (uuid "1CF7-0888" 'fat32))
+             (type "vfat"))
            %base-file-systems)))

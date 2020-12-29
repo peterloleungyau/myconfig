@@ -246,10 +246,10 @@
 
 (setq org-capture-templates
       '(("t" "Todo [inbox]" entry
-         (file+headline "~/todo.org" "Tasks")
+         (file+headline "~/to_keep/projects/todo.org" "Tasks")
          "* TODO %i%?")
         ("h" "Howto" entry
-         (file+headline "~/projects/learning_notes/learning.org" "HowTo")
+         (file+headline "~/to_keep/projects/learning_notes/learning.org" "HowTo")
          "* %i%?")
         ))
 
@@ -290,9 +290,10 @@
   (use-package ag
     )
   (use-package ripgrep
+    :ensure t
     )
   )
-(setq projectile-project-search-path '("~/projects/" "~/old_home/research/"))
+(setq projectile-project-search-path '("~/to_keep/projects/"))
 
 (use-package yasnippet
   :init
