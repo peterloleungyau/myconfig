@@ -23,6 +23,7 @@
     "xinput"
     "gimp"
     "krita"
+    "libreoffice"
     "icecat"
     "rsync"
     "curl"
