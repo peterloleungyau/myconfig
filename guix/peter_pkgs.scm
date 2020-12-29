@@ -35,6 +35,7 @@
     "youtube-dl"
     "nyxt"
     "git"
+    "openssh" ;; somehow ssh is not in the path without this
     "the-silver-searcher"
     "ripgrep"
     "texlive"
