@@ -16,6 +16,11 @@
     "font-cns11643"
     "font-cns11643-swjz"
     ;;
+    "gnupg"
+    "pinentry"
+    "pinentry-qt"
+    "password-store"
+    ;;
     "xterm"
     "mplayer"
     "mpv"

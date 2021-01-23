@@ -6,3 +6,6 @@ export GUIX_GTK2_IM_MODULE_FILE=/run/current-system/profile/lib/gtk-2.0/2.10.0/i
 export GUIX_GTK3_IM_MODULE_FILE=/run/current-system/profile/lib/gtk-3.0/3.0.0/immodules-gtk3.cache
 
 ibus-daemon -drx
+
+xinput --set-button-map "ELECOM TrackBall Mouse HUGE TrackBall" 1 2 3 4 5 6 7 2 1 10 11 12 13
+xinput --set-button-map "USB OPTICAL MOUSE" 1 2 3 4 5 6 7 2 9 10 11 12 13
