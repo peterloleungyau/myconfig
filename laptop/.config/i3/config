@@ -53,6 +53,9 @@ floating_modifier $mod
 # start a terminal
 bindsym $mod+Return exec xterm
 
+# password manager
+bindsym $mod+p exec LANG=C passmenu
+
 # kill focused window
 bindsym $mod+Shift+q kill
 
