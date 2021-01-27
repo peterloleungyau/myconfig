@@ -20,8 +20,12 @@
     "pinentry"
     "pinentry-qt"
     "password-store"
+    ;; emails
+    "isync"
+    "mu"
     ;;
     "xterm"
+    "xrandr"
     "mplayer"
     "mpv"
     "sxiv"

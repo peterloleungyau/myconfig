@@ -35,3 +35,8 @@ mkdir -p ~/old_root
 mkdir -p ~/old_drive/peter
 # and there is still sdb4 which is not currently mounted
 ln -sf ~/old_drive/peter ~/old_home
+
+#
+mkdir -p ~/to_keep/Mail
+ln -sf ~/to_keep/Mail ~/Mail
+link_rc .mbsyncrc
