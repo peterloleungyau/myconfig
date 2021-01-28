@@ -846,7 +846,7 @@ Each step consists of `simple-indent-list-offset' spaces. N defaults to 1. If N 
   (setq mu4e-change-filenames-when-moving t)
 
   ;; Refresh mail using isync every 10 minutes
-  (setq mu4e-update-interval (* 10 60))
+  (setq mu4e-update-interval (* 60 60))
   (setq mu4e-get-mail-command "mbsync -a")
   (setq mu4e-maildir "~/Mail")
 
@@ -861,6 +861,12 @@ Each step consists of `simple-indent-list-offset' spaces. N defaults to 1. If N 
           (:maildir "/[Gmail]/Trash"     :key ?t)
           (:maildir "/[Gmail]/Drafts"    :key ?d)
           (:maildir "/[Gmail]/All Mail"  :key ?a)))
+  (setq smtpmail-smtp-server "smtp.gmail.com"
+        smtpmail-smtp-service 465
+        smtpmail-stream-type  'ssl
+        user-mail-address "peterloleungyau@gmail.com"
+        user-full-name "Peter Lo")
+  (setq message-send-mail-function 'smtpmail-send-it)
   )
 
 ;;;;;;
