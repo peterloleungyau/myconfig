@@ -38,6 +38,7 @@
     "curl"
     "wget"
     "xrdb"
+    "xscreensaver"
     ;;
     "vim"
     "tmux"
