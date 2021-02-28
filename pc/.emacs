@@ -631,7 +631,9 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
   :ensure t
   :config
   (autopair-global-mode)
-  (push ?< (cl-getf autopair-dont-pair :never))
+  (add-hook 'org-mode-hook 
+            #'(lambda ()
+                     (setq autopair-dont-pair `(:never (?< ) ,@autopair-dont-pair))))
   )
 
 ;;

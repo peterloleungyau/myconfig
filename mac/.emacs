@@ -521,7 +521,9 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
   :ensure t
   :config
   (autopair-global-mode)
-  (push ?< (cl-getf autopair-dont-pair :never))
+  (add-hook 'org-mode-hook 
+            #'(lambda ()
+                     (setq autopair-dont-pair `(:never (?< ) ,@autopair-dont-pair))))
   )
 
 ;;
