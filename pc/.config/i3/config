@@ -196,4 +196,4 @@ bar {
 #exec --no-startup-id newsboat
 #exec --no-startup-id firefox
 
-xscreensaver &
+exec xscreensaver -no-splash &
