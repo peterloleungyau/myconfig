@@ -1,3 +1,16 @@
+(use-modules (guix)
+             (guix licenses)
+             (guix download)
+             (guix git-download)
+             (gnu packages statistics)
+             (gnu packages python)
+             (gnu packages python-science)
+             (gnu packages python-xyz)
+             (gnu packages libffi)
+             (gnu packages check)
+             (gnu packages terminals)
+             (guix build-system python))
+
 (define-public python-lineedit
   (package
     (name "python-lineedit")
@@ -79,3 +92,5 @@
     (description "A 21 century R console")
     (license #f)))
 
+;;
+python-radian
