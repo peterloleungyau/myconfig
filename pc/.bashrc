@@ -163,6 +163,11 @@ export PATH="/home/peter/.config/guix/current/bin${PATH:+:}$PATH"
 GUIX_PROFILE="/home/peter/.guix-profile"
 . "$GUIX_PROFILE/etc/profile"
 
+if [ -n "$GUIX_ENVIRONMENT" ]
+then
+  export PS1="\u@\h \w [dev]\$ "
+fi
+
 export XDG_DATA_DIRS="$HOME/.guix-profile/share${XDG_DATA_DIRS:+:}$XDG_DATA_DIRS"
 export GIO_EXTRA_MODULES="$HOME/.guix-profile/lib/gio/modules${GIO_EXTRA_MODULES:+:}$GIO_EXTRA_MODULES"
 
