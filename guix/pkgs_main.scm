@@ -58,6 +58,7 @@
         "texlive"
         "xpdf"
         "evince"
+        "inkscape"
         "stapler"
         "emacs"
         "emacs-use-package"
