@@ -56,7 +56,7 @@
         "the-silver-searcher"
         "ripgrep"
         "texlive"
-        "xpdf"
+        ;; "xpdf" ;; new version has problem with fonts
         "evince"
         "inkscape"
         "stapler"

@@ -20,7 +20,7 @@
                   (group "users")
                   (home-directory "/home/peter")
                   (supplementary-groups
-                    '("wheel" "netdev" "audio" "video")))
+                    '("wheel" "netdev" "audio" "video" "kvm")))
                 %base-user-accounts))
   (packages
     (append

@@ -20,6 +20,9 @@ GUIX_PROFILE="/home/peter/guix_extra_profiles/ds"
 GUIX_PROFILE="/home/peter/guix_extra_profiles/games"
 . "$GUIX_PROFILE/etc/profile"
 
+GUIX_PROFILE="/home/peter/guix_extra_profiles/other"
+. "$GUIX_PROFILE/etc/profile"
+
 export XDG_DATA_DIRS="$HOME/.guix-profile/share${XDG_DATA_DIRS:+:}$XDG_DATA_DIRS"
 export GIO_EXTRA_MODULES="$HOME/.guix-profile/lib/gio/modules${GIO_EXTRA_MODULES:+:}$GIO_EXTRA_MODULES"
 
