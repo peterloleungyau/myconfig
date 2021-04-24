@@ -1,10 +1,15 @@
 ;; This is an operating system configuration generated
 ;; by the graphical installer.
 
-(use-modules (gnu))
+(use-modules (gnu)
+             (nongnu packages linux)
+             (nongnu system linux-initrd))
 (use-service-modules desktop networking ssh xorg)
 
 (operating-system
+  (kernel linux)
+  (initrd microcode-initrd)
+  (firmware (list linux-firmware amdgpu-firmware))
   (locale "en_US.utf8")
   (timezone "Asia/Hong_Kong")
   (keyboard-layout (keyboard-layout "us"))
@@ -15,7 +20,7 @@
                   (group "users")
                   (home-directory "/home/peter")
                   (supplementary-groups
-                    '("wheel" "netdev" "audio" "video")))
+                    '("wheel" "netdev" "audio" "video" "kvm")))
                 %base-user-accounts))
   (packages
     (append
@@ -24,7 +29,8 @@
             (specification->package "i3status")
             (specification->package "dmenu")
             (specification->package "st")
-	    ;; for chinese input method
+            (specification->package "xf86-video-amdgpu")
+	        ;; for chinese input method
             (specification->package "glibc-locales")
             (specification->package "dconf")
             (specification->package "ibus")

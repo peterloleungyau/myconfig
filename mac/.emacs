@@ -47,7 +47,7 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
     ("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
  '(delete-by-moving-to-trash t)
  '(dired-dwim-target t)
- '(dired-isearch-filenames (quote dwim) t)
+ '(dired-isearch-filenames (quote dwim))
  '(dired-listing-switches "-aAFhlv")
  '(dired-recursive-copies (quote always))
  '(dired-subtree-use-backgrounds nil t)
@@ -61,7 +61,7 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
  '(org-odt-preferred-output-format "pdf")
  '(package-selected-packages
    (quote
-    (ripgrep ag window-numbering auctex-latexmk auctex highlight-indent-guides nix-mode ox-hugo counsel-projectile key-chord org-evil linum-relative autopair evil-surround evil dired-subtree image+ vdiff yasnippet-snippets flycheck lsp-ui lsp-mode company-lsp dash dockerfile-mode markdown-mode use-package ess-R-data-view elpygen spacemacs-theme ess yaml-mode magit anaconda-mode elpy)))
+    (dired-omit ripgrep ag window-numbering auctex-latexmk auctex highlight-indent-guides nix-mode ox-hugo counsel-projectile key-chord org-evil linum-relative autopair evil-surround evil dired-subtree image+ vdiff yasnippet-snippets flycheck lsp-ui lsp-mode company-lsp dash dockerfile-mode markdown-mode use-package ess-R-data-view elpygen spacemacs-theme ess yaml-mode magit anaconda-mode elpy)))
  '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -489,6 +489,10 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
 ;;;; dired related, adapted from https://gitlab.com/protesilaos/dotemacs/-/blob/master/emacs-init.org
 (use-package dired
   :ensure nil
+  :config
+  (use-package dired-x
+    :ensure nil
+    )
   :custom
   (dired-recursive-copies 'always)
   ;;(dired-recursive-deletes 'always)
@@ -499,6 +503,7 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
   :hook
   (dired-mode . dired-hide-details-mode)
   (dired-mode . hl-line-mode)
+  (dired-mode . dired-omit-mode)
   )
 
 (use-package dired-subtree
@@ -516,6 +521,9 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
   :ensure t
   :config
   (autopair-global-mode)
+  (add-hook 'org-mode-hook 
+            #'(lambda ()
+                     (setq autopair-dont-pair `(:never (?< ) ,@autopair-dont-pair))))
   )
 
 ;;

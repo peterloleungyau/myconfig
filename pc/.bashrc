@@ -156,15 +156,22 @@ function link_rc {
 ## image viewer: sxiv
 alias viewimg="sxiv"
 
-export GUIX_LOCPATH=$HOME/.guix-profile/lib/locale
-export PATH="/home/peter/.guix-profile/bin${PATH:+:}$PATH"
-export PATH="/home/peter/.config/guix/current/bin${PATH:+:}$PATH"
+#export GUIX_LOCPATH=$HOME/.guix-profile/lib/locale
+#export PATH="/home/peter/.guix-profile/bin${PATH:+:}$PATH"
+#export PATH="/home/peter/.config/guix/current/bin${PATH:+:}$PATH"
 
-GUIX_PROFILE="/home/peter/.guix-profile"
-. "$GUIX_PROFILE/etc/profile"
+#GUIX_PROFILE="/home/peter/.guix-profile"
+#. "$GUIX_PROFILE/etc/profile"
 
-export XDG_DATA_DIRS="$HOME/.guix-profile/share${XDG_DATA_DIRS:+:}$XDG_DATA_DIRS"
-export GIO_EXTRA_MODULES="$HOME/.guix-profile/lib/gio/modules${GIO_EXTRA_MODULES:+:}$GIO_EXTRA_MODULES"
+if [ -n "$GUIX_ENVIRONMENT" ]
+then
+  export PS1="\u@\h \w [dev]\$ "
+fi
+
+alias work="guix time-machine -C channels.scm -- environment --ad-hoc -m pkgs.scm"
+
+#export XDG_DATA_DIRS="$HOME/.guix-profile/share${XDG_DATA_DIRS:+:}$XDG_DATA_DIRS"
+#export GIO_EXTRA_MODULES="$HOME/.guix-profile/lib/gio/modules${GIO_EXTRA_MODULES:+:}$GIO_EXTRA_MODULES"
 
 # set the mouse speed for the trackball
 # the device id is found to be 10 using 'xinput list'

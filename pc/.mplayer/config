@@ -2,3 +2,4 @@
 volume=17
 vo=x11
 ao=sdl
+heartbeat-cmd="xscreensaver-command -deactivate >&- 2>&- &"
