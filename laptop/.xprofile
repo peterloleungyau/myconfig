@@ -1,0 +1,2 @@
+GUIX_PROFILE="/home/peter/extra_guix_profiles/main"
+. "$GUIX_PROFILE/etc/profile"

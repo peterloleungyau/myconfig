@@ -12,11 +12,15 @@
 ;;; Define org and melpa as package sources, and install `use-package' if it's not
 ;;; already there. Always ensure packages being loaded are there (or else it'll
 ;;; automatically download from melpa)
+(add-to-list 'load-path "~/.guix-profile/share/emacs/site-lisp")
+(setq load-path (remove "/home/peter/.guix-profile/share/emacs/site-lisp/obsolete" load-path))
+(setq load-path (remove "/home/peter/extra_guix_profiles/main/share/emacs/site-lisp/obsolete" load-path))
+(guix-emacs-autoload-packages)
 
 (require 'package)
 (setq user-emacs-directory "~/.emacs.d/")
 (setq package-user-dir (concat user-emacs-directory "packages"))
-(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+;;(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.2")
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
                          ;; for temporary problem with elpa using https
                          ;;("gnu-mirror" . "http://mirrors.163.com/elpa/gnu/")
@@ -40,7 +44,7 @@
 (eval-when-compile
   (require 'use-package))
 
-(setq use-package-always-ensure t)
+(setq use-package-always-ensure nil)
 (add-hook 'package-menu-mode-hook 'hl-line-mode)
 
 ;;; Load org mode early to ensure that the orgmode ELPA version gets picked up, not the
@@ -125,16 +129,14 @@
  '(ansi-color-names-vector
    ["#0a0814" "#f2241f" "#67b11d" "#b1951d" "#4f97d7" "#a31db1" "#28def0" "#b2b2b2"])
  '(column-number-mode t)
- '(custom-enabled-themes (quote (spacemacs-dark)))
+ '(custom-enabled-themes '(spacemacs-dark))
  '(custom-safe-themes
-   (quote
-    ("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
- '(display-line-numbers-type (quote relative))
+   '("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default))
+ '(display-line-numbers-type 'relative)
  '(electric-indent-mode nil)
  '(ess-indent-with-fancy-comments nil)
  '(ess-own-style-list
-   (quote
-    ((ess-indent-offset . 2)
+   '((ess-indent-offset . 2)
      (ess-offset-arguments . open-delim)
      (ess-offset-arguments-newline . prev-call)
      (ess-offset-block . prev-line)
@@ -145,11 +147,10 @@
      (ess-align-blocks control-flow)
      (ess-indent-from-lhs arguments fun-decl-opening)
      (ess-indent-from-chain-start . t)
-     (ess-indent-with-fancy-comments . t))))
- '(ess-style (quote RStudio))
+     (ess-indent-with-fancy-comments . t)))
+ '(ess-style 'RStudio)
  '(hl-todo-keyword-faces
-   (quote
-    (("TODO" . "#dc752f")
+   '(("TODO" . "#dc752f")
      ("NEXT" . "#dc752f")
      ("THEM" . "#2d9574")
      ("PROG" . "#4f97d7")
@@ -164,19 +165,18 @@
      ("FIXME" . "#dc752f")
      ("XXX" . "#dc752f")
      ("XXXX" . "#dc752f")
-     ("???" . "#dc752f"))))
+     ("???" . "#dc752f")))
  '(indent-tabs-mode nil)
- '(org-agenda-files (quote ("~/todo.org")))
- '(org-export-backends (quote (ascii beamer html icalendar latex)))
+ '(org-agenda-files '("~/todo.org"))
+ '(org-export-backends '(ascii beamer html icalendar latex))
  '(org-odt-preferred-output-format "pdf")
  '(package-selected-packages
-   (quote
-    (debbugs yaml-mode yaml-model ewal-spacemacs-themes nix-mode key-chord org-evil autopair linum-relative dired-subtree dired evil-surround evil evil-mode pydoc-info elpy yasnippet-snippets yasnippet lsp-python ess-R-data-view ess-smart-equals ess-smart-underscore ess-view company-lsp lsp-ui lsp-mode counsel-projectile projectile counsel ivy org-plus-contrib org-link-minor-mode ox-hugo ob-ipython ob-mongo ob-prolog ob-sagemath ob-sql-mode spacemacs-theme magit slime org-ref markdown-mode ess auctex)))
- '(pdf-view-midnight-colors (quote ("#b2b2b2" . "#292b2e")))
- '(safe-local-variable-values (quote ((Base . 10) (Syntax . ANSI-Common-Lisp))))
+   '(window-numbering pdf-tools highlight-indent-guides json-mode debbugs yaml-mode yaml-model ewal-spacemacs-themes nix-mode key-chord org-evil autopair linum-relative dired-subtree dired evil-surround evil evil-mode pydoc-info elpy yasnippet-snippets yasnippet lsp-python ess-R-data-view ess-smart-equals ess-smart-underscore ess-view company-lsp lsp-ui lsp-mode counsel-projectile projectile counsel ivy org-plus-contrib org-link-minor-mode ox-hugo ob-ipython ob-mongo ob-prolog ob-sagemath ob-sql-mode spacemacs-theme magit slime org-ref markdown-mode ess auctex))
+ '(pdf-view-midnight-colors '("#b2b2b2" . "#292b2e"))
+ '(safe-local-variable-values '((Base . 10) (Syntax . ANSI-Common-Lisp)))
  '(select-enable-primary t)
  '(show-paren-mode t)
- '(warning-suppress-types (quote ((:warning \(undo\ discard-info\))))))
+ '(warning-suppress-types '((:warning \(undo\ discard-info\)))))
 
 ;;;;;;
 ;;; for sql-mode
@@ -291,7 +291,7 @@
   ;;(use-package counsel-projectile
   ;;  :ensure t)
   )
-(setq projectile-project-search-path '("~/projects/" "~/old_home/research/"))
+(setq projectile-project-search-path '("~/projects/" "~/"))
 
 (use-package yasnippet
   :ensure t
@@ -628,6 +628,59 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
 
 (use-package debbugs
   :ensure t)
+;;
+
+(use-package highlight-indent-guides
+  :init
+  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
+  (add-hook 'yaml-mode-hook 'highlight-indent-guides-mode)
+  (setq highlight-indent-guides-method 'column)
+  )
+
+;;
+(use-package pdf-tools
+  :config
+  (pdf-tools-install))
+
+;;;;;;
+(use-package window-numbering
+    :ensure t
+    :config
+    (window-numbering-mode))
+
+;;;;;;
+(use-package mu4e
+  :ensure nil
+  ;; :load-path "/usr/share/emacs/site-lisp/mu4e/"
+  ;; :defer 20 ; Wait until 20 seconds after startup
+  :config
+
+  ;; This is set to 't' to avoid mail syncing issues when using mbsync
+  (setq mu4e-change-filenames-when-moving t)
+
+  ;; Refresh mail using isync every 10 minutes
+  (setq mu4e-update-interval (* 60 60))
+  (setq mu4e-get-mail-command "mbsync -a")
+  (setq mu4e-maildir "~/Mail")
+
+  (setq mu4e-drafts-folder "/[Gmail]/Drafts")
+  (setq mu4e-sent-folder   "/[Gmail]/Sent Mail")
+  (setq mu4e-refile-folder "/[Gmail]/All Mail")
+  (setq mu4e-trash-folder  "/[Gmail]/Trash")
+
+  (setq mu4e-maildir-shortcuts
+        '((:maildir "/Inbox"    :key ?i)
+          (:maildir "/[Gmail]/Sent Mail" :key ?s)
+          (:maildir "/[Gmail]/Trash"     :key ?t)
+          (:maildir "/[Gmail]/Drafts"    :key ?d)
+          (:maildir "/[Gmail]/All Mail"  :key ?a)))
+  (setq smtpmail-smtp-server "smtp.gmail.com"
+        smtpmail-smtp-service 465
+        smtpmail-stream-type  'ssl
+        user-mail-address "peterloleungyau@gmail.com"
+        user-full-name "Peter Lo")
+  (setq message-send-mail-function 'smtpmail-send-it)
+  )
 ;;;;;;
 
 (custom-set-faces

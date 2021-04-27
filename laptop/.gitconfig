@@ -8,5 +8,8 @@
 	smtpServer = smtp.gmail.com
 	smtpUser = peterloleungyau@gmail.com
 	smtpServerPort = 587
+	smtpPass = kxrvkedbpgqwnrsx
 [log]
 	decorate = short
+[pull]
+	rebase = false

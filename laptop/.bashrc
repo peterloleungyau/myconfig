@@ -170,3 +170,15 @@ else
 fi
 unset __conda_setup
 # <<< conda initialize <<<
+
+# set the mouse speed for the trackball
+# the device id is found to be 10 using 'xinput list'
+# and the "Device Accel Velocity Scaling" prop is found to be 262 using 'xinput list-props 10'
+#xinput --set-prop 10 262 2.0
+# to set the scroll to be less sensitive, again 268 is the property id of 'Evdev Scrolling Distance'
+#xinput --set-prop 10 268 2 1 1
+# to decrease acceleration
+#xinput --set-prop 10 260 2.0
+#xinput --set-button-map "ELECOM TrackBall Mouse HUGE TrackBall" 1 2 3 4 5 6 7 2 1 10 11 12 13
+xinput --set-button-map "USB OPTICAL MOUSE" 1 2 3 4 5 6 7 2 9 10 11 12 13
+
