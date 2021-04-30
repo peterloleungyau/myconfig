@@ -120,6 +120,7 @@
   (insert "<- "))
 (define-key ess-r-mode-map (kbd "M--") #'my-R-assign)
 (define-key inferior-ess-r-mode-map (kbd "M--") #'my-R-assign)
+(setq inferior-R-program-name "rwork")
 ;;;;;;
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -291,7 +292,7 @@
   ;;(use-package counsel-projectile
   ;;  :ensure t)
   )
-(setq projectile-project-search-path '("~/projects/" "~/"))
+(setq projectile-project-search-path '("~/projects/" "~/" "~/to_keep/projects/"))
 
 (use-package yasnippet
   :ensure t

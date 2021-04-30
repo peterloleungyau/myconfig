@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# add r-dt for DT to be loadable
+exec work r-dt -- R --no-save "$@"
+

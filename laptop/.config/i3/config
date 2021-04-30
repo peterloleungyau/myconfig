@@ -207,3 +207,5 @@ exec_always --no-startup-id syndaemon -i 1.5 -t -K -R -d
 # disable tap to click
 exec_always --no-startup-id synclient TapButton1=0
 exec --no-startup-id xinput --set-button-map "USB OPTICAL MOUSE" 1 2 3 4 5 6 7 2 9 10 11 12 13
+
+exec xscreensaver -no-splash &

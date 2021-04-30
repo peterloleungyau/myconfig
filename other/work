@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# adapted from https://unix.stackexchange.com/a/22215
+findup () {
+    if [ -e "./$1" ]
+    then
+        echo "."
+    else
+        path=$(pwd)
+        while [[ "$path" != "" && ! -e "$path/$1" ]]; do
+            path=${path%/*}
+        done
+        echo "$path"
+    fi
+}
+
+cfpath=$(findup channels.scm)
+pfpath=$(findup pkgs.scm)
+
+# https://unix.stackexchange.com/a/415028
+channel_file=${cfpath:+${cfpath}/}channels.scm
+pkgs_file=${pfpath:+${pfpath}/}pkgs.scm
+
+exec guix time-machine -C "${channel_file}" -- environment --ad-hoc -m "${pkgs_file}" "$@"
+
