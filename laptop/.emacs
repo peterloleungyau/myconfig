@@ -596,7 +596,7 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
   ;;(dired-recursive-deletes 'always)
   (dired-isearch-filenames 'dwim)
   (delete-by-moving-to-trash t)
-  (dired-listing-switches "-aAFhlv --group-directories-first")
+  (dired-listing-switches "-aAFhlv --group-directories-first --ignore-backups")
   (dired-dwim-target t)
   :hook
   (dired-mode . dired-hide-details-mode)

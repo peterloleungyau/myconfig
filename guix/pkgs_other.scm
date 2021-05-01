@@ -3,4 +3,5 @@
   (list
    "qemu"
    "rdesktop"
+   "samba"
    ))
