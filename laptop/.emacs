@@ -121,6 +121,11 @@
 (define-key ess-r-mode-map (kbd "M--") #'my-R-assign)
 (define-key inferior-ess-r-mode-map (kbd "M--") #'my-R-assign)
 (setq inferior-R-program-name "rwork")
+
+(defun my-R ()
+  (interactive)
+  (let ((inferior-R-program-name "R"))
+    (run-ess-r)))
 ;;;;;;
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -187,7 +192,7 @@
 
 ;;;;;;
 ;;(setq org-latex-pdf-process (list "latexmk -pdf -bibtex %f"))
-(setq org-latex-pdf-process (list "makepdf.sh %f"))
+;;(setq org-latex-pdf-process (list "makepdf.sh %f"))
 
 (add-hook 'org-mode-hook #'visual-line-mode)
 (setq org-blank-before-new-entry '((heading . never) (plain-list-item . never)))
