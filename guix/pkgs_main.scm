@@ -47,6 +47,7 @@
         "curl"
         "wget"
         "xrdb"
+        "udiskie"
         "vim"
         "tmux"
         "sbcl"
