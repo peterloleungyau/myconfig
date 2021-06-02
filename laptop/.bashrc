@@ -182,3 +182,8 @@ unset __conda_setup
 #xinput --set-button-map "ELECOM TrackBall Mouse HUGE TrackBall" 1 2 3 4 5 6 7 2 1 10 11 12 13
 xinput --set-button-map "USB OPTICAL MOUSE" 1 2 3 4 5 6 7 2 9 10 11 12 13
 
+if [ -n "$GUIX_ENVIRONMENT" ]
+then
+  export PS1="\u@\h \w [dev]\$ "
+fi
+
