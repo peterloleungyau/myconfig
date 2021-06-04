@@ -96,7 +96,7 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
 fi
 # add path
 # Taken and modified from https://gist.github.com/168835
-export PS1="$PS1\[\033[0;33m\](\$(git branch 2>/dev/null | grep '^*' | colrm 1 2))\[\033[01;32m\]\[\033[00m\]\$ "
+export PS1="┌$PS1\[\033[0;33m\](\$(git branch 2>/dev/null | grep '^*' | colrm 1 2))\[\033[01;32m\]\[\033[00m\]\n└\$ "
 # This will change your prompt to display not only your working directory but also your current git branch, if you have one. Pretty nifty!
 
 export EDITOR='emacs --no-splash'
