@@ -100,7 +100,9 @@
 
 (use-package ess
   :init (require 'ess-site)
-  (setq ess-fancy-comments nil))
+  (setq ess-fancy-comments nil)
+  (setq ess-history-file nil)
+  (setq tab-always-indent 'complete))
 
 ;; copied and modified from
 ;;  https://emacs.stackexchange.com/questions/8041/how-to-implement-the-piping-operator-in-ess-mode
