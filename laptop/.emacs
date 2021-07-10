@@ -694,8 +694,14 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
         user-full-name "Peter Lo")
   (setq message-send-mail-function 'smtpmail-send-it)
   )
-;;;;;;
 
+;;;;;;
+(use-package org-bullets
+  :ensure nil
+  :config
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
+;;;;;;
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

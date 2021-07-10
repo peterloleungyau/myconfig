@@ -1,4 +1,4 @@
-;;; adapted from https://github.com/chrispoole643/etc/blob/master/emacs/.emacs.d/init.el
+;; adapted from https://github.com/chrispoole643/etc/blob/master/emacs/.emacs.d/init.el
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Emacs Configuration
@@ -170,7 +170,7 @@
  '(org-export-backends '(ascii beamer html icalendar latex))
  '(org-odt-preferred-output-format "pdf")
  '(package-selected-packages
-   '(ripgrep ag window-numbering pdf-tools highlight-indent-guides debbugs yaml-mode yaml-model ewal-spacemacs-themes nix-mode key-chord org-evil autopair linum-relative dired-subtree dired evil-surround evil evil-mode pydoc-info elpy yasnippet-snippets yasnippet lsp-python ess-R-data-view ess-smart-equals ess-smart-underscore ess-view company-lsp lsp-ui lsp-mode counsel-projectile projectile counsel ivy org-plus-contrib org-link-minor-mode ox-hugo ob-ipython ob-mongo ob-prolog ob-sagemath ob-sql-mode spacemacs-theme magit slime org-ref markdown-mode ess auctex))
+   '(ripgrep ag window-numbering pdf-tools highlight-indent-guides debbugs yaml-mode yaml-model ewal-spacemacs-themes nix-mode key-chord org-evil autopair linum-relative dired-subtree dired evil-surround evil evil-mode pydoc-info elpy yasnippet-snippets yasnippet lsp-python ess-R-data-view ess-smart-equals ess-smart-underscore ess-view company-lsp lsp-ui lsp-mode counsel-projectile projectile counsel ivy org-plus-contrib org-link-minor-mode ox-hugo ob-ipython ob-mongo ob-prolog ob-sagemath ob-sql-mode spacemacs-theme magit slime org-ref markdown-mode ess))
  '(pdf-view-midnight-colors '("#b2b2b2" . "#292b2e"))
  '(safe-local-variable-values
    '((eval modify-syntax-entry 43 "'")
@@ -834,8 +834,8 @@ Each step consists of `simple-indent-list-offset' spaces. N defaults to 1. If N 
               ("<M-down>" . simple-indent-list-move-item-down))
   )
 
-(use-package debbugs
-  )
+;;(use-package debbugs
+;;  )
 
 ;;
 
@@ -893,6 +893,12 @@ Each step consists of `simple-indent-list-offset' spaces. N defaults to 1. If N 
         user-full-name "Peter Lo")
   (setq message-send-mail-function 'smtpmail-send-it)
   )
+
+;;;;;;
+(use-package org-bullets
+  :ensure nil
+  :config
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
 ;;;;;;
 (custom-set-faces

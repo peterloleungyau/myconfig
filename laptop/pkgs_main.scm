@@ -88,4 +88,5 @@
         "emacs-pdf-tools"
         "emacs-undo-tree"
         "emacs-spacemacs-theme"
+        "emacs-org-bullets"
         ))
