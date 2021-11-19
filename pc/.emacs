@@ -903,6 +903,15 @@ Each step consists of `simple-indent-list-offset' spaces. N defaults to 1. If N 
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
 ;;;;;;
+;; geiser for guix
+(with-eval-after-load 'geiser-guile
+  (add-to-list 'geiser-guile-load-path "~/guix"))
+
+;; for guix
+(with-eval-after-load 'yasnippet
+  (add-to-list 'yas-snippet-dirs "~/guix/etc/snippets"))
+
+;;;;;;
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

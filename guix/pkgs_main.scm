@@ -55,6 +55,7 @@
         "youtube-dl"
         "nyxt"
         "git"
+        "git:send-email"
         "the-silver-searcher"
         "ripgrep"
         "texlive"
