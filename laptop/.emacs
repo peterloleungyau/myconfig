@@ -13,6 +13,7 @@
 ;;; already there. Always ensure packages being loaded are there (or else it'll
 ;;; automatically download from melpa)
 (add-to-list 'load-path "~/.guix-profile/share/emacs/site-lisp")
+;;(add-to-list 'load-path "~/extra_guix_profiles/main/share/emacs/site-lisp")
 (setq load-path (remove "/home/peter/.guix-profile/share/emacs/site-lisp/obsolete" load-path))
 (setq load-path (remove "/home/peter/extra_guix_profiles/main/share/emacs/site-lisp/obsolete" load-path))
 (guix-emacs-autoload-packages)
@@ -632,6 +633,9 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
   :ensure t
   :config
   (autopair-global-mode)
+  (add-hook 'org-mode-hook 
+            #'(lambda ()
+                (setq autopair-dont-pair `(:never (?< ) ,@autopair-dont-pair))))
   )
 
 ;;
@@ -641,16 +645,16 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
 (use-package yaml-mode
   :ensure t)
 
-(use-package debbugs
-  :ensure t)
+;;(use-package debbugs
+;;  :ensure t)
 ;;
 
-(use-package highlight-indent-guides
-  :init
-  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
-  (add-hook 'yaml-mode-hook 'highlight-indent-guides-mode)
-  (setq highlight-indent-guides-method 'column)
-  )
+;;(use-package highlight-indent-guides
+;;  :init
+;;  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
+;;  (add-hook 'yaml-mode-hook 'highlight-indent-guides-mode)
+;;  (setq highlight-indent-guides-method 'column)
+;;  )
 
 ;;
 (use-package pdf-tools
@@ -702,6 +706,16 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
   :ensure nil
   :config
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
+;;;;;;
+(use-package rime
+  :ensure nil
+  :custom
+  (default-input-method "rime")
+  (rime-disable-predicates
+   '(rime-predict-evil-mode-p
+     rime-predicate-after-alphabet-char-p
+     rime-predicate-prog-in-code-p)))
 
 ;;;;;;
 (custom-set-faces

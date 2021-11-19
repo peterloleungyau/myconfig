@@ -18,7 +18,8 @@
         "pinentry-qt"
         "pinentry"
         "password-store"
-        "gnupg@2.2.27"
+        ;;"gnupg@2.2.27"
+        "gnupg"
         "transmission:gui"
         "transmission"
         "libreoffice"
@@ -94,4 +95,5 @@
         "emacs-undo-tree"
         "emacs-spacemacs-theme"
         "emacs-org-bullets"
+        "emacs-rime"
         ))
