@@ -91,6 +91,11 @@
   :ensure t
   :config
   (setq inferior-lisp-program "/usr/bin/sbcl --dynamic-space-size 2048")
+  (setq common-lisp-hyperspec-root
+        (concat "file://" (expand-file-name "~/to_keep/clhs/HyperSpec/")))
+  ;; originally want to use eww for HyperSpec lookup, otherwise use the default browser.
+  ;; but the default one is GNU IceCat which somehow has font problem, so just use eww
+  (setq browse-url-browser-function 'eww-browse-url)
   (slime-setup '(slime-fancy)))
 
 ;; magit
