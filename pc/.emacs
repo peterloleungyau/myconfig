@@ -917,6 +917,16 @@ Each step consists of `simple-indent-list-offset' spaces. N defaults to 1. If N 
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
 ;;;;;;
+(use-package rime
+  :ensure nil
+  :custom
+  (default-input-method "rime")
+  (rime-disable-predicates
+   '(rime-predict-evil-mode-p
+     rime-predicate-after-alphabet-char-p
+     rime-predicate-prog-in-code-p)))
+
+;;;;;;
 ;; geiser for guix
 (with-eval-after-load 'geiser-guile
   (add-to-list 'geiser-guile-load-path "~/guix"))
