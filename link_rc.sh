@@ -15,7 +15,6 @@ link_rc .emacs
 link_rc .gitconfig
 link_rc .Xresources
 link_rc .mplayer/config
-link_rc .xinitrc
 link_rc .xsession
 link_rc .xprofile
 link_rc .config/i3/config
