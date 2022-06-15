@@ -86,8 +86,22 @@
 ;;;;;;
 ;; SBCL and slime
 (use-package slime
+  :ensure nil
   :config
-  ;;(setq inferior-lisp-program "/usr/bin/sbcl --dynamic-space-size 2048")
+  (setq inferior-lisp-program "/home/peter/.guix-profile/bin/sbcl --dynamic-space-size 8192")
+  ;; Refer to http://snowsyn.net/2020/01/01/local-clhs-access-in-emacs/
+  ;; download archived HyperSpec from ftp://ftp.lispworks.com/pub/software_tools/reference/HyperSpec-7-0.tar.gz
+  (setq common-lisp-hyperspec-root
+        (concat "file://" (expand-file-name "~/to_keep/clhs/HyperSpec/")))
+  ;; In Slime, "C-c C-d h" calls slime-documentation-lookup to lookup
+  ;; symbol documentation; and "C-c C-d ~" calls
+  ;; common-lisp-hyperspec-format to lookup format control characters;
+  ;; and "C-c C-d g" calls common-lisp-hyperspec-glossary-term to
+  ;; access terms in the glossary.
+
+  ;; originally want to use eww for HyperSpec lookup, otherwise use the default browser.
+  ;; but the default one is GNU IceCat which somehow has font problem, so just use eww.
+  (setq browse-url-browser-function 'eww-browse-url)
   (slime-setup '(slime-fancy)))
 
 ;; magit
@@ -901,6 +915,16 @@ Each step consists of `simple-indent-list-offset' spaces. N defaults to 1. If N 
   :ensure nil
   :config
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
+;;;;;;
+(use-package rime
+  :ensure nil
+  :custom
+  (default-input-method "rime")
+  (rime-disable-predicates
+   '(rime-predict-evil-mode-p
+     rime-predicate-after-alphabet-char-p
+     rime-predicate-prog-in-code-p)))
 
 ;;;;;;
 ;; geiser for guix
