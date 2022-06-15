@@ -1,0 +1,407 @@
+#+STARTUP: indent
+#+STARTUP: overview
+#+STARTUP: logdone
+#+SEQ_TODO: TODO(t) NEXT(n) WAITING(w) | DONE(d) CANCELLED(c) DEFERRED(f)
+#+TITLE: Install Guix System with LUKS Encryption on Btrfs
+
+This records the steps of installing Guix system manually with whole
+disk encryption on Btrfs file system, for my needs. This mostly
+follows the official Guix system installation guide, with some steps
+simplified, and with some references for the Btrfs part.
+
+* Why Encryption?
+  - enhances data security at rest
+  - NOTE: encryption does not guard against malware when the computer is in use
+* Why Btrfs?
+  - native support in the kernel
+  - Copy-on-Write (CoW)
+  - checksums to enhance data integrity
+  - cheap snapshots, which is useful for backup
+* Steps
+** Prepare ISO:
+- follow https://guix.gnu.org/manual/en/html_node/USB-Stick-and-DVD-Installation.html to download and prepare the USB stick for installation
+** Enter manual installation
+- preparations that may be needed for your computer, e.g.:
+  - set boot order in BIOS
+  - turn off fast boot
+  - possibly turn off secure boot, and use legacy BIOS mode
+- boot into installer using the USB stick
+- since the guide installer seems not flexible enough (at the time
+  of writing) for creating subvolumes in btrfs, we use the manual
+  installation, which is not that difficult anyway
+
+** Keyboard layout
+- can use the default US qwerty, so no need to do anything
+
+** Networking
+
+*** first network type
+- first check the network interface, "e*" are wired; "w*" are wireless
+  - use either
+    #+begin_src bash
+      ifconfig -a
+    #+end_src
+  - or use
+    #+begin_src bash
+      ip address
+    #+end_src
+
+*** bring up the network interface
+**** wired connection
+- use either
+  #+begin_src bash
+    ifconfig interface up
+    # e.g.
+    # ifconfig eth0 up
+  #+end_src
+- or 
+  #+begin_src bash
+    ip link set interface up
+    # e.g.
+    # ip link set eth0 up
+  #+end_src
+**** wireless connection
+- create a configuration file for =wpa_supplicant=, e.g. using =nano=
+  #+begin_src bash
+    nano wpa_supplicant.conf
+  #+end_src
+- example configuration file, to replace your ssid and psk:
+  #+begin_src text
+    network={
+      ssid="my-ssid"
+      key_mgmt=WPA-PSK
+      psk="the network's secret passphrase"
+    }
+  #+end_src
+
+*** acquire IP address
+E.g. for DHCP:
+#+begin_src bash
+  dhclient -v interface
+  # e.g.
+  # dhclient -v eth0
+#+end_src
+
+*** test connection
+may either use =ping= or =wget= to test the network is connected
+#+begin_src bash
+  wget www.google.com
+  #ping -c 3 gnu.org
+#+end_src
+
+*** optional: proxy
+#+begin_src bash
+  herd set-http-proxy guix-daemon URL
+  # example of proxy URL is http://example.org:8118
+#+end_src
+
+*** optional use SSH to remotely continue the installation
+- set root password using =passwd=, or setup ssh key
+- start SSH server
+  #+begin_src bash
+    herd start ssh-daemon
+  #+end_src
+- then ssh into the machine from other machine
+
+** Disk Partitioning
+*** determine the device
+- NOTE: very important to determine the correct device, can use the
+  command and the size to get the correct one:
+  #+begin_src bash
+    lsblk
+  #+end_src
+- NOTE: in the following, we use =/dev/sdX/= to denote the device,
+  e.g. it may be =/dev/sda/= or =/dev/sdb/= or other device in your
+  case
+*** determine/decide whether to use EFI-based GRUB or BIOS-based GRUB
+- if there is a =/sys/firmware/efi= directory in the installation
+  image, the should use EFI-based GRUB, and the use the
+  =grub-efi-bootloader= bootloader later on in the configuration
+- otherwise, should use the BIOS-based GRUB, and use the
+  =grub-bootloader= bootloader later on in the configuration
+
+*** optional: clear the block device
+- for SSD and NVME disk, some reference recommends emptying the disk
+  using =blkdiscard= which "tells the drive's firmware that the disk
+  is empty and it improves it's performance and wear." (see
+  https://wiki.tnonline.net/w/Btrfs/Getting_Started#SSD_and_NVME_disks). Of
+  course, this erases the disk.
+  #+begin_src bash
+    blkdiscard /dev/sdX
+  #+end_src
+
+*** example partitioning
+- GPT is suggested for the disk partition table format.
+- you may use either =fdisk=, =cfdisk=, =parted=
+- NOTE: for SSD and NVME disk, some reference (see
+  https://wiki.tnonline.net/w/Btrfs/Getting_Started#SSD_and_NVME_disks)
+  recommends aligning the partitions to 4MiB to ensure alignment with
+  the disk's block size.
+**** EFI-based GRUB
+
+| partition | mount point | file system | type              | size             |
+|-----------+-------------+-------------+-------------------+------------------|
+| /dev/sdX1 | /boot/efi   | FAT32       | ESP               | 100MB            |
+| /dev/sdX2 | /           | BTRFS+LUKS  | Linux file system | rest of the disk |
+
+- after writing the parition table, format the EFI System Parition (ESP):
+  #+begin_src bash
+    mkfs.fat -F32 /dev/sdX1
+  #+end_src
+**** BIOS-based GRUB
+
+| partition | mount point | file system | type                                                            | size             |
+|-----------+-------------+-------------+-----------------------------------------------------------------+------------------|
+| /dev/sdX1 |             |             | BIOS Boot, "0xEF02", GUID ‘21686148-6449-6e6f-744e656564454649’ | 1 to 4MB         |
+| /dev/sdX2 | /           | BTRFS+LUKS  | Linux file system                                               | rest of the disk |
+
+- NOTE: the BIOS Boot partition does not need explicit formatting
+*** encryption setup
+#+begin_src bash
+  # need to choose a passphrase, and confirm it
+  cryptsetup luksFormat /dev/sdX2
+  # need to enter the passphrase to open the luks container
+  cryptsetup open --type luks /dev/sdX2 my-root
+#+end_src
+
+*** btrfs setup
+- two subvoles, and with compression
+#+begin_src bash
+  mkfs.btrfs -L my-root /dev/mapper/my-root
+  mount -o compress=zstd /dev/mapper/my-root /mnt
+
+  # subvolumes, here we only create 2, you may create more as needed
+  cd /mnt
+  btrfs subvolume create @
+  btrfs subvolume create @home
+
+  # remount
+  umount /mnt
+  mount -o compress=zstd,subvol=@ /dev/mapper/my-root /mnt
+
+  cd /mnt
+  mkdir -p /mnt/home
+  mount -o compress=zstd,subvol=@home /dev/mapper/my-root /mnt/home
+#+end_src
+
+- if EFI-based GRUB is used:
+  #+begin_src bash
+    mkdir -p /mnt/boot/efi
+    mount /dev/sdX1 /mnt/boot/efi
+  #+end_src
+*** swap file
+- for simplicity, to also get swap encrypted, we can use swap file
+  instead of swap partition
+- but we do not want copy-on-write or compression, so change attribute
+  to add 'C' which disables copy-on-write, and the compression is also
+  disabled:
+  #+begin_src bash
+    mkdir /mnt/var
+    truncate -s 0 /mnt/var/swapfile
+    # should set the attribute on an empty file
+    chattr +C /mnt/var/swapfile
+    # set to a suitable size
+    fallocate -l 8G /mnt/var/swapfile
+    chmod 600 /mnt/var/swapfile
+    mkswap /mnt/var/swapfile
+    swapon /mnt/var/swapfile
+  #+end_src
+** System Configuration File
+
+*** copy a sample as a starting point
+- there are some sample configuration files in the installation image
+  under =/etc/configuration= that you can copy as a starting point,
+  e.g.
+  - =/etc/configuration/desktop.scm=
+  #+begin_src bash
+    mkdir -p /mnt/etc
+    cp /etc/configuration/desktop.scm /mnt/etc/config.scm
+  #+end_src
+  - it is recommended to copy the configuration into =/mnt/etc/= so
+    that it is available in the installed system as a reference
+- alternatively, you can download from the web your own reference
+  configuration file as a starting point
+
+*** determine some UUIDs
+- it is recommended to use UUID of paritions instead of the device name (e.g. =/dev/sdX=)
+- if EFI-based GRUB is used, you may determine the UUID of the ESP parition by
+  #+begin_src bash
+    blkid
+    # then check the UUID of the partition
+
+    # for easier reference in editing the configuration, you may append
+    # the output to the config file:
+
+    # blkid >> /mnt/etc/config.scm
+  #+end_src
+- the UUID of the mapped LUKS device is also needed:
+  #+begin_src bash
+    cryptsetup luksUUID /dev/sdX
+
+    # again, you may append the result to the config file for easier
+    # reference:
+
+    # cryptsetup luksUUID /dev/sdX >> /mnt/etc/config.scm
+  #+end_src
+
+*** edit the configuration file
+=nano= is recommended for editing the configuration file.
+These edits are modifying or adding entries inside =(operating-system ...)=
+**** hostname, timezone and locale
+#+begin_src scheme
+  (host-name "btrfs-guix-testing")
+  (timezone "Asia/Hong_Kong")
+  (locale "en_US.utf8")
+#+end_src
+
+**** bootloader
+- if use EFI-based GRUB
+  #+begin_src scheme
+    (bootloader
+     (bootloader-configuration
+      (bootloader grub-efi-bootloader)
+      (target "/boot/efi")
+      (keyboard-layout keyboard-layout)))
+  #+end_src
+- if use BIOS-based GRUB
+  #+begin_src scheme
+    (bootloader
+     (bootloader-configuration
+      (bootloader grub-bootloader)
+      (target "/dev/sdX")
+      (keyboard-layout keyboard-layout)))
+  #+end_src
+**** mapped devices
+replace the "put-the-UUID-of-LUKS-here" with the UUID of the mapped
+LUKS device determined above:
+#+begin_src scheme
+  (mapped-devices
+   (list (mapped-device
+          (source (uuid "put-the-UUID-of-LUKS-here"))
+          (target "my-root")
+          (type luks-device-mapping))))
+#+end_src
+**** file systems
+- inside =(file-systems (cons* ...))=, add one entry for each btrfs subvolume, e.g. for our two subvolumes.
+- for EFI-based GRUB, also add one for =/boot/efi=
+- e.g.
+  #+begin_src scheme
+    (file-systems
+     (cons* (file-system
+             (device "/dev/mapper/my-root")
+             (mount-point "/")
+             (type "btrfs")
+             (options "compress=zstd,subvol=@")
+             ;; recommended to add no-atime, to not update access time metadata
+             (flags '(no-atime))
+             (dependencies mapped-devices))
+            (file-system
+             (device "/dev/mapper/my-root")
+             (mount-point "/home")
+             (type "btrfs")
+             (options "compress=zstd,subvol=@home")
+             ;; recommended to add no-atime, to not update access time metadata
+             (flags '(no-atime))
+             (dependencies mapped-devices))
+            ;; for EFI-based GRUB, skip this for BIOS-based GRUB
+            (file-system
+             (mount-point "/boot/efi")
+             (type "vfat")
+             ;; replace the ESP-partition-UUID with the UUID determined using blkid above
+             (device (uuid "ESP-partition-UUID" 'fat32)))
+            ;;
+            %base-file-systems))
+  #+end_src
+**** user account
+- you may create one or more users by adding =(user-account ...)=
+  #+begin_src scheme
+    (users
+     ;; use cons* for more than one user-account
+     (cons (user-account
+            (name "peter")
+            (comment "Peter Lo")
+            ;; this sets the initial password to be "alice"
+            ;; you may also skip this (password ...) and set the password after the first boot
+            (password (crypt "alice" "$6$abc"))
+            ;;
+            (group "users")
+            ;; can add more groups as needed
+            (supplementary-groups '("wheel" "netdev"
+                                    "audio" "video")))
+           %base-user-accounts))
+  #+end_src
+**** packages
+- here add some initial system-wide packages, e.g.
+#+begin_src scheme
+  (packages
+   (append
+    (list
+     ;; some useful packages for i3 window manager
+     (specification->package "i3-wm")
+     (specification->package "i3status")
+     (specification->package "dmenu")
+     (specification->package "st")
+     ;; for chinese input method
+     (specification->package "glibc-locales")
+     (specification->package "dconf")
+     (specification->package "ibus")
+     (specification->package "ibus-libpinyin")
+     (specification->package "ibus-rime")
+     ;; for SSL certs
+     (specification->package "nss-certs"))
+    %base-packages))
+#+end_src
+**** or any other parts that you want to customize
+- check [[https://guix.gnu.org/manual/en/html_node/System-Configuration.html][System Configuration]] for documentation
+** Guix System Init
+*** start her copy-on-write service
+#+begin_src bash
+  herd start cow-store /mnt
+#+end_src
+*** guix system init
+#+begin_src bash
+  guix system init /mnt/etc/config.scm /mnt
+#+end_src
+
+- then wait for the system to install by downloading substitutes or
+  building packages, which may take a while, depending on the speed of
+  network and CPU
+- if you think the downloading is stuck (which I have encountered a
+  few times), you may use =Ctrl-C= to stop the process, and use the
+  above =guix system init /mnt/etc/config.scm /mnt= again, and guix
+  will resume from where it stops
+** Reboot and Reset Password
+- now can remove the USB stick, and reboot the system
+- NOTE: on reboot, you would need to enter the LUKS passphrase twice,
+  once for the GRUB, the other time the mounting the root file system
+  after boot
+- after booting in the system, you may want to change your user
+  account's and root's password
+  - if you did not set the user account's password, you cannot even login
+  - so at the login screen, press =Ctrl+Alt+F5= to get a tty
+  - then type =root= as user name, and press enter
+  - because there is no root password set yet, you can login as root
+  - then you can use =passwd= to set the root's password and the user
+    account's password
+  - then type =exit= to get out of the shell
+  - press =Ctrl+Alt+F7= to get back to the graphical login screen, and
+    proceed to login
+* References
+  - [[https://github.com/pmeiyu/guix-config][Install Guix system (by pmeiyu)]]
+  - Guix official manual installation guide: [[https://guix.gnu.org/manual/en/html_node/Manual-Installation.html][Manual Installation]]
+    - Initial setup: [[https://guix.gnu.org/manual/en/html_node/Keyboard-Layout-and-Networking-and-Partitioning.html][Keyboard Layout, Networking, and Partitioning]]
+    - Installation: [[https://guix.gnu.org/manual/en/html_node/Proceeding-with-the-Installation.html][Proceeding with the Installation]]
+    - Useful for editing the configuration file: [[https://guix.gnu.org/manual/en/html_node/System-Configuration.html][System Configuration]]
+      - [[https://guix.gnu.org/manual/en/html_node/Bootloader-Configuration.html][Bootloader Configuration]]
+      - [[https://guix.gnu.org/manual/en/html_node/File-Systems.html][File Systems]]
+      - [[https://guix.gnu.org/manual/en/html_node/Mapped-Devices.html][Mapped Devices]]
+      - [[https://guix.gnu.org/manual/en/html_node/User-Accounts.html][User Accounts]]
+  - [[https://www.youtube.com/watch?v=XOYirIzUlW8][Video: Installing GNU Guix on encrypted btrfs (by  Andrew Tropin)]]
+    - Script for installing Guix on encrypted btrfs: [[https://github.com/abcdw/rde/blob/9e31470ba79d6b2e8e908256702616a1902b7aa3/rde/scripts/install.sh][rde/rde/scripts/install.sh]]
+    - Example configuration for desktop: [[https://github.com/abcdw/rde/blob/9e31470ba79d6b2e8e908256702616a1902b7aa3/rde/system/desktop.scm][rde/rde/system/desktop.scm]]
+  - [[https://gist.github.com/mruiz42/83d9a232e7592d65d953671409a2aab9][ARCH LINUX ENCRYPTED BTRFS WITH EFI GRUB BOOT INSTALLATION NOTES (by mruiz42)]]
+  - [[https://www.youtube.com/watch?v=oSy-TmoxG_Y][Video: Installing Guix as a Complete GNU/Linux System (by System Crafters)]]
+  - [[https://btrfs.wiki.kernel.org/index.php/Main_Page][Btrfs Wiki]]
+  - [[https://wiki.tnonline.net/w/Btrfs/Getting_Started][Btrfs/Getting Started]]
+  - [[https://wiki.archlinux.org/title/Dm-crypt/Encrypting_an_entire_system][ArchWiki: dm-crypt/Encrypting an entire system]]
+  - [[https://chadymorra.github.io/][Secured Arch Linux Installation]]
