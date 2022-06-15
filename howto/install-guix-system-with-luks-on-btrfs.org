@@ -306,7 +306,8 @@ LUKS device determined above:
              ;; recommended to add no-atime, to not update access time metadata
              (flags '(no-atime))
              (dependencies mapped-devices))
-            ;; for EFI-based GRUB, skip this for BIOS-based GRUB
+            ;; for EFI-based GRUB
+            ;; skip this for BIOS-based GRUB
             (file-system
              (mount-point "/boot/efi")
              (type "vfat")
@@ -357,7 +358,7 @@ LUKS device determined above:
 **** or any other parts that you want to customize
 - check [[https://guix.gnu.org/manual/en/html_node/System-Configuration.html][System Configuration]] for documentation
 ** Guix System Init
-*** start her copy-on-write service
+*** start herd copy-on-write service
 #+begin_src bash
   herd start cow-store /mnt
 #+end_src
