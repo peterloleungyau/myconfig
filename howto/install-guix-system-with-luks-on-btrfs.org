@@ -73,7 +73,10 @@ simplified, and with some references for the Btrfs part.
       psk="the network's secret passphrase"
     }
   #+end_src
-
+- start the wireless interface
+  #+begin_src bash
+    wpa_supplicant -c wpa_supplicant.conf -i interface -B
+  #+end_src
 *** acquire IP address
 E.g. for DHCP:
 #+begin_src bash
@@ -165,7 +168,7 @@ may either use =ping= or =wget= to test the network is connected
 #+end_src
 
 *** btrfs setup
-- two subvoles, and with compression
+- two subvolumes, and with compression
 #+begin_src bash
   mkfs.btrfs -L my-root /dev/mapper/my-root
   mount -o compress=zstd /dev/mapper/my-root /mnt
