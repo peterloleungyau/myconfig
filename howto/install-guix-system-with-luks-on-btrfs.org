@@ -16,7 +16,9 @@ simplified, and with some references for the Btrfs part.
   - native support in the kernel
   - Copy-on-Write (CoW)
   - checksums to enhance data integrity
-  - cheap snapshots, which is useful for backup
+  - transactional behavior
+  - transparent compression
+  - cheap snapshots, easy send/receive to sync snapshots between btrfs filesystems, which is useful for backup
 * Steps
 ** Prepare ISO:
 - follow https://guix.gnu.org/manual/en/html_node/USB-Stick-and-DVD-Installation.html to download and prepare the USB stick for installation
