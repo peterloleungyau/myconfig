@@ -1,0 +1,52 @@
+#+STARTUP: indent
+#+STARTUP: overview
+#+STARTUP: logdone
+#+TITLE: Backup Strategies
+
+This records the backup strategies that I will try out, and some
+references of tools or methods mentioned that are probably interesting
+but I have not seriously consider.
+
+* Consideration of backup
+  - the basic idea of backup is to make copy of important data, so
+    that it can be restored in case of corruption in the original data
+    store
+  - for data that is mostly accumulative, i.e. usually more new files
+    are added and old files stay unchanged, then one simple idea is to
+    keep copying newly added files to the same backup
+    - this may work well with media files that we usually keep intact,
+      although we may derive new files from old ones, e.g. video or
+      image editing
+  - for program code or smaller text files (e.g. blog posts, org
+    notes), we may use version control such as =git=, which keeps all
+    the committed history
+  - but we may be lazy and do not want to worry about using which
+    strategy for which type of data, so we can still make backup,
+    e.g. of the home directory
+  - however, we may be dissatified with always overwriting the same
+    backup copy, because we may want to get back the copy of some
+    files at an earlier date, e.g.
+    - day one you make a backup
+    - day two, you make a change to some file (assuming not using
+      version control), and also backup, overwriting day one's backup
+    - day three, you make large changes to that file, and also backup,
+      overwriting day two's backup
+    - day four, you regret day three's changes, and want day two's
+      version of the file, but you will not have it anymore
+  - then a simple idea is to make a new copy each time we 
+
+* Some common terminologies
+  - full backup
+  - incremental backup
+  - differential backup
+  - 3-2-1 backup strategy
+* Strategies to try
+I will probably adopt all these strategies, but some may take more
+time to setup, so may be delayed.
+** With Btrfs snapshots
+
+** With rsync
+
+** With tar
+
+* Other references
