@@ -47,6 +47,12 @@ simplified, and with some references for the Btrfs part.
     #+begin_src bash
       ip address
     #+end_src
+- NOTE: if you are sure you have wireless connection, but cannot see
+  any interface with name "w*", then it may be due to lack of driver
+  of your wifi chip in the Guix libre Linux kernel. In this case, you
+  may need to find way to use the wired connection first, then add the
+  [[https://gitlab.com/nonguix/nonguix][nonguix channel]] to get a Linux kernel with nonfree firmware, which
+  probably has driver for your wifi chip.
 
 *** bring up the network interface
 **** wired connection
@@ -181,6 +187,7 @@ may either use =ping= or =wget= to test the network is connected
   btrfs subvolume create @home
 
   # remount
+  cd /
   umount /mnt
   mount -o compress=zstd,subvol=@ /dev/mapper/my-root /mnt
 
@@ -241,7 +248,7 @@ may either use =ping= or =wget= to test the network is connected
   #+end_src
 - the UUID of the mapped LUKS device is also needed:
   #+begin_src bash
-    cryptsetup luksUUID /dev/sdX
+    cryptsetup luksUUID /dev/sdX2
 
     # again, you may append the result to the config file for easier
     # reference:
@@ -376,8 +383,21 @@ LUKS device determined above:
   few times), you may use =Ctrl-C= to stop the process, and use the
   above =guix system init /mnt/etc/config.scm /mnt= again, and guix
   will resume from where it stops
+** Workaround for EFI on some system
+- for EFI-based GRUB only
+- on some systems, the EFI boot process will look for a specific efi
+  file for booting, and therefore the efi written by the GRUB will be
+  ignored, causing the newly installed Guix unable to boot.
+- one workaround is to copy the GRUB generated efi to the specific
+  path and name required, for example, see [[https://wiki.archlinux.org/title/Lenovo_ThinkPad_T480#UEFI_and_GRUB][ArchWiki: Lenovo ThinkPad
+  T480 UEFI and GRUB]]
+- an alternative is to try to update the BIOS firmware and hope that
+  the new version fixes this
 ** Reboot and Reset Password
-- now can remove the USB stick, and reboot the system
+- now can reboot the system using the =reboot= command. Note that you
+  cannot yet remove the USB stick, otherwise you may not be able to
+  use the =reboot= command. So reboot, you may try to enter the BIOS
+  setting first, then remove the USB stick, then reboot again.
 - NOTE: on reboot, you would need to enter the LUKS passphrase twice,
   once for the GRUB, the other time the mounting the root file system
   after boot
@@ -392,6 +412,7 @@ LUKS device determined above:
   - then type =exit= to get out of the shell
   - press =Ctrl+Alt+F7= to get back to the graphical login screen, and
     proceed to login
+
 * References
   - [[https://github.com/pmeiyu/guix-config][Install Guix system (by pmeiyu)]]
   - Guix official manual installation guide: [[https://guix.gnu.org/manual/en/html_node/Manual-Installation.html][Manual Installation]]
