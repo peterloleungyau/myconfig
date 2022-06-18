@@ -1,0 +1,1 @@
+ntpdate stdtime.gov.hk
