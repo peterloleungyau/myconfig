@@ -5,7 +5,8 @@
 ;; See the "Replicating Guix" section in the manual.
 
 (specifications->manifest
-  (list 
+  (list "btrfs-progs"
+        ;;
         "inotify-tools"
         "xscreensaver"
         "fuse"
