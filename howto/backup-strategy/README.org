@@ -5,21 +5,31 @@
 
 This records the backup strategies that I will try out, and some
 references of tools or methods mentioned that are probably interesting
-but I have not seriously consider.
+but I have not seriously considered.
 
-* Consideration of backup
+* Considerations of backup
+
+** Basic idea: make a copy
   - the basic idea of backup is to make copy of important data, so
     that it can be restored in case of corruption in the original data
     store
-  - for data that is mostly accumulative, i.e. usually more new files
-    are added and old files stay unchanged, then one simple idea is to
+** Simple strategy: accumulate files
+  - for data that is mostly accumulative, i.e. usually new files are
+    added and old files stay unchanged, then one simple idea is to
     keep copying newly added files to the same backup
-    - this may work well with media files that we usually keep intact,
-      although we may derive new files from old ones, e.g. video or
-      image editing
+  - this may work well with media files that we usually keep intact,
+    although we may derive new files from old ones, e.g. video or
+    image editing
+  - you may choose to manually figure out which files are new or have
+    changed, and copy over, or you may use tools (e.g. rsync) to help
+    you
+** Simple strategy: version control for relatively small files
   - for program code or smaller text files (e.g. blog posts, org
     notes), we may use version control such as =git=, which keeps all
     the committed history
+  - but source control may or may not work well with large number of
+    files, or large files
+** Need for backups at multiple points in time
   - but we may be lazy and do not want to worry about using which
     strategy for which type of data, so we can still make backup,
     e.g. of the home directory
@@ -33,20 +43,106 @@ but I have not seriously consider.
       overwriting day two's backup
     - day four, you regret day three's changes, and want day two's
       version of the file, but you will not have it anymore
-  - then a simple idea is to make a new copy each time we 
+  - then a simple idea is to make a new copy each time want to make a
+    backup, e.g. regularly, or just before or after making important
+    changes
+  - of course, always making full copies at multiple time points takes
+    up a lot of space and time, so it may be desirable to avoid
+    copying unchanged files over and over, saving both time and space
+  - it is even better if unchanged files are somehow shared in the
+    backup, so that we still see full copies of the set of files at
+    different time points
+** Scope of backups
+- you may choose to backup the whole system, or just selected
+  directories or files, depending on the importance of the files to
+  you
+- e.g. you may choose not to backup the system files, because they can
+  be reinstalled; but you may still want to backup the system config
+  files (usually in =/etc= on Linux or Unix systems) because it may be
+  difficult to reconfigure the system
+- e.g. you may choose not to back either the system files or system
+  config files in =/etc=, but instead use Guix system and backup the
+  channels file and system =config.scm=
+- e.g. you may choose to backup the whole =/home= directory, which
+  contains your user config files and user data files (e.g. photos,
+  videos, blog posts, source code, etc)
+- e.g. you may choose to backup most of the =/home= directory, but not
+  the source code of projects you are working on because you have
+  separate version control for them
 
+** Frequency of backups
+- you may decide how frequent to make backups, depending on
+  - the importance of the files
+  - the importance of the changes
+  - and the frequency of the changes
+  - the resources you have or willing to spend on the backups
+- for some people, weekly or even monthly may be sufficient, if
+  important files do not change often
+- some people may want daily or even hourly backups
+- it is usual to backup frequently, but to keep less time points for
+  older backups, e.g.
+  - keep backups for the last few hours
+  - then last few days, i.e. for yesterday, only keep copy instead of
+    all 24 hourly copies
+  - then last week, last month, and so on
 * Some common terminologies
-  - full backup
-  - incremental backup
-  - differential backup
-  - 3-2-1 backup strategy
+** full backup
+- a full copy of the data that you intend to backup
+** differential backup
+- backup the difference relative to a full backup
+- for example:
+  - day 1: make a full backup
+  - day 2: backup the changes from day 1, i.e. a differential backup
+  - day 3: backup the changes from day 1, i.e. another differential
+    backup
+- NOTE:
+  - differential backup is always relative to a full backup,
+    therefore, you only need the differential backup at one point and
+    the associated full backup to recover the files
+** incremental backup
+- backup the difference relative to either a full backup or a previous
+  incremental backup
+- for example:
+  - day 1: make a full backup
+  - day 2: backup the changes from day 1, i.e. an incremental backup
+    (which is also a differential backup relative to day 1)
+  - day 3: backup the changes from *day 2*, i.e. another incremental
+    backuo (which is NOT a differential backup relative to day 1)
+  - day 4: backup the changes from *day 3*, i.e. another incremental
+    backup
+- NOTE:
+  - for recovery of the files at one point, you would need the
+    associated full backup and the series of incremental backups up to
+    that point, applied in order
+  - e.g., to recover files of day 3 in the above example, you would
+    need the full backup in day 1, and apply the incremental backup of
+    day 2, and then apply the incremental backup of day 3
+** 3-2-1 backup strategy
+- at least 3 copies
+- on at least 2 mediums
+- 1 is at a remote site (could be on cloud, or in a physical far enough location from your other copies)
+** snapshot
+- can mean a set of files at a particular point in time
+- also refers to a kind of feature supported by some filesystems, such
+  as btrfs and ZFS
+- a copy of the data at a point in time, and can be taken quickly and
+  cheaply
+- snapshots usually reside in the same filesystem, so is not good
+  enough as a backup
+- useful for backup by first quickly taking a snapshot, then copy or
+  sync the snapshot elsewhere (which may take some time), reducing the
+  chance of copying half states of the set of files if the system is
+  still operating
+- some filesystem (e.g. btrfs) supports efficiently syncing snapshots
+  between two btrfs filesystems
 * Strategies to try
 I will probably adopt all these strategies, but some may take more
 time to setup, so may be delayed.
 ** With Btrfs snapshots
-
+TODO
 ** With rsync
-
+TODO
 ** With tar
-
+TODO
 * Other references
+TODO
