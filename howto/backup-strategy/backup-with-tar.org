@@ -1,0 +1,7 @@
+#+STARTUP: indent
+#+STARTUP: overview
+#+STARTUP: logdone
+#+TITLE: Backup with tar
+
+TODO
+

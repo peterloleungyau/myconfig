@@ -3,9 +3,9 @@
 #+STARTUP: logdone
 #+TITLE: Backup Strategies
 
-This records the backup strategies that I will try out, and some
-references of tools or methods mentioned that are probably interesting
-but I have not seriously considered.
+This records the backup strategies that I will try out (on Linux
+system), and some references of tools or methods mentioned that are
+probably interesting but I have not seriously considered.
 
 * Considerations of backup
 
@@ -139,10 +139,96 @@ but I have not seriously considered.
 I will probably adopt all these strategies, but some may take more
 time to setup, so may be delayed.
 ** With Btrfs snapshots
-TODO
+- idea:
+  - use btrfs filesystem for the main system and the backup
+    (e.g. external hard drive or remote machine), and create subvolume
+    for home directory, and enjoy the
+    - copy-on-write
+    - transactional behavior
+    - transparent compression
+    - checksum
+    - efficient and quick snapshots
+  - when we want to backup, make a snapshot of subvolume (e.g. the
+    home), and sync the (incremental changes of) snapshot to the
+    backup system
+- NOTE:
+  - snapshots alone in the same filesystem are not good enough as backup
+  - but snapshots provides an efficient way to sync (possibly through
+    network by using ssh) the changes to another btrfs filesystem,
+    which /is/ the backup
+  - in the backup, each snapshot serves as a full backup at a chosen
+    time point
+  - the snapshot can either be restored as a whole, or be used to
+    cherry-picked some files at chosen time point
+  - the filesystem can optionally be encrypted for improved data
+    security at rest
+- see [[file:backup-with-btrfs-snapshots.org][Backup with Btrfs snapshots]]
 ** With rsync
-TODO
+- idea:
+  - =rsync= can be used to synchronize files from one directory (from
+    one filesystem) to another directory (possibly on another
+    filesystem, and possibly through network using ssh)
+  - with the =--link-dest= option and a reference /snapshot/ (e.g. a
+    previous backup), files that have not changed can be [[https://en.wikipedia.org/wiki/Hard_link][hard-linked]]
+    instead of copied, and therefore saving space
+  - therefore we can use =rsync= to make full backups at different
+    time points, but each time use the latest backup as reference for
+    =--link-dest=, so that we hard-link unchanged files to save space
+- NOTE:
+  - with this method, since some files at different snapshots are
+    shared using hard-links, each snapshot can be independently
+    deleted without affecting other snapshots, whenever we no longer
+    need that snapshot
+  - the filesystem will keep track of the hard-links, and if the blob
+    of file has zero hard-links pointing to it, the space will be
+    automatically reclaimed
+  - but the shared files should not be modified, otherwise, the "copy"
+    at different snapshots hard-linking to the same file will see the
+    same change
+  - the filesystem can optionally be encrypted for improved data
+    security at rest
+- see [[file:backup-with-rsync.org][Backup with rsync]]
 ** With tar
-TODO
+- idea:
+  - =tar= can be used to archive a set of files or directories as one
+    single file, which can be zipped or encrypted for transferring or
+    backup
+  - =tar= also supports creating an incremental (or differential,
+    depending on the reference used) archive by using =snar= file which
+    records some metadata so that the changes can be determined and
+    archived accordingly
+  - therefore we can use this feature to create incremental or
+    differential backups, by suitably managing a full backup, and the
+    associated snar file(s) and archived changes
+  - the full backup and incremental or differential backup(s) can be
+    optionally easily zipped and/or encrypted, which is useful for
+    backups put at cloud, to save cost and improving privacy
+- NOTE:
+  - restoring files from the tar incremental or differntial backups
+    takes a little bit more work than the above btrfs or rsync methods
+- see [[file:backup-with-tar.org][Backup with tar]]
 * Other references
-TODO
+In the process of finding information of the above backup strategies,
+I have found some posts which is useful as reference, and some often
+mentioned tools (by no means exhaustive) which I do not intend to try
+out at the moment. They are included here for reference.
+
+- rsync related:
+  - Time Machine-style backup using rsync: https://github.com/laurent22/rsync-time-backup
+    - associated hackernew post: https://news.ycombinator.com/item?id=6623514
+  - [[https://linuxconfig.org/how-to-create-incremental-backups-using-rsync-on-linux][How to create incremental backups using rsync on Linux]]
+  - https://officeguide.cc/linux-rsync-incremental-backups-hard-link-snapshots-tutorial-examples/
+  - [[https://rsnapshot.org/][rsnapshot]]
+- btrfs related:
+  - [[https://wiki.tnonline.net/w/Btrfs/Getting_Started][Btrfs/Getting Started]]
+  - [[https://linuxhint.com/back_up_btrfs_snapshots_external_drives/][How to Backup Btrfs Snapshots to External Drives]]
+  - [[https://linuxhint.com/how-to-use-btrfs-scrub/][How to Use Btrfs Scrub?]]
+  - [[https://github.com/digint/btrbk][btrbk]]
+  - [[https://en.wikipedia.org/wiki/ZFS][ZFS]] instead of btrfs
+- encryption:
+  - https://opensource.com/article/21/3/encryption-luks
+  - [[https://wiki.archlinux.org/title/Dm-crypt/Encrypting_an_entire_system][ArchWiki: dm-crypt/Encrypting an entire system]]
+- git related
+  - [[https://github.com/bup/bup][bup]]
+  - [[https://git-annex.branchable.com/][git-annex]]
+  - [[https://en.wikipedia.org/wiki/Git-annex][Wiki: git-annex]]
