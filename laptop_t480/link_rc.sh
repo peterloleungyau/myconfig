@@ -18,7 +18,8 @@ link_rc .Xresources
 link_rc .Xdefaults
 link_rc .mplayer/config
 #link_rc .xsession
-#link_rc .xprofile
+link_rc .xprofile
+link_rc .bash_profile
 link_rc .config/i3/config
 link_rc .i3status.conf
 #link_rc calibrate_time.sh
