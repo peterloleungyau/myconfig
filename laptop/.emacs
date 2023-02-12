@@ -90,7 +90,7 @@
 (use-package slime
   :ensure t
   :config
-  (setq inferior-lisp-program "/usr/bin/sbcl --dynamic-space-size 2048")
+  (setq inferior-lisp-program "/usr/bin/sbcl --dynamic-space-size 16384")
   ;; Refer to http://snowsyn.net/2020/01/01/local-clhs-access-in-emacs/
   ;; download archived HyperSpec from ftp://ftp.lispworks.com/pub/software_tools/reference/HyperSpec-7-0.tar.gz
   (setq common-lisp-hyperspec-root
@@ -712,6 +712,7 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
         user-mail-address "peterloleungyau@gmail.com"
         user-full-name "Peter Lo")
   (setq message-send-mail-function 'smtpmail-send-it)
+  (setq mu4e-mu-binary "/home/peter/extra_guix_profiles/main/bin/mu")
   )
 
 ;;;;;;
