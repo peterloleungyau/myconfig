@@ -120,9 +120,11 @@ bindsym $mod+a focus parent
 #bindsym $mod+d focus child
 
 # turn off eDP
-bindsym $mod+m exec --no-startup-id xrandr --output eDP --off --output HDMI-A-0 --auto --primary --set TearFree on
+#bindsym $mod+m exec --no-startup-id xrandr --output eDP --off --output HDMI-A-0 --auto --primary --set TearFree on
+bindsym $mod+m exec --no-startup-id xrandr --output eDP --off --output DisplayPort-1 --auto --primary --set TearFree on
 # turn on eDP
-bindsym $mod+Shift+m exec --no-startup-id xrandr --output eDP --auto --primary --output HDMI-A-0 --auto
+#bindsym $mod+Shift+m exec --no-startup-id xrandr --output eDP --auto --primary --output HDMI-A-0 --auto
+bindsym $mod+Shift+m exec --no-startup-id xrandr --output eDP --auto --primary --output DisplayPort-1 --auto
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
