@@ -602,7 +602,7 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
 (use-package linum-relative
   :ensure t
   :config
-  (linum-relative-global-mode 1)
+  (linum-relative-global-mode 0)
   ;; Use `display-line-number-mode` as linum-mode's backend for smooth performance
   (setq linum-relative-backend 'display-line-numbers-mode))
 
@@ -730,6 +730,14 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
    '(rime-predict-evil-mode-p
      rime-predicate-after-alphabet-char-p
      rime-predicate-prog-in-code-p)))
+
+;;;;;;
+
+(defun evince-file (file)
+  (interactive `(,(ido-read-file-name "File:" "~/to_keep/books")))
+  (start-process "evince" nil "evince" file))
+
+(global-set-key (kbd "C-c C-r") 'evince-file)
 
 ;;;;;;
 (custom-set-faces
