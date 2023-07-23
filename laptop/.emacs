@@ -90,7 +90,7 @@
 (use-package slime
   :ensure t
   :config
-  (setq inferior-lisp-program "/usr/bin/sbcl --dynamic-space-size 16384")
+  (setq inferior-lisp-program "sbcl --dynamic-space-size 16384")
   ;; Refer to http://snowsyn.net/2020/01/01/local-clhs-access-in-emacs/
   ;; download archived HyperSpec from ftp://ftp.lispworks.com/pub/software_tools/reference/HyperSpec-7-0.tar.gz
   (setq common-lisp-hyperspec-root
@@ -193,12 +193,13 @@
  '(org-export-backends '(ascii beamer html icalendar latex))
  '(org-odt-preferred-output-format "pdf")
  '(package-selected-packages
-   '(window-numbering pdf-tools highlight-indent-guides json-mode debbugs yaml-mode yaml-model ewal-spacemacs-themes nix-mode key-chord org-evil autopair linum-relative dired-subtree dired evil-surround evil evil-mode pydoc-info elpy yasnippet-snippets yasnippet lsp-python ess-R-data-view ess-smart-equals ess-smart-underscore ess-view company-lsp lsp-ui lsp-mode counsel-projectile projectile counsel ivy org-plus-contrib org-link-minor-mode ox-hugo ob-ipython ob-mongo ob-prolog ob-sagemath ob-sql-mode spacemacs-theme magit slime org-ref markdown-mode ess auctex))
+   '(window-numbering pdf-tools highlight-indent-guides json-mode debbugs yaml-mode yaml-model ewal-spacemacs-themes nix-mode key-chord linum-relative dired-subtree dired evil-surround evil evil-mode pydoc-info elpy yasnippet-snippets yasnippet lsp-python ess-R-data-view ess-smart-equals ess-smart-underscore ess-view company-lsp lsp-ui lsp-mode counsel-projectile projectile counsel ivy org-plus-contrib org-link-minor-mode ox-hugo ob-ipython ob-mongo ob-prolog ob-sagemath ob-sql-mode spacemacs-theme magit slime org-ref markdown-mode ess auctex))
  '(pdf-view-midnight-colors '("#b2b2b2" . "#292b2e"))
  '(safe-local-variable-values '((Base . 10) (Syntax . ANSI-Common-Lisp)))
  '(select-enable-primary t)
  '(show-paren-mode t)
- '(warning-suppress-types '((:warning \(undo\ discard-info\)))))
+ '(warning-suppress-log-types '((use-package) (:warning \(undo\ discard-info\))))
+ '(warning-suppress-types '((comp) (:warning \(undo\ discard-info\)))))
 
 ;;;;;;
 ;;; for sql-mode
@@ -313,6 +314,7 @@
   ;;(use-package counsel-projectile
   ;;  :ensure t)
   )
+
 (setq projectile-project-search-path '("~/projects/" "~/" "~/to_keep/projects/"))
 
 (use-package yasnippet
@@ -595,8 +597,8 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
     :ensure t
     :config
     (global-evil-surround-mode 1))
-  (use-package org-evil
-    :ensure t)
+  ;;(use-package org-evil
+  ;;  :ensure t)
   )
 
 (use-package linum-relative
@@ -642,14 +644,14 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
               ("<S-iso-lefttab>" . dired-subtree-remove)))
 
 ;;
-(use-package autopair
-  :ensure t
-  :config
-  (autopair-global-mode)
-  (add-hook 'org-mode-hook 
-            #'(lambda ()
-                (setq autopair-dont-pair `(:never (?< ) ,@autopair-dont-pair))))
-  )
+;;(use-package autopair
+;;  :ensure t
+;;  :config
+;;  (autopair-global-mode)
+;;  (add-hook 'org-mode-hook 
+;;            #'(lambda ()
+;;                (setq autopair-dont-pair `(:never (?< ) ,@autopair-dont-pair))))
+;;  )
 
 ;;
 (use-package nix-mode
@@ -681,38 +683,40 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
     (window-numbering-mode))
 
 ;;;;;;
-(use-package mu4e
-  :ensure nil
-  ;; :load-path "/usr/share/emacs/site-lisp/mu4e/"
-  ;; :defer 20 ; Wait until 20 seconds after startup
-  :config
+(if nil
+    (use-package mu4e
+      :ensure nil
+      ;; :load-path "/usr/share/emacs/site-lisp/mu4e/"
+      ;; :defer 20 ; Wait until 20 seconds after startup
+      :config
 
-  ;; This is set to 't' to avoid mail syncing issues when using mbsync
-  (setq mu4e-change-filenames-when-moving t)
+      ;; This is set to 't' to avoid mail syncing issues when using mbsync
+      (setq mu4e-change-filenames-when-moving t)
 
-  ;; Refresh mail using isync every 10 minutes
-  (setq mu4e-update-interval (* 60 60))
-  (setq mu4e-get-mail-command "mbsync -a")
-  (setq mu4e-maildir "~/Mail")
+      ;; Refresh mail using isync every 10 minutes
+      (setq mu4e-update-interval (* 60 60))
+      (setq mu4e-get-mail-command "mbsync -a")
+      (setq mu4e-maildir "~/Mail")
 
-  (setq mu4e-drafts-folder "/[Gmail]/Drafts")
-  (setq mu4e-sent-folder   "/[Gmail]/Sent Mail")
-  (setq mu4e-refile-folder "/[Gmail]/All Mail")
-  (setq mu4e-trash-folder  "/[Gmail]/Trash")
+      (setq mu4e-drafts-folder "/[Gmail]/Drafts")
+      (setq mu4e-sent-folder   "/[Gmail]/Sent Mail")
+      (setq mu4e-refile-folder "/[Gmail]/All Mail")
+      (setq mu4e-trash-folder  "/[Gmail]/Trash")
 
-  (setq mu4e-maildir-shortcuts
-        '((:maildir "/Inbox"    :key ?i)
-          (:maildir "/[Gmail]/Sent Mail" :key ?s)
-          (:maildir "/[Gmail]/Trash"     :key ?t)
-          (:maildir "/[Gmail]/Drafts"    :key ?d)
-          (:maildir "/[Gmail]/All Mail"  :key ?a)))
-  (setq smtpmail-smtp-server "smtp.gmail.com"
-        smtpmail-smtp-service 465
-        smtpmail-stream-type  'ssl
-        user-mail-address "peterloleungyau@gmail.com"
-        user-full-name "Peter Lo")
-  (setq message-send-mail-function 'smtpmail-send-it)
-  (setq mu4e-mu-binary "/home/peter/extra_guix_profiles/main/bin/mu")
+      (setq mu4e-maildir-shortcuts
+            '((:maildir "/Inbox"    :key ?i)
+              (:maildir "/[Gmail]/Sent Mail" :key ?s)
+              (:maildir "/[Gmail]/Trash"     :key ?t)
+              (:maildir "/[Gmail]/Drafts"    :key ?d)
+              (:maildir "/[Gmail]/All Mail"  :key ?a)))
+      (setq smtpmail-smtp-server "smtp.gmail.com"
+            smtpmail-smtp-service 465
+            smtpmail-stream-type  'ssl
+            user-mail-address "peterloleungyau@gmail.com"
+            user-full-name "Peter Lo")
+      (setq message-send-mail-function 'smtpmail-send-it)
+      (setq mu4e-mu-binary "/home/peter/extra_guix_profiles/main/bin/mu")
+      )
   )
 
 ;;;;;;

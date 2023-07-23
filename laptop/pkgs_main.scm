@@ -6,7 +6,7 @@
 
 (specifications->manifest
   (list 
-        "neovim"
+        ;;"neovim"
         "inotify-tools"
         ;;"patchelf"
         "mu"
@@ -21,7 +21,7 @@
         ;;"libreoffice"
         ;;"openssh"
         "nss-certs"
-        "glibc-utf8-locales"
+        ;;"glibc-utf8-locales"
         "glibc-locales"
         "fontconfig"
         "gs-fonts"
@@ -61,6 +61,7 @@
         "emacs-use-package"
         "emacs-org"
         "emacs-slime"
+        "emacs-macrostep"
         "emacs-magit"
         "emacs-ess"
         "emacs-ox-hugo"
@@ -81,7 +82,7 @@
         "emacs-key-chord"
         "emacs-dired-hacks"
         "emacs-smartparens"
-        "emacs-nix-mode"
+        ;;"emacs-nix-mode"
         "emacs-yaml-mode"
         "emacs-debbugs"
         "emacs-highlight-indent-guides"
@@ -89,4 +90,5 @@
         "emacs-undo-tree"
         "emacs-spacemacs-theme"
         "emacs-org-bullets"
+        "emacs-which-key"
         ))

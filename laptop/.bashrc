@@ -156,21 +156,6 @@ function link_rc {
 ## image viewer: sxiv
 alias viewimg="sxiv"
 
-## >>> conda initialize >>>
-## !! Contents within this block are managed by 'conda init' !!
-#__conda_setup="$('/home/peter/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
-#if [ $? -eq 0 ]; then
-#    eval "$__conda_setup"
-#else
-#    if [ -f "/home/peter/anaconda3/etc/profile.d/conda.sh" ]; then
-#        . "/home/peter/anaconda3/etc/profile.d/conda.sh"
-#    else
-#        export PATH="/home/peter/anaconda3/bin:$PATH"
-#    fi
-#fi
-#unset __conda_setup
-## <<< conda initialize <<<
-
 # set the mouse speed for the trackball
 # the device id is found to be 10 using 'xinput list'
 # and the "Device Accel Velocity Scaling" prop is found to be 262 using 'xinput list-props 10'
@@ -180,10 +165,26 @@ alias viewimg="sxiv"
 # to decrease acceleration
 #xinput --set-prop 10 260 2.0
 #xinput --set-button-map "ELECOM TrackBall Mouse HUGE TrackBall" 1 2 3 4 5 6 7 2 1 10 11 12 13
-xinput --set-button-map "USB OPTICAL MOUSE" 1 2 3 4 5 6 7 2 9 10 11 12 13
+#xinput --set-button-map "USB OPTICAL MOUSE" 1 2 3 4 5 6 7 2 9 10 11 12 13
 
 if [ -n "$GUIX_ENVIRONMENT" ]
 then
   export PS1="\u@\h \w [dev]\$ "
 fi
+
+
+# # >>> conda initialize >>>
+# # !! Contents within this block are managed by 'conda init' !!
+# __conda_setup="$('/home/peter/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+# if [ $? -eq 0 ]; then
+#     eval "$__conda_setup"
+# else
+#     if [ -f "/home/peter/miniconda3/etc/profile.d/conda.sh" ]; then
+#         . "/home/peter/miniconda3/etc/profile.d/conda.sh"
+#     else
+#         export PATH="/home/peter/miniconda3/bin:$PATH"
+#     fi
+# fi
+# unset __conda_setup
+# # <<< conda initialize <<<
 
