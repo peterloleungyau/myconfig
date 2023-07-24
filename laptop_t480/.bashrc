@@ -173,3 +173,5 @@ then
   export PS1="\u@\h \w [dev]\$ "
 fi
 
+alias work="guix time-machine -C channels.scm -- environment --ad-hoc -m pkgs.scm"
+

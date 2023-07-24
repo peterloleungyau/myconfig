@@ -90,7 +90,7 @@
 (use-package slime
   :ensure t
   :config
-  (setq inferior-lisp-program "/usr/bin/sbcl --dynamic-space-size 2048")
+  (setq inferior-lisp-program "sbcl --dynamic-space-size 4096")
   ;; Refer to http://snowsyn.net/2020/01/01/local-clhs-access-in-emacs/
   ;; download archived HyperSpec from ftp://ftp.lispworks.com/pub/software_tools/reference/HyperSpec-7-0.tar.gz
   (setq common-lisp-hyperspec-root
@@ -113,8 +113,9 @@
 ;;
 (setq exec-path (cons "/home/peter/.guix-profile/bin" exec-path))
 (use-package ess
-  :ensure t
-  :init (require 'ess-site)
+  :ensure nil
+  :defer t
+  :init (require 'ess-r-mode)
   (setq ess-fancy-comments nil)
   (setq ess-history-file nil)
   (setq tab-always-indent 'complete))
@@ -136,7 +137,7 @@
   (insert "<- "))
 (define-key ess-r-mode-map (kbd "M--") #'my-R-assign)
 (define-key inferior-ess-r-mode-map (kbd "M--") #'my-R-assign)
-(setq inferior-R-program-name "rwork")
+(setq inferior-R-program-name "R")
 
 (defun my-R ()
   (interactive)
@@ -729,6 +730,14 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
    '(rime-predict-evil-mode-p
      rime-predicate-after-alphabet-char-p
      rime-predicate-prog-in-code-p)))
+
+;;;;;;
+
+(defun evince-file (file)
+  (interactive `(,(ido-read-file-name "File:" "~/to_keep/books")))
+  (start-process "evince" nil "evince" file))
+
+(global-set-key (kbd "C-c C-r") 'evince-file)
 
 ;;;;;;
 (custom-set-faces
