@@ -91,4 +91,6 @@
         "emacs-spacemacs-theme"
         "emacs-org-bullets"
         "emacs-which-key"
+        "emacs-devdocs"
+        "emacs-dumb-jump"
         ))

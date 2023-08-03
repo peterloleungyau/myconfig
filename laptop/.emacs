@@ -736,6 +736,27 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
      rime-predicate-prog-in-code-p)))
 
 ;;;;;;
+(use-package which-key
+  :ensure nil
+  :config
+  (which-key-mode))
+
+;;;;;;
+(use-package devdocs
+  :ensure nil
+  :config
+  (global-set-key (kbd "C-h D") 'devdocs-lookup)
+  (add-hook 'python-mode-hook
+            (lambda ()
+              (setq-local devdocs-current-docs
+                          '("python~3.9"
+                            "pandas~1"
+                            "scikit_learn")))))
+
+(use-package dumb-jump
+  :ensure nil)
+  
+;;;;;;
 
 (defun evince-file (file)
   (interactive `(,(ido-read-file-name "File:" "~/to_keep/books")))
