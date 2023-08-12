@@ -599,6 +599,10 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
     (global-evil-surround-mode 1))
   ;;(use-package org-evil
   ;;  :ensure t)
+
+  ;; to prevent evil from messing up keybindings of some modes
+  (evil-set-initial-state 'Info-mode 'emacs)
+  ;(add-hook 'Info-mode-hook #'turn-off-evil-mode nil)
   )
 
 (use-package linum-relative
