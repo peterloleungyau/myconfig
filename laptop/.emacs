@@ -758,7 +758,9 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
                             "scikit_learn")))))
 
 (use-package dumb-jump
-  :ensure nil)
+  :ensure nil
+  :config
+  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
   
 ;;;;;;
 
@@ -767,6 +769,10 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
   (start-process "evince" nil "evince" file))
 
 (global-set-key (kbd "C-c C-r") 'evince-file)
+
+;;;;;;
+;;(add-to-list 'Info-additional-directory-list "~/to_keep/info/info/")
+;;(add-to-list 'Info-additional-directory-list "~/to_keep/info/")
 
 ;;;;;;
 (custom-set-faces

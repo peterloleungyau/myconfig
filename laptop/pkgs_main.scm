@@ -93,4 +93,5 @@
         "emacs-which-key"
         "emacs-devdocs"
         "emacs-dumb-jump"
+        "emacs-xah-fly-keys"
         ))
