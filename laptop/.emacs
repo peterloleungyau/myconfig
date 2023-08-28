@@ -762,6 +762,10 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
 
 (use-package dumb-jump
   :ensure nil
+  :init
+  (setq xref-show-definitions-function #'xref-show-definitions-completing-read)
+  ;; use M-. to jump to definition
+  ;; use M-, to jump back
   :config
   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
 
