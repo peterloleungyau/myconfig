@@ -599,6 +599,10 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
     (global-evil-surround-mode 1))
   ;;(use-package org-evil
   ;;  :ensure t)
+
+  ;; to prevent evil from messing up keybindings of some modes
+  (evil-set-initial-state 'Info-mode 'emacs)
+  ;(add-hook 'Info-mode-hook #'turn-off-evil-mode nil)
   )
 
 (use-package linum-relative
@@ -736,12 +740,39 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
      rime-predicate-prog-in-code-p)))
 
 ;;;;;;
+(use-package which-key
+  :ensure nil
+  :config
+  (which-key-mode))
+
+;;;;;;
+(use-package devdocs
+  :ensure nil
+  :config
+  (global-set-key (kbd "C-h D") 'devdocs-lookup)
+  (add-hook 'python-mode-hook
+            (lambda ()
+              (setq-local devdocs-current-docs
+                          '("python~3.9"
+                            "pandas~1"
+                            "scikit_learn")))))
+
+(use-package dumb-jump
+  :ensure nil
+  :config
+  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
+  
+;;;;;;
 
 (defun evince-file (file)
   (interactive `(,(ido-read-file-name "File:" "~/to_keep/books")))
   (start-process "evince" nil "evince" file))
 
 (global-set-key (kbd "C-c C-r") 'evince-file)
+
+;;;;;;
+;;(add-to-list 'Info-additional-directory-list "~/to_keep/info/info/")
+;;(add-to-list 'Info-additional-directory-list "~/to_keep/info/")
 
 ;;;;;;
 (custom-set-faces
