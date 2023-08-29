@@ -67,7 +67,7 @@
         "emacs-org"
         "emacs-slime"
         "emacs-magit"
-        "emacs-ess"
+        ;; "emacs-ess" ;; need to be careful not to install the elpa version
         "emacs-ox-hugo"
         "emacs-projectile"
         "emacs-counsel-projectile"
@@ -95,4 +95,7 @@
         "emacs-spacemacs-theme"
         "emacs-org-bullets"
         "emacs-rime"
+        "emacs-dumb-jump"
+        "python" ;; so that dumb-jump works on python
+        "emacs-xah-fly-keys"
         ))

@@ -199,7 +199,8 @@
  '(safe-local-variable-values '((Base . 10) (Syntax . ANSI-Common-Lisp)))
  '(select-enable-primary t)
  '(show-paren-mode t)
- '(warning-suppress-types '((:warning \(undo\ discard-info\)))))
+ '(warning-suppress-log-types '((comp) (comp) (:warning \(undo\ discard-info\))))
+ '(warning-suppress-types '((comp) (:warning \(undo\ discard-info\)))))
 
 ;;;;;;
 ;;; for sql-mode
@@ -572,47 +573,45 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
 (setq ido-auto-merge-work-directories-length -1)
 
 ;;;; evil
-(use-package evil
-  :ensure t
-  :config
-  (evil-mode 1)
-  (define-key evil-insert-state-map (kbd "C-e") nil)
-  (define-key evil-insert-state-map (kbd "C-y") nil)
-  (define-key evil-insert-state-map (kbd "TAB") nil)
-  (define-key evil-insert-state-map (kbd "C-a") nil)
-  (define-key evil-insert-state-map (kbd "C-k") nil)
-  (define-key evil-insert-state-map (kbd "C-w") nil)
-  (define-key evil-insert-state-map (kbd "C-r") nil)
-  (define-key evil-motion-state-map (kbd "C-e") nil)
-  (define-key evil-motion-state-map (kbd "C-y") nil)
-  (define-key evil-motion-state-map (kbd "TAB") nil)
-  (define-key evil-motion-state-map (kbd "C-w") nil)
-  (define-key evil-motion-state-map (kbd "C-r") nil)
-  (define-key evil-normal-state-map (kbd "C-r") nil)
-  (undo-tree-mode 1)
-  (define-key undo-tree-map (kbd "C-r") nil)
-  
-  (use-package evil-surround
-    :ensure t
-    :config
-    (global-evil-surround-mode 1))
-  ;;(use-package org-evil
-  ;;  :ensure t)
+(if nil
+    (use-package evil
+      :ensure t
+      :config
+      (evil-mode 1)
+      (define-key evil-insert-state-map (kbd "C-e") nil)
+      (define-key evil-insert-state-map (kbd "C-y") nil)
+      (define-key evil-insert-state-map (kbd "TAB") nil)
+      (define-key evil-insert-state-map (kbd "C-a") nil)
+      (define-key evil-insert-state-map (kbd "C-k") nil)
+      (define-key evil-insert-state-map (kbd "C-w") nil)
+      (define-key evil-insert-state-map (kbd "C-r") nil)
+      (define-key evil-motion-state-map (kbd "C-e") nil)
+      (define-key evil-motion-state-map (kbd "C-y") nil)
+      (define-key evil-motion-state-map (kbd "TAB") nil)
+      (define-key evil-motion-state-map (kbd "C-w") nil)
+      (define-key evil-motion-state-map (kbd "C-r") nil)
+      (define-key evil-normal-state-map (kbd "C-r") nil)
+      (undo-tree-mode 1)
+      (define-key undo-tree-map (kbd "C-r") nil)
+      
+      (use-package evil-surround
+        :ensure t
+        :config
+        (global-evil-surround-mode 1))
+      ;;(use-package org-evil
+      ;;  :ensure t)
+      ))
+
+(if nil
+    (use-package linum-relative
+      :ensure t
+      :config
+      (linum-relative-global-mode 1)
+      ;; Use `display-line-number-mode` as linum-mode's backend for smooth performance
+      (setq linum-relative-backend 'display-line-numbers-mode))
   )
 
-(use-package linum-relative
-  :ensure t
-  :config
-  (linum-relative-global-mode 1)
-  ;; Use `display-line-number-mode` as linum-mode's backend for smooth performance
-  (setq linum-relative-backend 'display-line-numbers-mode))
 
-(use-package key-chord
-  :ensure t
-  :config
-  (setq key-chord-two-keys-delay 0.5)
-  (key-chord-define evil-insert-state-map "kj" 'evil-normal-state)
-  (key-chord-mode 1))
 ;;
 (require 'dired)
 (define-key dired-mode-map (kbd "C-c t") 'dired-hide-details-mode)
@@ -730,6 +729,32 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
    '(rime-predict-evil-mode-p
      rime-predicate-after-alphabet-char-p
      rime-predicate-prog-in-code-p)))
+
+(use-package dumb-jump
+  :ensure nil
+  :init
+  (setq xref-show-definitions-function #'xref-show-definitions-completing-read)
+  ;; use M-. to jump to definition
+  ;; use M-, to jump back
+  :config
+  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
+
+;;;;;;
+(setq xah-fly-use-control-key nil)
+(setq xah-fly-use-meta-key nil)
+(use-package xah-fly-keys
+  :ensure nil
+  :config
+  (xah-fly-keys-set-layout "qwerty")
+  (xah-fly-keys 1))
+
+(use-package key-chord
+  :ensure t
+  :config
+  (setq key-chord-two-keys-delay 0.5)
+  ;;(key-chord-define evil-insert-state-map "kj" 'evil-normal-state)
+  (key-chord-define xah-fly-insert-map "kj" 'xah-fly-command-mode-activate-no-hook)
+  (key-chord-mode 1))
 
 ;;;;;;
 
