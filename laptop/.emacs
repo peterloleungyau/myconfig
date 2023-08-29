@@ -573,44 +573,47 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
 (setq ido-auto-merge-work-directories-length -1)
 
 ;;;; evil
-(use-package evil
-  :ensure t
-  :config
-  (evil-mode 1)
-  (define-key evil-insert-state-map (kbd "C-e") nil)
-  (define-key evil-insert-state-map (kbd "C-y") nil)
-  (define-key evil-insert-state-map (kbd "TAB") nil)
-  (define-key evil-insert-state-map (kbd "C-a") nil)
-  (define-key evil-insert-state-map (kbd "C-k") nil)
-  (define-key evil-insert-state-map (kbd "C-w") nil)
-  (define-key evil-insert-state-map (kbd "C-r") nil)
-  (define-key evil-motion-state-map (kbd "C-e") nil)
-  (define-key evil-motion-state-map (kbd "C-y") nil)
-  (define-key evil-motion-state-map (kbd "TAB") nil)
-  (define-key evil-motion-state-map (kbd "C-w") nil)
-  (define-key evil-motion-state-map (kbd "C-r") nil)
-  (define-key evil-normal-state-map (kbd "C-r") nil)
-  (undo-tree-mode 1)
-  (define-key undo-tree-map (kbd "C-r") nil)
-  
-  (use-package evil-surround
-    :ensure t
-    :config
-    (global-evil-surround-mode 1))
-  ;;(use-package org-evil
-  ;;  :ensure t)
+(if nil
+    (use-package evil
+      :ensure t
+      :config
+      (evil-mode 1)
+      (define-key evil-insert-state-map (kbd "C-e") nil)
+      (define-key evil-insert-state-map (kbd "C-y") nil)
+      (define-key evil-insert-state-map (kbd "TAB") nil)
+      (define-key evil-insert-state-map (kbd "C-a") nil)
+      (define-key evil-insert-state-map (kbd "C-k") nil)
+      (define-key evil-insert-state-map (kbd "C-w") nil)
+      (define-key evil-insert-state-map (kbd "C-r") nil)
+      (define-key evil-motion-state-map (kbd "C-e") nil)
+      (define-key evil-motion-state-map (kbd "C-y") nil)
+      (define-key evil-motion-state-map (kbd "TAB") nil)
+      (define-key evil-motion-state-map (kbd "C-w") nil)
+      (define-key evil-motion-state-map (kbd "C-r") nil)
+      (define-key evil-normal-state-map (kbd "C-r") nil)
+      (undo-tree-mode 1)
+      (define-key undo-tree-map (kbd "C-r") nil)
+      
+      (use-package evil-surround
+        :ensure t
+        :config
+        (global-evil-surround-mode 1))
+      ;;(use-package org-evil
+      ;;  :ensure t)
 
-  ;; to prevent evil from messing up keybindings of some modes
-  (evil-set-initial-state 'Info-mode 'emacs)
-  ;(add-hook 'Info-mode-hook #'turn-off-evil-mode nil)
+      ;; to prevent evil from messing up keybindings of some modes
+      (evil-set-initial-state 'Info-mode 'emacs)
+                                        ;(add-hook 'Info-mode-hook #'turn-off-evil-mode nil)
+      ))
+
+(if nil
+    (use-package linum-relative
+      :ensure t
+      :config
+      (linum-relative-global-mode 0)
+      ;; Use `display-line-number-mode` as linum-mode's backend for smooth performance
+      (setq linum-relative-backend 'display-line-numbers-mode))
   )
-
-(use-package linum-relative
-  :ensure t
-  :config
-  (linum-relative-global-mode 0)
-  ;; Use `display-line-number-mode` as linum-mode's backend for smooth performance
-  (setq linum-relative-backend 'display-line-numbers-mode))
 
 (use-package key-chord
   :ensure t
@@ -759,8 +762,21 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
 
 (use-package dumb-jump
   :ensure nil
+  :init
+  (setq xref-show-definitions-function #'xref-show-definitions-completing-read)
+  ;; use M-. to jump to definition
+  ;; use M-, to jump back
   :config
   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
+
+;;;;;;
+(setq xah-fly-use-control-key nil)
+(setq xah-fly-use-meta-key nil)
+(use-package xah-fly-keys
+  :ensure nil
+  :config
+  (xah-fly-keys-set-layout "qwerty")
+  (xah-fly-keys 1))
   
 ;;;;;;
 
