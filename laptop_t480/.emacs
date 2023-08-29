@@ -746,7 +746,8 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
   :ensure nil
   :config
   (xah-fly-keys-set-layout "qwerty")
-  (xah-fly-keys 1))
+  (xah-fly-keys 1)
+  (global-set-key (kbd "M-SPC") 'xah-fly-command-mode-activate-no-hook))
 
 (use-package key-chord
   :ensure t
