@@ -730,6 +730,12 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
      rime-predicate-after-alphabet-char-p
      rime-predicate-prog-in-code-p)))
 
+;;;;;;
+(use-package which-key
+  :ensure nil
+  :config
+  (which-key-mode))
+
 (use-package dumb-jump
   :ensure nil
   :init
@@ -747,6 +753,7 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
   :config
   (xah-fly-keys-set-layout "qwerty")
   (xah-fly-keys 1)
+  (global-set-key (kbd "<print>") 'xah-fly-command-mode-activate-no-hook)
   (global-set-key (kbd "M-SPC") 'xah-fly-command-mode-activate-no-hook))
 
 (use-package key-chord

@@ -94,6 +94,7 @@
         "emacs-undo-tree"
         "emacs-spacemacs-theme"
         "emacs-org-bullets"
+        "emacs-which-key"
         "emacs-rime"
         "emacs-dumb-jump"
         "python" ;; so that dumb-jump works on python

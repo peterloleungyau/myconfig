@@ -39,7 +39,7 @@ bindsym XF86AudioPause exec playerctl play-pause
 bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 bindsym $mod+Shift+f exec firefox
-bindsym Print exec screenshot
+#bindsym Print exec screenshot
 
 # need to install acpilight for xbacklight to work: https://gitlab.com/wavexx/acpilight
 # also need to add user to the video group
