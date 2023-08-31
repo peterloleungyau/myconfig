@@ -565,15 +565,15 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
 (global-set-key (kbd "M-s m") 'search-bookmarks)
 
 ;;;; ido-mode
-(when nil
+(when t
   (setq ido-enable-flex-matching t)
   (setq ido-create-new-buffer 'always)
   ;;(setq ido-everywhere t)
   (ido-mode 1)
-  (ido-everywhere 1)
+  (ido-everywhere 0)
   (setq ido-auto-merge-work-directories-length -1))
 
-(when t
+(when nil
   (if (version< emacs-version "28.1")
       (progn
         ;; use ido mode for flex matching, and make it display vertical
