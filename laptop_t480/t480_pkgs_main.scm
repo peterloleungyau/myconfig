@@ -38,6 +38,7 @@
         "mplayer"
         "mpv"
         "sxiv"
+        "imagemagick"
         "xinput"
         "gimp"
         "krita"

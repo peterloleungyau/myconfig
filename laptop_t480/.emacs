@@ -26,7 +26,8 @@
                          ;; for temporary problem with elpa using https
                          ;;("gnu-mirror" . "http://mirrors.163.com/elpa/gnu/")
                          ("melpa" . "https://melpa.org/packages/")
-                         ("org" . "https://orgmode.org/elpa/")))
+                         ;;("org" . "https://orgmode.org/elpa/")
+                         ))
 
 (when (>= emacs-major-version 25)
   (setq package-archive-priorities '(("org" . 4)
@@ -51,10 +52,11 @@
 ;;; Load org mode early to ensure that the orgmode ELPA version gets picked up, not the
 ;;; shipped version
 (use-package org
-  :ensure org-plus-contrib
-  :pin org
-  :config
-  (require 'org-tempo))
+  ;; :ensure org-plus-contrib
+  :pin gnu
+  ;;:config
+  ;;(require 'org-tempo)
+  )
 
 ;;; Check to see if running on Mac OS X or some GNU/Linux distro
 (defvar macosxp (string-match "darwin" (symbol-name system-type)))
@@ -194,13 +196,55 @@
  '(org-export-backends '(ascii beamer html icalendar latex))
  '(org-odt-preferred-output-format "pdf")
  '(package-selected-packages
-   '(window-numbering pdf-tools highlight-indent-guides json-mode debbugs yaml-mode yaml-model ewal-spacemacs-themes nix-mode key-chord linum-relative dired-subtree dired evil-surround evil evil-mode pydoc-info elpy yasnippet-snippets yasnippet lsp-python ess-R-data-view ess-smart-equals ess-smart-underscore ess-view company-lsp lsp-ui lsp-mode counsel-projectile projectile counsel ivy org-plus-contrib org-link-minor-mode ox-hugo ob-ipython ob-mongo ob-prolog ob-sagemath ob-sql-mode spacemacs-theme magit slime org-ref markdown-mode ess auctex))
+   '(window-numbering pdf-tools highlight-indent-guides json-mode debbugs yaml-mode yaml-model ewal-spacemacs-themes nix-mode key-chord linum-relative dired-subtree dired evil-surround evil evil-mode pydoc-info elpy yasnippet-snippets yasnippet lsp-python ess-R-data-view ess-smart-equals ess-smart-underscore ess-view company-lsp lsp-ui lsp-mode counsel-projectile projectile counsel ivy org-link-minor-mode ox-hugo ob-ipython ob-mongo ob-prolog ob-sagemath ob-sql-mode spacemacs-theme magit slime org-ref markdown-mode ess auctex))
  '(pdf-view-midnight-colors '("#b2b2b2" . "#292b2e"))
- '(safe-local-variable-values '((Base . 10) (Syntax . ANSI-Common-Lisp)))
+ '(safe-local-variable-values
+   '((eval progn
+           (require 'lisp-mode)
+           (defun emacs27-lisp-fill-paragraph
+               (&optional justify)
+             (interactive "P")
+             (or
+              (fill-comment-paragraph justify)
+              (let
+                  ((paragraph-start
+                    (concat paragraph-start "\\|\\s-*\\([(;\"]\\|\\s-:\\|`(\\|#'(\\)"))
+                   (paragraph-separate
+                    (concat paragraph-separate "\\|\\s-*\".*[,\\.]$"))
+                   (fill-column
+                    (if
+                        (and
+                         (integerp emacs-lisp-docstring-fill-column)
+                         (derived-mode-p 'emacs-lisp-mode))
+                        emacs-lisp-docstring-fill-column fill-column)))
+                (fill-paragraph justify))
+              t))
+           (setq-local fill-paragraph-function #'emacs27-lisp-fill-paragraph))
+     (eval modify-syntax-entry 43 "'")
+     (eval modify-syntax-entry 36 "'")
+     (eval modify-syntax-entry 126 "'")
+     (geiser-repl-per-project-p . t)
+     (eval with-eval-after-load 'yasnippet
+           (let
+               ((guix-yasnippets
+                 (expand-file-name "etc/snippets/yas"
+                                   (locate-dominating-file default-directory ".dir-locals.el"))))
+             (unless
+                 (member guix-yasnippets yas-snippet-dirs)
+               (add-to-list 'yas-snippet-dirs guix-yasnippets)
+               (yas-reload-all))))
+     (eval setq-local guix-directory
+           (locate-dominating-file default-directory ".dir-locals.el"))
+     (eval add-to-list 'completion-ignored-extensions ".go")
+     (Base . 10)
+     (Syntax . ANSI-Common-Lisp)))
  '(select-enable-primary t)
  '(show-paren-mode t)
  '(warning-suppress-log-types '((comp) (comp) (:warning \(undo\ discard-info\))))
- '(warning-suppress-types '((comp) (:warning \(undo\ discard-info\)))))
+ '(warning-suppress-types
+   '((org-element-cache)
+     (comp)
+     (:warning \(undo\ discard-info\)))))
 
 ;;;;;;
 ;;; for sql-mode
@@ -273,6 +317,9 @@
       '(("t" "Todo [inbox]" entry
          (file+headline "~/todo.org" "Tasks")
          "* TODO %i%?")
+        ("w" "Work-Todo [inbox]" entry
+         (file+headline "/home/peter/to_keep/job/bochk/generative_AI/proj_tasks.org" "Work TODOs")
+         "* TODO %T %i%?")
         ("h" "Howto" entry
          (file+headline "~/projects/learning_notes/learning.org" "HowTo")
          "* %i%?")
@@ -363,12 +410,21 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
     (python-shell-send-region beg end))
   (forward-line))
 
+;; to work around strange bug of freezing of single quote in the stupid elpy
+;; reference:
+;;    https://lists.gnu.org/archive/html/bug-gnu-emacs/2022-12/msg00489.html
+;;    https://github.com/jorgenschaefer/elpy/issues/2002
+(defun python-nav-end-of-statement--bug-override (orig-fn &optional noend)
+  (forward-line 1))
+
 (use-package elpy
   :ensure t
   :commands elpy-enable
   :init (with-eval-after-load 'python (elpy-enable))
   :config
   (flymake-mode -1)
+  (remove-hook 'elpy-modules 'elpy-module-flymake)
+  (advice-add 'python-nav-end-of-statement :around #'python-nav-end-of-statement--bug-override)
   :bind (:map python-mode-map
               ("<C-return>" . my-python-shell-send-region))
   )
@@ -756,13 +812,14 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
   (global-set-key (kbd "<print>") 'xah-fly-command-mode-activate-no-hook)
   (global-set-key (kbd "M-SPC") 'xah-fly-command-mode-activate-no-hook))
 
-(use-package key-chord
-  :ensure t
-  :config
-  (setq key-chord-two-keys-delay 0.5)
-  ;;(key-chord-define evil-insert-state-map "kj" 'evil-normal-state)
-  (key-chord-define xah-fly-insert-map "kj" 'xah-fly-command-mode-activate-no-hook)
-  (key-chord-mode 1))
+(when nil
+  (use-package key-chord
+    :ensure t
+    :config
+    (setq key-chord-two-keys-delay 0.5)
+    ;;(key-chord-define evil-insert-state-map "kj" 'evil-normal-state)
+    (key-chord-define xah-fly-insert-map "kj" 'xah-fly-command-mode-activate-no-hook)
+    (key-chord-mode 1)))
 
 ;;;;;;
 

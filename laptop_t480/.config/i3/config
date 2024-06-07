@@ -40,6 +40,7 @@ bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 bindsym $mod+Shift+f exec firefox
 #bindsym Print exec screenshot
+bindsym $mod+Print exec import -window root ~/screenshot_$(date +%Y-%m-%d_%H_%M_%S).png
 
 # need to install acpilight for xbacklight to work: https://gitlab.com/wavexx/acpilight
 # also need to add user to the video group
@@ -212,5 +213,7 @@ exec_always --no-startup-id syndaemon -i 1.5 -t -K -R -d
 # disable tap to click
 exec_always --no-startup-id synclient TapButton1=0
 #exec --no-startup-id xinput --set-button-map "USB OPTICAL MOUSE" 1 2 3 4 5 6 7 2 9 10 11 12 13
+# adjust keyboard repeat rate
+exec_always xset r rate 800 10
 
 #exec xscreensaver -no-splash &
