@@ -57,7 +57,8 @@
                  (comment "Peter Lo")
                  (group "users")
                  (supplementary-groups '("wheel" "netdev"
-                                         "audio" "video")))
+                                         "audio" "video"
+					 "docker")))
                 (user-account
                  (name "lemon")
                  (comment "Lemon Lin")
