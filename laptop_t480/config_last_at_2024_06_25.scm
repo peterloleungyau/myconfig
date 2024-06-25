@@ -2,11 +2,13 @@
 ;; for a "desktop" setup with GNOME and Xfce where the
 ;; root partition is encrypted with LUKS.
 
-(use-modules (gnu) (gnu system nss) (gnu services docker))
+(use-modules (gnu) (nongnu packages linux) (gnu system nss) (gnu services docker))
 (use-service-modules desktop xorg)
 (use-package-modules certs gnome)
 
 (operating-system
+  (kernel linux)
+  (firmware (list linux-firmware))
   (host-name "peter-guix-T480")
   (timezone "Asia/Hong_Kong")
   (locale "en_US.utf8")
