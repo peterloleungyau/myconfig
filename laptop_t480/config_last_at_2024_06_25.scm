@@ -83,7 +83,7 @@
                      (specification->package "ibus-libpinyin")
                      (specification->package "ibus-rime")
                      ;; for HTTPS access
-                     ;;nss-certs ;; now already included in %base-packages
+                     nss-certs
                      ;; for user mounts
                      gvfs)
                     %base-packages))
