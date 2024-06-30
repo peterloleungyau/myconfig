@@ -1,0 +1,13 @@
+#+STARTUP: indent
+#+STARTUP: overview
+#+STARTUP: logdone
+#+SEQ_TODO: TODO(t) NEXT(n) WAITING(w) | DONE(d) CANCELLED(c) DEFERRED(f)
+
+* Useful Guix commands
+** guix shell container with network and certs
+- To spawn a guix shell inside container, but also need certs inside the container
+  - need to include =nss-certs= and expose the directory of certs, e.g. can be used to spawn a container with python to use pip
+    #+BEGIN_SRC bash
+      guix shell --container --network --expose=/etc/ssl/certs/ nss-certs other-pkgs ...
+    #+END_SRC
+  - reference: https://lists.libreplanet.org/archive/html/guix-devel/2020-04/msg00343.html
