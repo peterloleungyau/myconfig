@@ -26,7 +26,8 @@
                          ;; for temporary problem with elpa using https
                          ;;("gnu-mirror" . "http://mirrors.163.com/elpa/gnu/")
                          ("melpa" . "https://melpa.org/packages/")
-                         ("org" . "https://orgmode.org/elpa/")))
+                         ;;("org" . "https://orgmode.org/elpa/")
+                         ))
 
 (when (>= emacs-major-version 25)
   (setq package-archive-priorities '(("org" . 4)
@@ -51,10 +52,11 @@
 ;;; Load org mode early to ensure that the orgmode ELPA version gets picked up, not the
 ;;; shipped version
 (use-package org
-  :ensure org-plus-contrib
-  :pin org
-  :config
-  (require 'org-tempo))
+  ;;:ensure org-plus-contrib
+  :pin gnu
+  ;;:config
+  ;;(require 'org-tempo)
+  )
 
 ;;; Check to see if running on Mac OS X or some GNU/Linux distro
 (defvar macosxp (string-match "darwin" (symbol-name system-type)))
@@ -113,7 +115,7 @@
 ;;
 (setq exec-path (cons "/home/peter/.guix-profile/bin" exec-path))
 (use-package ess
-  :ensure t
+  :ensure nil
   :init (require 'ess-site)
   (setq ess-fancy-comments nil)
   (setq ess-history-file nil)
@@ -136,7 +138,7 @@
   (insert "<- "))
 (define-key ess-r-mode-map (kbd "M--") #'my-R-assign)
 (define-key inferior-ess-r-mode-map (kbd "M--") #'my-R-assign)
-(setq inferior-R-program-name "rwork")
+;;(setq inferior-R-program-name "rwork")
 
 (defun my-R ()
   (interactive)
@@ -193,9 +195,24 @@
  '(org-export-backends '(ascii beamer html icalendar latex))
  '(org-odt-preferred-output-format "pdf")
  '(package-selected-packages
-   '(window-numbering pdf-tools highlight-indent-guides json-mode debbugs yaml-mode yaml-model ewal-spacemacs-themes nix-mode key-chord linum-relative dired-subtree dired evil-surround evil evil-mode pydoc-info elpy yasnippet-snippets yasnippet lsp-python ess-R-data-view ess-smart-equals ess-smart-underscore ess-view company-lsp lsp-ui lsp-mode counsel-projectile projectile counsel ivy org-plus-contrib org-link-minor-mode ox-hugo ob-ipython ob-mongo ob-prolog ob-sagemath ob-sql-mode spacemacs-theme magit slime org-ref markdown-mode ess auctex))
+   '(window-numbering pdf-tools highlight-indent-guides json-mode debbugs yaml-mode yaml-model ewal-spacemacs-themes nix-mode key-chord linum-relative dired-subtree dired evil-surround evil evil-mode pydoc-info elpy yasnippet-snippets yasnippet lsp-python ess-R-data-view ess-smart-equals ess-smart-underscore ess-view company-lsp lsp-ui lsp-mode counsel-projectile projectile counsel ivy org-link-minor-mode ox-hugo ob-ipython ob-mongo ob-prolog ob-sagemath ob-sql-mode spacemacs-theme magit slime org-ref markdown-mode ess auctex))
  '(pdf-view-midnight-colors '("#b2b2b2" . "#292b2e"))
- '(safe-local-variable-values '((Base . 10) (Syntax . ANSI-Common-Lisp)))
+ '(safe-local-variable-values
+   '((geiser-repl-per-project-p . t)
+     (eval with-eval-after-load 'yasnippet
+           (let
+               ((guix-yasnippets
+                 (expand-file-name "etc/snippets/yas"
+                                   (locate-dominating-file default-directory ".dir-locals.el"))))
+             (unless
+                 (member guix-yasnippets yas-snippet-dirs)
+               (add-to-list 'yas-snippet-dirs guix-yasnippets)
+               (yas-reload-all))))
+     (eval setq-local guix-directory
+           (locate-dominating-file default-directory ".dir-locals.el"))
+     (eval add-to-list 'completion-ignored-extensions ".go")
+     (Base . 10)
+     (Syntax . ANSI-Common-Lisp)))
  '(select-enable-primary t)
  '(show-paren-mode t)
  '(warning-suppress-log-types '((use-package) (:warning \(undo\ discard-info\))))
@@ -364,11 +381,13 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
   (forward-line))
 
 (use-package elpy
-  :ensure t
+  :ensure nil
   :commands elpy-enable
   :init (with-eval-after-load 'python (elpy-enable))
   :config
+  ;; do not want flymake enabled in elpy
   (flymake-mode -1)
+  (remove-hook 'elpy-modules 'elpy-module-flymake)
   :bind (:map python-mode-map
               ("<C-return>" . my-python-shell-send-region))
   )
@@ -649,12 +668,13 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
       (setq linum-relative-backend 'display-line-numbers-mode))
   )
 
-(use-package key-chord
-  :ensure t
-  :config
-  (setq key-chord-two-keys-delay 0.5)
-  (key-chord-define evil-insert-state-map "kj" 'evil-normal-state)
-  (key-chord-mode 1))
+(when nil
+  (use-package key-chord
+    :ensure t
+    :config
+    (setq key-chord-two-keys-delay 0.5)
+    (key-chord-define evil-insert-state-map "kj" 'evil-normal-state)
+    (key-chord-mode 1)))
 ;;
 (require 'dired)
 (define-key dired-mode-map (kbd "C-c t") 'dired-hide-details-mode)
