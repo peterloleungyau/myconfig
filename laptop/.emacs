@@ -369,6 +369,7 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
   :init (with-eval-after-load 'python (elpy-enable))
   :config
   (flymake-mode -1)
+  (remove-hook 'elpy-modules 'elpy-module-flymake)
   :bind (:map python-mode-map
               ("<C-return>" . my-python-shell-send-region))
   )
