@@ -2,7 +2,9 @@
 ;; for a "desktop" setup with GNOME and Xfce where the
 ;; root partition is encrypted with LUKS.
 
-(use-modules (gnu) (nongnu packages linux) (gnu system nss) (gnu services docker))
+(use-modules (gnu) (nongnu packages linux)
+             (gnu system nss) (gnu services docker)
+             (gnu system mapped-devices))
 (use-service-modules desktop xorg)
 (use-package-modules certs gnome)
 
@@ -34,7 +36,8 @@
          (mapped-device
           (source (uuid "e3fa1453-7adc-4b77-bf4e-f7c08a994b06"))
           (target "large")
-          (type luks-device-mapping))))
+          (type (luks-device-mapping-with-options
+                 #:key-file "/mykeyfile")))))
 
   (file-systems (append
                  (list (file-system
@@ -96,7 +99,7 @@
                      (specification->package "ibus-libpinyin")
                      (specification->package "ibus-rime")
                      ;; for HTTPS access
-                     nss-certs
+                     ;nss-certs ;; now already in base-packages
                      ;; for user mounts
                      gvfs)
                     %base-packages))
