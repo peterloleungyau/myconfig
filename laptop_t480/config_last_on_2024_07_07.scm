@@ -46,14 +46,16 @@
                          (type "btrfs")
                          (options "compress=zstd,subvol=@")
                          (flags '(no-atime))
-                         (dependencies mapped-devices))
+                         ;; only need the first drive for root and home
+                         (dependencies (list (car mapped-devices))))
                        (file-system
                          (device "/dev/mapper/my-root")
                          (mount-point "/home")
                          (type "btrfs")
                          (options "compress=zstd,subvol=@home")
                          (flags '(no-atime))
-                         (dependencies mapped-devices))
+                         ;; only need the first drive for root and home
+                         (dependencies (list (car mapped-devices))))
                        (file-system
                          (device "/dev/mapper/large")
                          (mount-point "/home/peter/large")
