@@ -11,3 +11,7 @@
       guix shell --container --network --expose=/etc/ssl/certs/ nss-certs other-pkgs ...
     #+END_SRC
   - reference: https://lists.libreplanet.org/archive/html/guix-devel/2020-04/msg00343.html
+
+* Useful Docker commands
+** to modify container config without recreating
+- can modify the config files in =/var/lib/docker/containers/{container-hash}=
