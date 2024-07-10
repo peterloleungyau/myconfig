@@ -737,38 +737,38 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
     (window-numbering-mode))
 
 ;;;;;;
-(use-package mu4e
-  :ensure nil
-  ;; :load-path "/usr/share/emacs/site-lisp/mu4e/"
-  ;; :defer 20 ; Wait until 20 seconds after startup
-  :config
-
-  ;; This is set to 't' to avoid mail syncing issues when using mbsync
-  (setq mu4e-change-filenames-when-moving t)
-
-  ;; Refresh mail using isync every 10 minutes
-  (setq mu4e-update-interval (* 60 60))
-  (setq mu4e-get-mail-command "mbsync -a")
-  (setq mu4e-maildir "~/Mail")
-
-  (setq mu4e-drafts-folder "/[Gmail]/Drafts")
-  (setq mu4e-sent-folder   "/[Gmail]/Sent Mail")
-  (setq mu4e-refile-folder "/[Gmail]/All Mail")
-  (setq mu4e-trash-folder  "/[Gmail]/Trash")
-
-  (setq mu4e-maildir-shortcuts
-        '((:maildir "/Inbox"    :key ?i)
-          (:maildir "/[Gmail]/Sent Mail" :key ?s)
-          (:maildir "/[Gmail]/Trash"     :key ?t)
-          (:maildir "/[Gmail]/Drafts"    :key ?d)
-          (:maildir "/[Gmail]/All Mail"  :key ?a)))
-  (setq smtpmail-smtp-server "smtp.gmail.com"
-        smtpmail-smtp-service 465
-        smtpmail-stream-type  'ssl
-        user-mail-address "peterloleungyau@gmail.com"
-        user-full-name "Peter Lo")
-  (setq message-send-mail-function 'smtpmail-send-it)
-  )
+;; (use-package mu4e
+;;   :ensure nil
+;;   ;; :load-path "/usr/share/emacs/site-lisp/mu4e/"
+;;   ;; :defer 20 ; Wait until 20 seconds after startup
+;;   :config
+;; 
+;;   ;; This is set to 't' to avoid mail syncing issues when using mbsync
+;;   (setq mu4e-change-filenames-when-moving t)
+;; 
+;;   ;; Refresh mail using isync every 10 minutes
+;;   (setq mu4e-update-interval (* 60 60))
+;;   (setq mu4e-get-mail-command "mbsync -a")
+;;   (setq mu4e-maildir "~/Mail")
+;; 
+;;   (setq mu4e-drafts-folder "/[Gmail]/Drafts")
+;;   (setq mu4e-sent-folder   "/[Gmail]/Sent Mail")
+;;   (setq mu4e-refile-folder "/[Gmail]/All Mail")
+;;   (setq mu4e-trash-folder  "/[Gmail]/Trash")
+;; 
+;;   (setq mu4e-maildir-shortcuts
+;;         '((:maildir "/Inbox"    :key ?i)
+;;           (:maildir "/[Gmail]/Sent Mail" :key ?s)
+;;           (:maildir "/[Gmail]/Trash"     :key ?t)
+;;           (:maildir "/[Gmail]/Drafts"    :key ?d)
+;;           (:maildir "/[Gmail]/All Mail"  :key ?a)))
+;;   (setq smtpmail-smtp-server "smtp.gmail.com"
+;;         smtpmail-smtp-service 465
+;;         smtpmail-stream-type  'ssl
+;;         user-mail-address "peterloleungyau@gmail.com"
+;;         user-full-name "Peter Lo")
+;;   (setq message-send-mail-function 'smtpmail-send-it)
+;;   )
 
 ;;;;;;
 (use-package org-bullets
