@@ -59,7 +59,7 @@
         "git:send-email"
         "the-silver-searcher"
         "ripgrep"
-        ;;"texlive"
+        "texlive"
         "tree"
         ;; "xpdf" ;; new version has problem with fonts
         "evince"
