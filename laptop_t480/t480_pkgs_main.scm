@@ -56,6 +56,7 @@
 	"yt-dlp"
         ;;"nyxt"
         "git"
+	"git-annex"
         "git:send-email"
         "the-silver-searcher"
         "ripgrep"
