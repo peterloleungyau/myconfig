@@ -88,6 +88,7 @@
                      (specification->package "ibus")
                      (specification->package "ibus-libpinyin")
                      (specification->package "ibus-rime")
+                     (specification->package "rime-data")
 
                      ;; for HTTPS access
                      ;;nss-certs

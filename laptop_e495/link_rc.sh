@@ -21,6 +21,7 @@ link_rc .mplayer/config
 link_rc .xprofile
 link_rc .bash_profile
 link_rc .config/i3/config
+link_rc .config/ibus/rime
 link_rc .i3status.conf
 #link_rc calibrate_time.sh
 #link_rc home.html

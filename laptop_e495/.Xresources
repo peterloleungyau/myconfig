@@ -10,3 +10,4 @@ Xft.hintstyle: hintfull
 Xft.lcdfilter: lcddefault
 Xft.rgba: rgb
 Xft.autohint: 0
+Xterm*visualBell: true
