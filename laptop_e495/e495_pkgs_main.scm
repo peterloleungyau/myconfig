@@ -72,7 +72,7 @@
         "emacs-org"
         "emacs-slime"
         "emacs-magit"
-        ;; "emacs-ess" ;; need to be careful not to install the elpa version
+        "emacs-ess" ;; need to be careful not to install the elpa version
         "emacs-ox-hugo"
         "emacs-projectile"
         "emacs-counsel-projectile"
