@@ -1,0 +1,22 @@
+# This is Git's per-user configuration file.
+[user]
+# Please adapt and uncomment the following lines:
+	name = Peter Lo
+	email = peterloleungyau@gmail.com
+[sendemail]
+	smtpEncryption = tls
+	smtpServer = smtp.gmail.com
+	smtpUser = peterloleungyau@gmail.com
+	smtpServerPort = 587
+	smtpPass = kxrvkedbpgqwnrsx
+[log]
+	decorate = short
+[pull]
+	rebase = false
+[init]
+	defaultBranch = master
+[filter "lfs"]
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
