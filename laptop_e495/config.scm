@@ -33,7 +33,12 @@
    (list (mapped-device
           (source (uuid "e8ed2b99-696c-47f0-b130-57581da3fe96"))
           (target "my-root")
-          (type luks-device-mapping))))
+          (type luks-device-mapping))
+         (mapped-device
+          (source (uuid "5506d5dd-0821-4ef2-a714-011cb6d86fe7"))
+          (target "large")
+          (type (luks-device-mapping-with-options
+                 #:key-file "/mykeyfile")))))
 
   (file-systems (append
                  (list (file-system
@@ -42,12 +47,21 @@
                          (type "btrfs")
                          (options "compress=zstd,subvol=@")
                          (flags '(no-atime))
-                         (dependencies mapped-devices))
+                         ;; only need the first drive for root and home
+                         (dependencies (list (car mapped-devices))))
                        (file-system
                          (device "/dev/mapper/my-root")
                          (mount-point "/home")
                          (type "btrfs")
                          (options "compress=zstd,subvol=@home")
+                         (flags '(no-atime))
+                         ;; only need the first drive for root and home
+                         (dependencies (list (car mapped-devices))))
+                       (file-system
+                         (device "/dev/mapper/large")
+                         (mount-point "/home/peter/large")
+                         (type "btrfs")
+                         (options "compress=zstd,subvol=@large")
                          (flags '(no-atime))
                          (dependencies mapped-devices))
                        (file-system
