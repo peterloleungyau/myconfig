@@ -321,7 +321,7 @@
          (file+headline "/home/peter/to_keep/job/bochk/generative_AI/proj_tasks.org" "Work TODOs")
          "* TODO %T %i%?")
         ("h" "Howto" entry
-         (file+headline "~/projects/learning_notes/learning.org" "HowTo")
+         (file+headline "~/to_keep/projects/learning_notes/learning.org" "HowTo")
          "* %i%?")
         ))
 
