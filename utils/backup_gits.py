@@ -139,8 +139,8 @@ def backup_repo(repo, to_remote, to_dir, from_dir, from_remote, create_if_not_ex
             return
     log_msg(f"=== for repo to [{to_remote}]: {repo['abs_root']}")
     if repo['is_annex']:
-        log_msg(f"  git annex copy --to={to_remote}")
-        res = subprocess.run([git_cmd, 'annex', 'copy', f'--to={to_remote}'],
+        log_msg(f"  git annex sync {to_remote}")
+        res = subprocess.run([git_cmd, 'annex', 'sync', to_remote],
                              cwd = repo['abs_root'])
         log_msg('  FAIL' if res.returncode != 0 else '  ok')
     else:
