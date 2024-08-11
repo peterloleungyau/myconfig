@@ -142,12 +142,12 @@ def backup_repo(repo, to_remote, to_dir, from_dir, from_remote, create_if_not_ex
         log_msg(f"  git annex sync {to_remote}")
         res = subprocess.run([git_cmd, 'annex', 'sync', to_remote],
                              cwd = repo['abs_root'])
-        log_msg('  FAIL' if res.returncode != 0 else '  ok')
+        log_msg('    FAIL' if res.returncode != 0 else '    ok')
     else:
         log_msg(f"  git push --all {to_remote}")
         res = subprocess.run([git_cmd, 'push', '--all', to_remote],
                              cwd = repo['abs_root'])
-        log_msg('  FAIL' if res.returncode != 0 else '  ok')
+        log_msg('    FAIL' if res.returncode != 0 else '    ok')
         if not repo['is_bare']:
             log_msg('  NOTE: if to_root non-bare, may need to manually checkout branches.')
 
@@ -185,12 +185,12 @@ def backup_all_repos(from_dir, from_remote, to_dir, to_remotes,
         repos = find_git_repos(from_dir)
         log_msg(f"== to backup these repos:")
         print_repo_infos(repos)
-        log_msg(f"== start backup")
+        log_msg(f"\n== start backup")
         flush_log()
 
     for to_remote in to_remotes:
         # put to_remotes at outer loop, so that we may pause inbetween, e.g. to allow plugging in another usb drive.
-        log_msg(f"== to_remote: {to_remote}")
+        log_msg(f"== to_remote: {to_remote}\n")
         if confirm_remote:
             r = ask_choices(f"Remote '{to_remote}' ready?", y_c_s_choices_as_str, y_c_s_choices)
             if r == 'skip':
@@ -202,6 +202,7 @@ def backup_all_repos(from_dir, from_remote, to_dir, to_remotes,
             # else if 'yes', process it
         for repo in repos:
             backup_repo(repo, to_remote, to_dir, from_dir, from_remote, create_if_not_exists)
+            log_msg('\n')
             flush_log()
 
 def backup_main(
