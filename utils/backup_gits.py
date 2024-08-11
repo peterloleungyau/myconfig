@@ -215,7 +215,7 @@ def backup_main(
     cur_time = time.ctime()
     
     if log_file_name is None:
-        log_file_name = time.strftime('log_backup_gits_%Y_%M_%d_%Z.log')
+        log_file_name = time.strftime('log_backup_gits_%Y_%m_%d_%Z.log')
     print(f"Append to logfile: {log_file_name}")
     with open(log_file_name, 'at') as log_file:
         out_log_file = log_file
