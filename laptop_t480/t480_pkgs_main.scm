@@ -103,6 +103,7 @@
         "emacs-dumb-jump"
         "python" ;; so that dumb-jump works on python
         "emacs-xah-fly-keys"
+        "task-spooler"
         ;;
 	"ungoogled-chromium"
 	"unzip"
