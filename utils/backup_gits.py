@@ -68,7 +68,9 @@ def exe_cmd_log(args, **kwargs):
     kwargs['capture_output'] = True
     r = subprocess.run(args, **kwargs)
     if r.returncode != 0:
-        log_msg(f"  FAIL: \n{r.stdout}\n")
+        log_msg(f"    FAIL: \n{r.stdout}\n\n{r.stderr}\n!!!\n\n")
+    else:
+        log_msg("    ok")
     return r
 
 def replace_from_to_dir(abs_root, from_dir, to_dir):
@@ -89,7 +91,7 @@ def replace_from_to_dir(abs_root, from_dir, to_dir):
 def create_repo(repo, to_remote, to_dir, from_dir, from_remote):
     log_msg(f"==== create repo: {repo['abs_root']}")
     # git clone will complain if the dir already exists,
-    # so we instead use git init
+    # so we instead use git init, which is safe to re-run in existing git repo.
     to_root = replace_from_to_dir(repo['abs_root'], from_dir, to_dir)
     to_git_parent_dir = str(Path(to_root).parent.absolute())
     log_msg(f"  to_root: {to_root}")
@@ -101,23 +103,23 @@ def create_repo(repo, to_remote, to_dir, from_dir, from_remote):
     #   if the fail is serious, the subsequent steps should also fail, so not much harm
     if repo['is_bare']:
         log_msg(f"  at to_root: git init --bare")
-        exe_cmd_log([git_cmd, 'init', '--bare'],
-                    cwd = to_root)
+        run_cmd_ok_fail([git_cmd, 'init', '--bare'],
+                        cwd = to_root)
     else:
         log_msg(f"  at to_root: git init")
-        exe_cmd_log([git_cmd, 'init'], cwd = to_root)
+        run_cmd_ok_fail([git_cmd, 'init'], cwd = to_root)
         # git by default refuse to accept push for non-bare repo
         log_msg(f"  at to_root, to allow push at non-bare repo: git config receive.denyCurrentBranch warn")
-        exe_cmd_log([git_cmd, 'config', 'receive.denyCurrentBranch', 'warn'],
-                    cwd = to_root)
+        run_cmd_ok_fail([git_cmd, 'config', 'receive.denyCurrentBranch', 'warn'],
+                        cwd = to_root)
     log_msg(f"  at to_root: git remote add {from_remote} {repo['abs_root']}")
-    exe_cmd_log([git_cmd, 'remote', 'add', from_remote, repo['abs_root']],
-                cwd = to_root)
+    run_cmd_ok_fail([git_cmd, 'remote', 'add', from_remote, repo['abs_root']],
+                    cwd = to_root)
     # to remote: git annex sync
     if repo['is_annex']:
         log_msg(f"  at to_root: git annex init {to_remote}")
-        exe_cmd_log([git_cmd, 'annex', 'init', to_remote],
-                    cwd = to_root)
+        run_cmd_ok_fail([git_cmd, 'annex', 'init', to_remote],
+                        cwd = to_root)
         # sync a few times, until there is no error, to sync the metadata
         log_msg("  git annex repo, sync metadata at to_root first")
         for i in range(3):
@@ -128,8 +130,18 @@ def create_repo(repo, to_remote, to_dir, from_dir, from_remote):
     # from remote: add to remote
     # can allow error, which most likely is the remote somehow already exists, but unlikely
     log_msg(f"  at source repo: git remote add {to_remote} {to_root}")
-    exe_cmd_log([git_cmd, 'remote', 'add', to_remote, to_root],
-                cwd = repo['abs_root'])
+    run_cmd_ok_fail([git_cmd, 'remote', 'add', to_remote, to_root],
+                    cwd = repo['abs_root'])
+
+def run_cmd_ok_fail(cmds, **kwargs):
+    kwargs['capture_output'] = True
+    res = subprocess.run(cmds, **kwargs)
+    if res.returncode != 0:
+        std_err_str = res.stderr.decode('utf-8')
+        log_msg(f'    FAIL\n{std_err_str}\n!!!\n\n')
+    else:
+        log_msg('    ok')
+    return res
 
 def backup_repo(repo, to_remote, to_dir, from_dir, from_remote,
                 create_if_not_exists = False, sync_content = True):
@@ -140,10 +152,10 @@ def backup_repo(repo, to_remote, to_dir, from_dir, from_remote,
             return
     log_msg(f"=== for repo to [{to_remote}]: {repo['abs_root']}")
     # now ask git annex to sync only its metadata and content, but not mess with our git content, which we push by ourselves
-    log_msg(f"  git push --all {to_remote}")
-    res = subprocess.run([git_cmd, 'push', '--all', to_remote],
-                         cwd = repo['abs_root'])
-    log_msg('    FAIL' if res.returncode != 0 else '    ok')
+    #log_msg(f"  git push --all {to_remote}")
+    log_msg(f"  git push {to_remote} master") # only push master
+    run_cmd_ok_fail([git_cmd, 'push', to_remote, 'master'],
+                    cwd = repo['abs_root'])
     if not repo['is_bare']:
         log_msg('  NOTE: if to_root non-bare, may need to manually checkout branches.')
     # git annex sync
@@ -155,8 +167,7 @@ def backup_repo(repo, to_remote, to_dir, from_dir, from_remote,
             msg = f"  git annex sync {to_remote}"
             cmd_args = [git_cmd, 'annex', 'sync', to_remote]
         log_msg(msg)
-        res = subprocess.run(cmd_args, cwd = repo['abs_root'])
-        log_msg('    FAIL' if res.returncode != 0 else '    ok')
+        run_cmd_ok_fail(cmd_args, cwd = repo['abs_root'])
 
 y_c_s_choices = {
     'yes': ['yes', 'y'],
@@ -242,8 +253,7 @@ def backup_main(
             log_msg(f"  create remote repo if not exists: {create_if_not_exists}")
             # set annex.synconlyannex to true, so that git annex will not mess with git content, and not delete our files
             log_msg("To be safe: git config --global annex.synconlyannex true")
-            res = subprocess.run([git_cmd, 'config', '--global', 'annex.synconlyannex', 'true'])
-            log_msg('    FAIL' if res.returncode != 0 else '    ok')
+            run_cmd_ok_fail([git_cmd, 'config', '--global', 'annex.synconlyannex', 'true'])
             #
             flush_log()
 
