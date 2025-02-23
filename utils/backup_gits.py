@@ -131,25 +131,32 @@ def create_repo(repo, to_remote, to_dir, from_dir, from_remote):
     exe_cmd_log([git_cmd, 'remote', 'add', to_remote, to_root],
                 cwd = repo['abs_root'])
 
-def backup_repo(repo, to_remote, to_dir, from_dir, from_remote, create_if_not_exists = False):
+def backup_repo(repo, to_remote, to_dir, from_dir, from_remote,
+                create_if_not_exists = False, sync_content = True):
     if to_remote not in repo['remotes']:
         if create_if_not_exists:
             create_repo(repo, to_remote, to_dir, from_dir, from_remote)
         else:
             return
     log_msg(f"=== for repo to [{to_remote}]: {repo['abs_root']}")
+    # now ask git annex to sync only its metadata and content, but not mess with our git content, which we push by ourselves
+    log_msg(f"  git push --all {to_remote}")
+    res = subprocess.run([git_cmd, 'push', '--all', to_remote],
+                         cwd = repo['abs_root'])
+    log_msg('    FAIL' if res.returncode != 0 else '    ok')
+    if not repo['is_bare']:
+        log_msg('  NOTE: if to_root non-bare, may need to manually checkout branches.')
+    # git annex sync
     if repo['is_annex']:
-        log_msg(f"  git annex sync {to_remote}")
-        res = subprocess.run([git_cmd, 'annex', 'sync', to_remote],
-                             cwd = repo['abs_root'])
+        if sync_content:
+            msg = f"  git annex sync {to_remote} --content"
+            cmd_args = [git_cmd, 'annex', 'sync', to_remote, '--content']
+        else:
+            msg = f"  git annex sync {to_remote}"
+            cmd_args = [git_cmd, 'annex', 'sync', to_remote]
+        log_msg(msg)
+        res = subprocess.run(cmd_args, cwd = repo['abs_root'])
         log_msg('    FAIL' if res.returncode != 0 else '    ok')
-    else:
-        log_msg(f"  git push --all {to_remote}")
-        res = subprocess.run([git_cmd, 'push', '--all', to_remote],
-                             cwd = repo['abs_root'])
-        log_msg('    FAIL' if res.returncode != 0 else '    ok')
-        if not repo['is_bare']:
-            log_msg('  NOTE: if to_root non-bare, may need to manually checkout branches.')
 
 y_c_s_choices = {
     'yes': ['yes', 'y'],
@@ -179,7 +186,9 @@ def ask_choices(prompt, choices_str, choices):
 
 def backup_all_repos(from_dir, from_remote, to_dir, to_remotes,
                      repos = None,
-                     confirm_remote = True, create_if_not_exists = False):
+                     confirm_remote = True,
+                     sync_content = True,
+                     create_if_not_exists = False):
     if repos is None:
         log_msg(f"== find git repos under {from_dir}")
         repos = find_git_repos(from_dir)
@@ -201,14 +210,16 @@ def backup_all_repos(from_dir, from_remote, to_dir, to_remotes,
                 break
             # else if 'yes', process it
         for repo in repos:
-            backup_repo(repo, to_remote, to_dir, from_dir, from_remote, create_if_not_exists)
+            backup_repo(repo, to_remote, to_dir, from_dir, from_remote, create_if_not_exists, sync_content)
             log_msg('\n')
             flush_log()
 
 def backup_main(
         from_dir, from_remote, to_dir, to_remotes,
         repos = None,
-        confirm_remote = True, create_if_not_exists = False,
+        confirm_remote = True,
+        sync_content = True,
+        create_if_not_exists = False,
         log_file_name = None):
     import time
     # setup the log file first
@@ -227,12 +238,19 @@ def backup_main(
             log_msg(f"  to_dir: '{to_dir}'")
             log_msg(f"  to_remotes: '{to_remotes}'")
             log_msg(f"  confirm ready for to_remote: {confirm_remote}")
+            log_msg(f"  sync content for annex repo: {sync_content}")
             log_msg(f"  create remote repo if not exists: {create_if_not_exists}")
+            # set annex.synconlyannex to true, so that git annex will not mess with git content, and not delete our files
+            log_msg("To be safe: git config --global annex.synconlyannex true")
+            res = subprocess.run([git_cmd, 'config', '--global', 'annex.synconlyannex', 'true'])
+            log_msg('    FAIL' if res.returncode != 0 else '    ok')
+            #
             flush_log()
 
             backup_all_repos(from_dir, from_remote, to_dir, to_remotes,
                              repos = repos,
                              confirm_remote = confirm_remote,
+                             sync_content = sync_content,
                              create_if_not_exists = create_if_not_exists)
             log_msg(f"== All done.")
         except Exception as e:
@@ -268,6 +286,9 @@ if __name__ == "__main__":
                    help = """If True, if a to_remote is not in a repo, will create a repo at 'to_dir', mirroring the sub-dirs of 'from_dir'.
     The created dest repo will have a remote named 'from_remote' to the source repo.
     Also, if create dest repo, the source repo will have a remote named 'to_remote' to the dest repo.""")
+    p.add_argument('--sync-content',
+                   default = True, action = argparse.BooleanOptionalAction,
+                   help = """Whether to sync content for annex repo.""")
     p.add_argument('--log_file_name',
                    default = None,
                    help = """Name of the log_file to append to.
@@ -281,6 +302,7 @@ if __name__ == "__main__":
     from_remote = args.from_remote
     to_remotes = args.to_remotes.split(',')
     confirm_remote = args.confirm_remote
+    sync_content = args.sync_content
     create_if_not_exists = args.create_if_not_exists
     log_file_name = args.log_file_name
     backup_main(
@@ -289,6 +311,7 @@ if __name__ == "__main__":
         from_remote = from_remote,
         to_remotes = to_remotes,
         confirm_remote = confirm_remote,
+        sync_content = sync_content,
         create_if_not_exists = create_if_not_exists,
         log_file_name = log_file_name
     )
