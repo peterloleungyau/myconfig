@@ -3,4 +3,24 @@
 #+STARTUP: logdone
 #+TITLE: Backup with Btrfs Snapshots
 
+* Create directory for checkpoints (once)
+#+BEGIN_SRC bash
+  # can put at a convenient place
+  # since I mainly snapshot the home, so put it under root
+  sudo mkdir -p /.snapshots
+#+END_SRC
 
+* Create checkpoint
+#+BEGIN_SRC bash
+  # can give a convenient name for the checkpoint, here use ${device}-{directory}-{date}
+  sudo btrfs subvolume snapshot -r /home /.snapshots/laptop-e495-home-2025-03-02
+#+END_SRC
+
+* Send checkpoint to backup device
+- *NOTE*
+  - seems it is better to have a partition (or sub-volume) specifically to store the snapshots
+  - not sure if this can have better sharing for regular snapshots
+- command
+#+BEGIN_SRC bash
+sudo btrfs send /.snapshots/laptop-e495-home-2025-03-02 | sudo btrfs receive /media/peter/lenovo-backup/
+#+END_SRC
