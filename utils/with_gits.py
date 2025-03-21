@@ -68,6 +68,8 @@ def print_repo_infos(repos):
         #log_msg(f"  remotes: {repo['remotes']}")
 
 def exe_cmd_log(args, **kwargs):
+    args_str = ' '.join(args)
+    log_msg(f"  == To exec: {args_str}")
     kwargs['capture_output'] = True
     r = subprocess.run(args, **kwargs)
     msg_out = r.stdout.decode('utf-8')
@@ -78,7 +80,12 @@ def exe_cmd_log(args, **kwargs):
         log_msg(f"    ok:\n{msg_out}\n")
     return r
 
-def exec_for_all(from_dir, only_annex, cmds_to_exec, repos = None):
+def exec_for_all(from_dir,
+                 only_annex,
+                 cmds_to_exec,
+                 to_git_fsck = False,
+                 to_annex_fsck = False,
+                 repos = None):
     if repos is None:
         log_msg(f"== find git repos under {from_dir}")
         repos = find_git_repos(from_dir)
@@ -90,14 +97,25 @@ def exec_for_all(from_dir, only_annex, cmds_to_exec, repos = None):
         flush_log()
     for repo in repos:
         log_msg(f"=== for repo: {repo['abs_root']}")
-        exe_cmd_log(cmds_to_exec, cwd = repo['abs_root'])
-        log_msg('\n')
+        if to_git_fsck:
+            exe_cmd_log(['git', 'fsck'], cwd = repo['abs_root'])
+            log_msg('\n')
+            flush_log()
+        if to_annex_fsck and repo['is_annex']:
+            exe_cmd_log(['git', 'annex', 'fsck', '--quiet'], cwd = repo['abs_root'])
+            log_msg('\n')
+            flush_log()
+        if cmds_to_exec:
+            exe_cmd_log(cmds_to_exec, cwd = repo['abs_root'])
+            log_msg('\n')
         flush_log()
 
 def main(
         from_dir,
         only_annex,
         cmds_to_exec,
+        to_git_fsck = False,
+        to_annex_fsck = False, 
         repos = None,
         log_file_name = None):
     import time
@@ -114,7 +132,9 @@ def main(
             log_msg(f"====== with git repos: {cur_time}")
             log_msg(f"  from_dir: '{from_dir}'")
             log_msg(f"  only_annex: '{only_annex}'")
-            log_msg(f"  cmds_to_exec: '{cmds_to_exec}'")
+            log_msg(f"  cmds_to_exec: {cmds_to_exec}")
+            log_msg(f"  to_git_fsck: {to_git_fsck}")
+            log_msg(f"  to_annex_fsck: {to_annex_fsck}'")
             log_msg(f"  log_file_name: '{log_file_name}'")
             #
             flush_log()
@@ -123,10 +143,12 @@ def main(
                 from_dir = from_dir,
                 only_annex = only_annex,
                 cmds_to_exec = cmds_to_exec,
+                to_git_fsck = to_git_fsck,
+                to_annex_fsck = to_annex_fsck,
                 repos = repos
             )
             
-            log_msg(f"== All done.")
+            log_msg(f"== All done.=============================\n\n")
         except Exception as e:
             log_msg(e)
             out_log_file = None
@@ -147,6 +169,18 @@ if __name__ == "__main__":
                    default = False, action = argparse.BooleanOptionalAction,
                    help = """Whether to restrict to git annex repos.""")
 
+    p.add_argument('--git_fsck',
+                   default = False, action = argparse.BooleanOptionalAction,
+                   help = """Whether to do 'git fsck' for the repo. If True, will do 'git fsck' before the rest of commands.""")
+
+    p.add_argument('--annex_fsck',
+                   default = False, action = argparse.BooleanOptionalAction,
+                   help = """Whether to do 'git annex fsck --quiet' for a annex repo. Will do nothing for non-annex repo. If True, will do 'git annex fsck --quiet' before the rest of commands.""")
+
+    p.add_argument('--fsck',
+                   default = False, action = argparse.BooleanOptionalAction,
+                   help = """Convenient flag to turn on both --git-fsck and --annex-fsck.""")
+
     p.add_argument('--log_file_name',
                    default = None,
                    help = """Name of the log_file to append to.
@@ -158,6 +192,8 @@ if __name__ == "__main__":
     # convert paths to absolute paths
     from_dir = str(Path(args.from_dir).absolute())
     only_annex = args.annex
+    to_git_fsck = args.git_fsck or args.fsck
+    to_annex_fsck = args.annex_fsck or args.fsck
     log_file_name = args.log_file_name
     rest_args = args.rest
-    main(from_dir, only_annex, rest_args, log_file_name)
+    main(from_dir, only_annex, rest_args, to_git_fsck, to_annex_fsck, log_file_name)
