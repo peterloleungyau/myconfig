@@ -92,7 +92,7 @@
 (use-package slime
   :ensure t
   :config
-  (setq inferior-lisp-program "sbcl --dynamic-space-size 4096")
+  (setq inferior-lisp-program "sbcl --dynamic-space-size 24576")
   ;; Refer to http://snowsyn.net/2020/01/01/local-clhs-access-in-emacs/
   ;; download archived HyperSpec from ftp://ftp.lispworks.com/pub/software_tools/reference/HyperSpec-7-0.tar.gz
   (setq common-lisp-hyperspec-root
