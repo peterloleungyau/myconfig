@@ -103,7 +103,8 @@ export PS1="┌$PS1\[\033[0;33m\](\$(git branch 2>/dev/null | grep '^*' | colrm 
 export EDITOR='emacs --no-splash'
 alias editor=$EDITOR
 #alias git="PATH=~/mybin:$PATH git"
-alias fplay="mplayer -af scaletempo -fs -zoom -framedrop -osdlevel 3"
+#alias fplay="mplayer -af scaletempo -fs -zoom -framedrop -osdlevel 3"
+alias fplay="mpv --fs --hwdec=auto-safe"
 alias afplay="mplayer -af scaletempo -aspect 4:3 -fs -zoom -framedrop -osdlevel 3"
 alias fmplay="mplayer -af scaletempo"
 alias ydown="youtube-dl --no-check-certificate --no-playlist -f 22/18"

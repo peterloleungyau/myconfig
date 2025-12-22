@@ -56,6 +56,8 @@
   :pin gnu
   ;;:config
   ;;(require 'org-tempo)
+  :init
+  (setq org-src-preserve-indentation t)
   )
 
 ;;; Check to see if running on Mac OS X or some GNU/Linux distro
@@ -167,7 +169,7 @@
      (ess-offset-block . prev-line)
      (ess-offset-continued . straight)
      (ess-align-nested-calls "ifelse")
-     (ess-align-arguments-in-calls "function[ 	]*(")
+     (ess-align-arguments-in-calls "function[ \11]*(")
      (ess-align-continuations-in-calls . t)
      (ess-align-blocks control-flow)
      (ess-indent-from-lhs arguments fun-decl-opening)
@@ -196,7 +198,7 @@
  '(org-export-backends '(ascii beamer html icalendar latex))
  '(org-odt-preferred-output-format "pdf")
  '(package-selected-packages
-   '(window-numbering pdf-tools highlight-indent-guides json-mode debbugs yaml-mode yaml-model ewal-spacemacs-themes nix-mode key-chord linum-relative dired-subtree dired evil-surround evil evil-mode pydoc-info elpy yasnippet-snippets yasnippet lsp-python ess-R-data-view ess-smart-equals ess-smart-underscore ess-view company-lsp lsp-ui lsp-mode counsel-projectile projectile counsel ivy org-link-minor-mode ox-hugo ob-ipython ob-mongo ob-prolog ob-sagemath ob-sql-mode spacemacs-theme magit slime org-ref markdown-mode ess auctex))
+   '(htmlize window-numbering pdf-tools highlight-indent-guides json-mode debbugs yaml-mode yaml-model ewal-spacemacs-themes nix-mode key-chord linum-relative dired-subtree dired evil-surround evil evil-mode pydoc-info elpy yasnippet-snippets yasnippet lsp-python ess-R-data-view ess-smart-equals ess-smart-underscore ess-view company-lsp lsp-ui lsp-mode counsel-projectile projectile counsel ivy org-link-minor-mode ox-hugo ob-ipython ob-mongo ob-prolog ob-sagemath ob-sql-mode spacemacs-theme magit slime org-ref markdown-mode ess auctex))
  '(pdf-view-midnight-colors '("#b2b2b2" . "#292b2e"))
  '(safe-local-variable-values
    '((eval progn

@@ -53,7 +53,7 @@
        "vim"
        "tmux"
        "sbcl"
-       "cl-asdf"
+       ;;"cl-asdf"
        "youtube-dl"
 	   "yt-dlp"
        ;;"nyxt"
@@ -71,6 +71,7 @@
        "emacs"
        "emacs-use-package"
        "emacs-org"
+       "emacs-htmlize"
        "emacs-slime"
        "emacs-magit"
        "emacs-ess" ;; need to be careful not to install the elpa version

@@ -6,4 +6,6 @@
 #+STARTUP: overview
 #+STARTUP: logdone
 #+SEQ_TODO: TODO(t) NEXT(n) WAITING(w) | DONE(d) CANCELLED(c) DEFERRED(f)
+#+OPTIONS: ^:{}
+#+INFOJS_OPT: 
 $0
