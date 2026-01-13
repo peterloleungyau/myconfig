@@ -4,6 +4,7 @@
 
 (use-modules (gnu) (nongnu packages linux)
              (gnu system nss) (gnu services docker)
+             (gnu services ssh)
              (gnu system mapped-devices)
              (guix utils))
 (use-service-modules desktop xorg)
@@ -76,13 +77,20 @@
                        (target "/var/swapfile"))))
 
   ;; Create user `bob' with `alice' as its initial password.
-  (users (cons (user-account
-                (name "peter")
-                (comment "Peter Lo")
-                (group "users")
-                (supplementary-groups '("wheel" "netdev"
-                                        "audio" "video"
-                                        "docker")))
+  (users (cons* (user-account
+                 (name "peter")
+                 (comment "Peter Lo")
+                 (group "users")
+                 (supplementary-groups '("wheel" "netdev"
+                                         "audio" "video"
+                                         "docker")))
+                (user-account
+                 (name "lemon")
+                 (comment "Lemon Lin")
+                 (group "users")
+                 (supplementary-groups '("wheel" "netdev"
+                                         "audio" "video"
+                                         "docker")))
                %base-user-accounts))
 
   ;; Add the `students' group
@@ -118,6 +126,12 @@
                 (append (list (service gnome-desktop-service-type)
                               (service xfce-desktop-service-type)
                               (service docker-service-type)
+                              (service openssh-service-type
+                                       (openssh-configuration
+                                        (port-number 8022) ;; intentionally use a different port
+                                        (x11-forwarding? #t)
+                                        (permit-root-login 'prohibit-password)
+                                        ))
                               (set-xorg-configuration
                                (xorg-configuration
                                 (keyboard-layout keyboard-layout))))
@@ -130,6 +144,12 @@
                 (append (list (service mate-desktop-service-type)
                               (service xfce-desktop-service-type)
                               (service docker-service-type)
+                              (service openssh-service-type
+                                       (openssh-configuration
+                                        (port-number 8022) ;; intentionally use a different port
+                                        (x11-forwarding? #t)
+                                        (permit-root-login 'prohibit-password)
+                                        ))
                               (set-xorg-configuration
                                (xorg-configuration
                                 (keyboard-layout keyboard-layout))
