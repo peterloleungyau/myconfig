@@ -158,6 +158,7 @@
  '(custom-safe-themes
    '("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default))
  '(display-line-numbers-type 'relative)
+ '(doc-view-resolution 400)
  '(electric-indent-mode nil)
  '(ess-indent-with-fancy-comments nil)
  '(ess-own-style-list
@@ -167,7 +168,7 @@
      (ess-offset-block . prev-line)
      (ess-offset-continued . straight)
      (ess-align-nested-calls "ifelse")
-     (ess-align-arguments-in-calls "function[ 	]*(")
+     (ess-align-arguments-in-calls "function[ \11]*(")
      (ess-align-continuations-in-calls . t)
      (ess-align-blocks control-flow)
      (ess-indent-from-lhs arguments fun-decl-opening)
@@ -321,7 +322,7 @@
          (file+headline "/home/peter/to_keep/job/bochk/generative_AI/proj_tasks.org" "Work TODOs")
          "* TODO %T %i%?")
         ("h" "Howto" entry
-         (file+headline "~/projects/learning_notes/learning.org" "HowTo")
+         (file+headline "/home/peter/to_keep/projects/learning_notes/learning.org" "HowTo")
          "* %i%?")
         ))
 
@@ -829,6 +830,8 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
 
 (global-set-key (kbd "C-c C-r") 'evince-file)
 
+;;;;; start a server
+(server-start)
 ;;;;;;
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
