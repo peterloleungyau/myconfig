@@ -101,7 +101,7 @@ export PS1="┌$PS1\[\033[0;33m\](\$(git branch 2>/dev/null | grep '^*' | colrm 
 # This will change your prompt to display not only your working directory but also your current git branch, if you have one. Pretty nifty!
 
 #export EDITOR='emacs --no-splash'
-export EDITOR='emacsclient -c -a "" '
+export EDITOR='emacsclient -c -a "emacs" '
 alias editor=$EDITOR
 #alias git="PATH=~/mybin:$PATH git"
 alias fplay="mplayer -af scaletempo -fs -zoom -framedrop -osdlevel 3"
