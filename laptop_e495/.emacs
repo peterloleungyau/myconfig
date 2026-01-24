@@ -831,6 +831,9 @@ From https://stackoverflow.com/questions/27777133/change-the-emacs-send-code-to-
 
 (global-set-key (kbd "C-c C-r") 'evince-file)
 
+(setq doc-view-resolution 600)
+;;;;; start a server
+(server-start)
 ;;;;;;
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
